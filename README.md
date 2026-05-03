@@ -26,9 +26,13 @@ These challenges lead to inefficiencies, poor patient experience, and operationa
 ✅ How SyncQueue Solves It
 
 📲 Enables patients to take queue tickets digitally
+
 📊 Provides real-time queue position and status updates
+
 📡 Works fully offline without internet dependency
+
 🔄 Automatically syncs data when connection is restored
+
 🧠 Simulates real hospital queue behavior reliably
 
 ---
@@ -130,8 +134,11 @@ SyncQueue uses an **offline-first architecture**:
 📦 PWA Features
 
 📲 Installable on mobile and desktop
+
 📡 Works offline after first load
+
 ⚡ Fast loading via cached assets
+
 📁 Service worker handles caching
 
 ---
@@ -139,9 +146,13 @@ SyncQueue uses an **offline-first architecture**:
 🧪 Edge Cases Handled
 
 ✔️ Page refresh during queue updates
+
 ✔️ Ticket creation while offline
+
 ✔️ Multiple offline actions before reconnect
+
 ✔️ Rapid repeated clicks (debounced)
+
 ✔️ State recovery after app restart
 
 ---
@@ -180,12 +191,17 @@ Deployed on Vercel with automatic builds.
 Build a **production-ready frontend system** that demonstrates:
 
 🌍 Real-world reliability
+
 📡 Offline-first engineering
+
 🔄 Robust synchronization logic
+
 ⚙️ Clean architecture and maintainability
+
 🎨 Premium user experience
 
 ---
 
 Built with ❤️ by Delice Keza
+
 Frontend Engineering Challenge · 2026 🚀
