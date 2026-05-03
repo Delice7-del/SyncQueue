@@ -3,6 +3,7 @@
 ### Always in Sync. Always in Order.
 
 🌍 Overview
+
 This repository contains the frontend application for **SyncQueue**, an offline-first hospital queue management system designed to simulate real-world patient flow with high reliability and consistency.
 
 The system is built with a strong focus on **offline functionality, real-time simulation, and data synchronization**, ensuring seamless operation even in unstable network conditions.
@@ -148,8 +149,11 @@ SyncQueue uses an **offline-first architecture**:
 📏 Code Standards
 
 ✅ TypeScript only
+
 ✅ Tailwind CSS only
+
 ✅ Modular and reusable components
+
 ✅ Clean and maintainable architecture
 
 ---
