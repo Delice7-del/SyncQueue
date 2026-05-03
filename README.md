@@ -156,6 +156,85 @@ SyncQueue uses an **offline-first architecture**:
 ✔️ State recovery after app restart
 
 ---
+## 🏗️ Architecture Explanation
+
+SyncQueue follows a layered architecture to ensure scalability, reliability, and separation of concerns:
+
+* **UI Layer**: Built with Next.js and TailwindCSS for responsive and modern interfaces
+* **State Layer**: Managed using Zustand for predictable and efficient state updates
+* **Queue Engine**: Handles ticket generation, queue ordering, and status transitions
+* **Storage Layer**: IndexedDB (via Dexie) ensures persistent, offline-capable data storage
+* **Sync Engine**: Processes offline actions and synchronizes them when connectivity is restored
+* **Service Worker**: Enables PWA functionality and caching for offline access
+
+This architecture ensures the system remains consistent even under unstable network conditions.
+
+---
+
+## 📡 Offline Strategy
+
+SyncQueue is designed as an **offline-first application**, meaning all core functionality works without internet.
+
+### Key Principles:
+
+* All user actions (e.g., ticket creation) are executed locally first
+* Data is stored in IndexedDB for persistence across refresh and restart
+* The app does not rely on a backend to function
+
+### Outbox Pattern:
+
+* Offline actions are stored in a queue (outbox)
+* When the app detects connectivity:
+
+  * queued actions are processed
+  * successful actions are removed
+  * failed actions are retried
+
+This ensures no data loss and consistent system behavior.
+
+---
+
+## 🗄️ Caching Strategy
+
+SyncQueue uses a **Progressive Web App (PWA) caching strategy** to ensure fast and reliable access.
+
+### Cached Resources:
+
+* App shell (HTML, CSS, JS)
+* Static assets (icons, styles)
+* Essential pages
+* Last known queue state
+
+### Approach:
+
+* Service Worker caches critical resources on first load
+* Subsequent visits load instantly, even offline
+* Data is refreshed in the background when online
+
+This guarantees that the application remains usable without internet.
+
+---
+
+## 🧠 State Management Approach
+
+State is managed using **Zustand**, chosen for its simplicity and performance.
+
+### Managed State Includes:
+
+* tickets
+* queue state
+* current user ticket
+* offline/online status
+* sync status (pending, syncing, completed)
+
+### Key Benefits:
+
+* minimal boilerplate
+* fine-grained state updates (avoids unnecessary re-renders)
+* easy integration with async logic (queue simulation and sync engine)
+
+This ensures a responsive UI and predictable state behavior.
+
 
 📏 Code Standards
 
