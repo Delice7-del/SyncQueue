@@ -124,7 +124,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-bg-light selection:bg-brand-blue/10 selection:text-brand-blue font-body">
       {/* ── TOP STATUS BAR ── */}
       <nav className="fixed top-0 left-0 right-0 z-[120] bg-white/60 backdrop-blur-[40px] border-b border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
-        <div className="max-w-7xl mx-auto px-8 h-20 flex justify-between items-center">
+        <div className="max-w-[1700px] mx-auto px-4 md:px-8 h-20 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-white shadow-premium group-hover:scale-110 transition-transform border border-brand-blue/5 overflow-hidden">
@@ -215,14 +215,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-8 pt-20 pb-16 relative">
+      <main className="max-w-[1700px] mx-auto px-4 md:px-8 pt-20 pb-16 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-gradient-to-b from-brand-accent/[0.04] to-transparent pointer-events-none -z-10" />
         {children}
       </main>
 
       {/* ── REFINED FOOTER ── */}
       <footer className="bg-white border-t border-brand-blue/5 pt-16 pb-16">
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="max-w-[1700px] mx-auto px-4 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
             <div className="bg-brand-blue/[0.02] border border-brand-blue/5 rounded-[40px] p-10 flex flex-col items-start relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">

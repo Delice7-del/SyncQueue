@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   title: "SyncQueue | Smart Hospital Queue System",
   description: "A premium, offline-first hospital queue management experience.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -39,7 +43,7 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <head>
         <meta name="theme-color" content="#F6F9FC" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" href="/icon.png" />
       </head>
       <body
         className={`${sairaCondensed.variable} ${outfit.variable} font-body bg-bg-light text-brand-blue min-h-full antialiased`}
