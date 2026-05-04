@@ -1,27 +1,26 @@
 "use client";
 
-import React, { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Layout from '@/components/Layout';
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import TicketCard from '@/components/TicketCard';
 import { useQueueStore } from '@/store/useQueueStore';
 import { Ticket } from '@/lib/db';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RefreshCw, ArrowLeft, Share2, Info, X } from 'lucide-react';
+import { RefreshCw, X, Share2, Info } from 'lucide-react';
 import Link from 'next/link';
 
-function TicketContent() {
-  const searchParams = useSearchParams();
-  const ticketId = searchParams.get('id');
+export default function DynamicTicketPage() {
+  const { id } = useParams();
+  const router = useRouter();
   const { tickets, initialized } = useQueueStore();
   const [ticket, setTicket] = useState<Ticket | null>(null);
 
   useEffect(() => {
-    if (initialized && ticketId) {
-      const found = tickets.find(t => t.id === ticketId);
+    if (initialized && id) {
+      const found = tickets.find(t => t.id === id);
       setTicket(found || null);
     }
-  }, [ticketId, tickets, initialized]);
+  }, [id, tickets, initialized]);
 
   if (!initialized) {
     return (
@@ -35,7 +34,7 @@ function TicketContent() {
     );
   }
 
-  if (!ticketId || !ticket) {
+  if (!id || !ticket) {
     return (
       <div className="flex flex-col items-center justify-center py-32 text-center max-w-md mx-auto">
         <div className="w-20 h-20 rounded-[32px] bg-red-50 flex items-center justify-center mb-8 border border-red-100">
@@ -107,19 +106,3 @@ function TicketContent() {
     </div>
   );
 }
-
-export default function MyTicketPage() {
-  return (
-    <Layout>
-      <Suspense fallback={
-        <div className="flex flex-col items-center justify-center py-32 gap-8">
-          <RefreshCw className="w-12 h-12 text-brand-accent animate-spin" />
-          <p className="font-heading text-xl font-black text-brand-blue uppercase tracking-widest animate-pulse italic">SYNCING SEARCH PARAMS...</p>
-        </div>
-      }>
-        <TicketContent />
-      </Suspense>
-    </Layout>
-  );
-}
-

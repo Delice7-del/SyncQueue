@@ -4,86 +4,101 @@
   --font-heading: var(--font-saira);
   --font-body: var(--font-outfit);
   
-  /* Premium Palette from Figma Prompt */
-  --color-brand-blue: #3B82F6;
-  --color-brand-purple: #8B5CF6;
-  --color-bg-navy: #0B0F19;
-  --color-surface-dark: #111827;
-  
-  /* Status Colors */
-  --color-status-waiting: #F59E0B;
-  --color-status-serving: #3B82F6;
-  --color-status-completed: #10B981;
+  /* Premium Light Palette */
+  --color-brand-blue: #0A2540;
+  --color-brand-accent: #3B82F6;
+  --color-bg-light: #F6F9FC;
+  --color-brand-gray: #64748B;
 }
 
-:root {
-  --background: #0B0F19;
-  --foreground: #FFFFFF;
+@layer base {
+  body {
+    @apply font-body text-brand-blue antialiased;
+  }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-body);
-  overflow-x: hidden;
-}
-
-h1, h2, h3, h4, h5, h6 {
+.font-heading {
   font-family: var(--font-heading);
-  text-transform: uppercase;
 }
 
-/* Glassmorphism utility */
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* Glassmorphism Utilities */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-.glass-dark {
-  background: rgba(17, 24, 39, 0.7);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+/* Premium Shadows */
+.shadow-premium {
+  box-shadow: 0 20px 40px -15px rgba(10, 37, 64, 0.1);
 }
 
-/* Diagonal Background Elements */
-.diagonal-bg {
+/* ── MASTER NAV (ZERO HORNS - MASKED) ── */
+.nav-container {
+  background: var(--color-brand-blue);
+  border-radius: 35px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  box-shadow: 0 15px 50px -10px rgba(10, 37, 64, 0.4);
+  /* The Secret: Cutting the hole OUT of the bar instead of adding pieces ON TOP */
+  mask-image: var(--nav-mask);
+  mask-size: 100% 100%;
+  -webkit-mask-image: var(--nav-mask);
+  -webkit-mask-size: 100% 100%;
+}
+
+.nav-indicator-wrapper {
   position: absolute;
-  top: -20%;
-  left: -10%;
-  width: 120%;
-  height: 120%;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, transparent 40%),
-              linear-gradient(225deg, rgba(139, 92, 246, 0.03) 0%, transparent 40%);
-  transform: skewY(-6deg);
-  z-index: 0;
+  top: 0;
+  width: 100px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
   pointer-events: none;
+  z-index: 10;
 }
 
-/* Glow effects */
-.glow-blue {
-  box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
+.nav-circle-bg {
+  position: absolute;
+  top: -30px;
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 8px 25px rgba(10, 37, 64, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid var(--color-bg-light);
 }
 
-.glow-purple {
-  box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
+/* No more curves needed in CSS! The Mask handles it perfectly */
+.nav-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: white;
+  margin-top: 4px;
+  transition: all 0.3s ease;
 }
 
-.glow-status-serving {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+.nav-label-active {
+  color: var(--color-brand-accent);
+  font-weight: 900;
+  transform: translateY(2px);
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite ease-in-out;
 }
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+
+@keyframes pulse-slow {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }

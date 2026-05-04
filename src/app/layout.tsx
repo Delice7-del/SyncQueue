@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Saira_Condensed, Outfit } from "next/font/google";
 import "./globals.css";
+import Layout from "@/components/Layout";
 
 const sairaCondensed = Saira_Condensed({
   variable: "--font-saira",
@@ -37,13 +38,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <head>
-        <meta name="theme-color" content="#0B0B0B" />
+        <meta name="theme-color" content="#F6F9FC" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
       <body
-        className={`${sairaCondensed.variable} ${outfit.variable} font-body bg-[#0B0B0B] text-white min-h-full antialiased`}
+        className={`${sairaCondensed.variable} ${outfit.variable} font-body bg-bg-light text-brand-blue min-h-full antialiased`}
       >
-        {children}
+        <Layout>
+          {children}
+        </Layout>
         <Script id="register-sw" strategy="afterInteractive">
           {`
             if ('serviceWorker' in navigator) {
