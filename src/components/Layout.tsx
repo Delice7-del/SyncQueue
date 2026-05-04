@@ -215,7 +215,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-8 pt-32 pb-48 relative">
+      <main className="max-w-7xl mx-auto px-8 pt-20 pb-16 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-gradient-to-b from-brand-accent/[0.04] to-transparent pointer-events-none -z-10" />
         {children}
       </main>

@@ -112,14 +112,14 @@ export default function Home() {
       </AnimatePresence>
 
       {/* 1. Hero Section */}
-      <section className="relative pt-20 pb-32">
+      <section className="relative pt-4 pb-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <motion.div
             initial={{ opacity: 0, x: -60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-brand-accent/10 border border-brand-accent/20 mb-8">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-brand-accent/10 border border-brand-accent/20 mb-4">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-accent"></span>
@@ -175,7 +175,40 @@ export default function Home() {
             className="relative hidden lg:flex items-center justify-end"
           >
             <div className="absolute inset-0 bg-brand-accent/10 blur-[80px] rounded-full scale-75" />
+            
             <div className="relative">
+              {/* TOP RIGHT STATUS BADGE (Restored) */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20, x: 20 }}
+                animate={{ opacity: 1, y: 0, x: 0 }}
+                transition={{ delay: 1.2, duration: 0.8 }}
+                className="absolute -top-10 -right-2 z-30 bg-white rounded-3xl p-5 shadow-premium border border-brand-blue/5 flex items-center gap-4 min-w-[180px]"
+              >
+                <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                  <ShieldCheck className="w-5 h-5 text-green-500" />
+                </div>
+                <div>
+                   <p className="text-[7px] font-black text-brand-blue/20 uppercase tracking-widest mb-0.5">Status</p>
+                   <p className="text-[10px] font-black text-green-600 uppercase tracking-tight">Secure & synced</p>
+                </div>
+              </motion.div>
+
+              {/* BOTTOM LEFT DEPARTMENTS CARD (Restored) */}
+              <motion.div 
+                initial={{ opacity: 0, y: -20, x: -20 }}
+                animate={{ opacity: 1, y: 0, x: 0 }}
+                transition={{ delay: 1.4, duration: 0.8 }}
+                className="absolute -bottom-6 -left-20 z-30 bg-brand-blue rounded-3xl p-6 shadow-2xl flex items-center gap-5 min-w-[200px]"
+              >
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
+                  <Activity className="w-5 h-5 text-brand-accent" />
+                </div>
+                <div>
+                   <p className="text-[8px] font-black text-white/40 uppercase tracking-widest mb-1">Departments</p>
+                   <p className="text-xs font-black text-white uppercase tracking-tight">3 Active queues</p>
+                </div>
+              </motion.div>
+
               <div className="relative w-full max-w-sm bg-white rounded-[40px] shadow-premium border border-brand-blue/5 overflow-visible">
                 <div className="absolute left-[-10px] top-[68%] w-5 h-5 bg-bg-light rounded-full border border-brand-blue/5 z-20" />
                 <div className="absolute right-[-10px] top-[68%] w-5 h-5 bg-bg-light rounded-full border border-brand-blue/5 z-20" />
@@ -246,9 +279,21 @@ export default function Home() {
                      </div>
                      <span className="text-[6px] font-mono font-bold text-brand-blue/40 tracking-[0.4em] uppercase">Auth-ID: SQ-PROT-77X-B4</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                     <RefreshCw className="w-3 h-3 text-brand-accent animate-spin-slow" />
-                     <span className="text-[8px] font-black tracking-widest text-brand-blue/40 uppercase">Synced</span>
+                  <div className="flex items-center gap-4">
+                     <div className="flex items-center gap-2">
+                        <RefreshCw className="w-3 h-3 text-brand-accent animate-spin-slow" />
+                        <span className="text-[8px] font-black tracking-widest text-brand-blue/40 uppercase">Syncing protocol</span>
+                     </div>
+                     <div className="flex gap-1">
+                        {[0, 1, 2].map((i) => (
+                           <motion.div 
+                              key={i}
+                              animate={{ opacity: [0.2, 1, 0.2] }}
+                              transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
+                              className="w-1 h-1 rounded-full bg-brand-accent"
+                           />
+                        ))}
+                     </div>
                   </div>
                 </div>
               </div>
@@ -308,48 +353,59 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. About Systems Section (RESTORED WHITE SECTION) */}
+      {/* 4. About Systems Section (EXACT 4:47 PM NUMBERED GRID) */}
       <section id="about" className="relative pb-32 scroll-mt-32">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-           <div>
-              <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-brand-blue/5 border border-brand-blue/10 mb-8">
-                 <Server className="w-4 h-4 text-brand-blue/40" />
-                 <span className="text-[9px] font-black tracking-widest text-brand-blue uppercase">Infrastructure</span>
-              </div>
-              <h2 className="font-heading text-6xl font-black text-brand-blue tracking-tighter mb-8 italic uppercase leading-none">About<br />systems.</h2>
-              <p className="text-sm font-medium text-brand-blue/60 max-w-md leading-relaxed mb-10">
-                 SyncQueue is a high-precision orchestration layer designed for mission-critical hospital environments. We engineer total reliability through advanced local logic.
-              </p>
-              <div className="grid grid-cols-2 gap-8">
-                 {[
-                   { label: 'Latency', value: '< 2ms' },
-                   { label: 'Uptime', value: '100%' },
-                 ].map((stat, i) => (
-                   <div key={i} className="p-6 rounded-2xl bg-white border border-brand-blue/5 shadow-soft">
-                      <p className="text-[9px] font-black text-brand-blue/30 uppercase tracking-widest mb-1">{stat.label}</p>
-                      <p className="text-2xl font-black text-brand-blue italic tracking-tighter">{stat.value}</p>
-                   </div>
-                 ))}
-              </div>
-           </div>
-           
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                { title: 'Reactive Sync', desc: 'Real-time protocol sync.', icon: RefreshCw },
-                { title: 'Flow Logic', desc: 'Deterministic queue path.', icon: Layers },
-                { title: 'Security', desc: 'AES-256 local encryption.', icon: Lock },
-                { title: 'Departmental', desc: 'Multi-stream support.', icon: Activity }
-              ].map((item, i) => (
-                <div key={i} className="p-8 rounded-[32px] bg-white border border-brand-blue/5 shadow-premium group hover:bg-brand-blue hover:text-white transition-all duration-500">
-                   <div className="w-12 h-12 rounded-2xl bg-brand-blue/5 flex items-center justify-center mb-6 group-hover:bg-white/10 transition-colors">
-                      <item.icon className="w-6 h-6 text-brand-blue group-hover:text-brand-accent transition-colors" />
-                   </div>
-                   <h4 className="font-heading text-xl font-black italic mb-2 tracking-tight">{item.title}</h4>
-                   <p className="text-[10px] font-bold opacity-40 uppercase tracking-widest leading-relaxed">{item.desc}</p>
+         <div className="text-center mb-20">
+            <h2 className="font-heading text-5xl font-black text-brand-blue tracking-tighter mb-4 italic uppercase leading-none">About systems.</h2>
+            <p className="text-[10px] font-black text-brand-blue/30 tracking-[0.6em] uppercase italic">Engineering mission-critical infrastructure</p>
+         </div>
+         
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            {[
+              { 
+                title: 'Dynamic Protocol', 
+                desc: 'Real-time orchestration and patient flow management protocol.', 
+                icon: Activity,
+                num: '01'
+              },
+              { 
+                title: 'Offline Resilience', 
+                desc: 'Total operational integrity without internet connection.', 
+                icon: WifiOff,
+                num: '02'
+              },
+              { 
+                title: 'P2P Synchronization', 
+                desc: 'Peer-to-peer reactive data synchronization engine.', 
+                icon: RefreshCw,
+                num: '03'
+              },
+              { 
+                title: 'Secure Persistence', 
+                desc: 'Encrypted local storage via secure IndexedDB nodes.', 
+                icon: Lock,
+                num: '04'
+              }
+            ].map((item, i) => (
+              <div key={i} className="relative group">
+                {/* LARGE BACKGROUND NUMBER (4:47 PM Style) */}
+                <span className="absolute -top-10 -left-6 text-[120px] font-black text-brand-blue/[0.03] select-none group-hover:text-brand-accent/[0.05] transition-colors duration-700">
+                  {item.num}
+                </span>
+                
+                <div className="relative z-10">
+                  <div className="w-12 h-12 rounded-2xl bg-brand-blue/5 flex items-center justify-center mb-6 group-hover:bg-brand-accent/10 transition-colors">
+                    <item.icon className="w-6 h-6 text-brand-blue group-hover:text-brand-accent transition-colors" />
+                  </div>
+                  <h4 className="font-heading text-2xl font-black italic mb-4 tracking-tight text-brand-blue">{item.title}</h4>
+                  <p className="text-xs font-medium text-brand-blue/60 leading-relaxed mb-6">
+                    {item.desc}
+                  </p>
+                  <div className="w-10 h-1 bg-brand-blue/5 rounded-full group-hover:w-20 group-hover:bg-brand-accent transition-all duration-500" />
                 </div>
-              ))}
-           </div>
-        </div>
+              </div>
+            ))}
+         </div>
       </section>
 
       {/* 5. Blue Offline Section (RESTORED BLUE SECTION) */}
@@ -387,7 +443,7 @@ export default function Home() {
       </section>
 
       {/* 6. Contact Section */}
-      <section id="contact" className="relative pb-32 scroll-mt-32">
+      <section id="contact" className="relative pb-12 scroll-mt-32">
          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div className="bg-white rounded-[40px] p-12 shadow-premium border border-brand-blue/5">
                <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-brand-blue/5 border border-brand-blue/10 mb-6">

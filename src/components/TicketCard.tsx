@@ -13,7 +13,8 @@ import {
   Activity,
   ArrowRight,
   RotateCcw,
-  QrCode
+  QrCode,
+  RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQueueStore } from '@/store/useQueueStore';
@@ -222,6 +223,22 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
                  ))}
               </div>
               <span className="text-[7px] font-mono font-bold text-brand-blue/40 tracking-[0.5em] text-center uppercase">Secure Protocol Auth</span>
+           </div>
+           <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                 <RefreshCw className="w-3 h-3 text-brand-accent animate-spin-slow" />
+                 <span className="text-[8px] font-black tracking-widest text-brand-blue/40 uppercase">Syncing protocol</span>
+              </div>
+              <div className="flex gap-1">
+                 {[0, 1, 2].map((i) => (
+                    <motion.div 
+                       key={i}
+                       animate={{ opacity: [0.2, 1, 0.2] }}
+                       transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
+                       className="w-1 h-1 rounded-full bg-brand-accent"
+                    />
+                 ))}
+              </div>
            </div>
            <QrCode className="w-8 h-8 text-brand-blue/10" />
         </div>
