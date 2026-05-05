@@ -46,9 +46,9 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
   };
 
   const serviceLabels = {
-    consultation: 'General Consultation',
-    lab: 'Laboratory Analysis',
-    pharmacy: 'Pharmacy Supply'
+    consultation: 'General consultation',
+    lab: 'Laboratory analysis',
+    pharmacy: 'Pharmacy supply'
   };
 
   const getAccentColor = (service: Ticket['service']) => {
@@ -91,9 +91,9 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
         <div className="p-10 pb-6 relative z-10">
           <div className="flex items-center justify-between mb-8">
             <div className="flex flex-col">
-              <span className={cn("text-[9px] font-black tracking-[0.3em] mb-1 uppercase", `text-${accentColor}`)}>Health Protocol</span>
+              <span className={cn("text-[9px] font-black mb-1", `text-${accentColor}`)}>Health protocol</span>
               <h2 className="text-xl font-black text-brand-blue tracking-tighter italic leading-tight">
-                {serviceLabels[liveTicket.service]}
+                {serviceLabels[liveTicket.service].toLowerCase()}
               </h2>
             </div>
             <motion.div 
@@ -101,19 +101,19 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               className={cn(
-                "px-4 py-2 rounded-2xl border font-black text-[9px] tracking-[0.2em] uppercase",
+                "px-4 py-2 rounded-2xl border font-black text-[9px]",
                 liveTicket.status === 'serving' ? "bg-green-50 border-green-200 text-green-600 shadow-[0_0_15px_rgba(34,197,94,0.1)]" :
                 liveTicket.status === 'done' ? "bg-brand-blue text-white" : "bg-amber-50 border-amber-200 text-amber-600"
               )}
             >
-              {liveTicket.status === 'serving' ? 'Serving' : liveTicket.status.toUpperCase()}
+              {liveTicket.status === 'serving' ? 'Serving' : liveTicket.status.charAt(0).toUpperCase() + liveTicket.status.slice(1)}
             </motion.div>
           </div>
 
           <div className="mb-10">
             <div className="flex items-end justify-between mb-2">
-               <p className="text-[10px] font-black tracking-[0.2em] text-brand-blue/40 uppercase">Boarding Sequence</p>
-               <span className="text-[10px] font-black text-brand-accent tracking-widest uppercase italic">04 MAY 26</span>
+               <p className="text-[10px] font-black text-brand-blue/40">Boarding sequence</p>
+               <span className="text-[10px] font-black text-brand-accent italic">04 May 26</span>
             </div>
             <p className="font-heading text-7xl font-black tracking-tighter text-brand-blue leading-none">
               {liveTicket.number < 100 ? (liveTicket.service === 'consultation' ? 'CN' : liveTicket.service === 'lab' ? 'LB' : 'PH') : ''}
@@ -124,7 +124,7 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
           {/* Progress Bar (Jesko Style) */}
           <div className="mb-10">
             <div className="flex justify-between items-center mb-2">
-               <span className="text-[9px] font-black tracking-[0.2em] text-brand-blue/30 uppercase italic">Waiting Progress</span>
+               <span className="text-[9px] font-black text-brand-blue/30 italic">Waiting progress</span>
                <span className={cn("text-[10px] font-black italic", `text-${accentColor}`)}>{Math.round(progress)}%</span>
             </div>
             <div className="h-1.5 w-full bg-brand-blue/[0.03] rounded-full overflow-hidden border border-brand-blue/5">
@@ -139,7 +139,7 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
 
           <div className="grid grid-cols-2 gap-8 py-8 border-y border-dashed border-brand-blue/10 mb-8">
             <div className="border-r border-brand-blue/5 pr-4">
-              <p className="text-[9px] font-black tracking-[0.2em] text-brand-blue/40 mb-1 uppercase">Est. Gate Time</p>
+              <p className="text-[9px] font-black text-brand-blue/40 mb-1">Est. gate time</p>
               <AnimatePresence mode="wait">
                 <motion.p
                   key={queueData.estimatedWaitTime}
@@ -147,13 +147,13 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
                   animate={{ opacity: 1, y: 0 }}
                   className="text-3xl font-black text-brand-blue tracking-tighter"
                 >
-                  {liveTicket.status === 'serving' ? 'NOW' : `~${queueData.estimatedWaitTime}`}
-                  <span className="text-xs font-bold text-brand-blue/20 ml-1">MIN</span>
+                  {liveTicket.status === 'serving' ? 'Now' : `~${queueData.estimatedWaitTime}`}
+                  <span className="text-xs font-bold text-brand-blue/20 ml-1">min</span>
                 </motion.p>
               </AnimatePresence>
             </div>
             <div className="pl-4">
-              <p className="text-[9px] font-black tracking-[0.2em] text-brand-blue/40 mb-1 uppercase">Current Rank</p>
+              <p className="text-[9px] font-black text-brand-blue/40 mb-1">Current rank</p>
               <AnimatePresence mode="wait">
                 <motion.p
                   key={queueData.position}
@@ -179,8 +179,8 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
             <div className="w-10 h-10 rounded-2xl bg-white shadow-soft flex items-center justify-center shrink-0 border border-brand-blue/5">
                <Activity className={cn("w-5 h-5", `text-${accentColor}`)} />
             </div>
-            <p className="text-[10px] font-black tracking-widest text-brand-blue/80 uppercase leading-relaxed">
-              {queueData.message}
+            <p className="text-[10px] font-black text-brand-blue/80 leading-relaxed">
+               {queueData.message}
             </p>
           </motion.div>
 
@@ -191,8 +191,8 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
 
           <div className="flex flex-col gap-4">
              <div className="flex gap-4">
-                <button className="flex-1 px-6 py-5 rounded-2xl bg-brand-blue text-white text-[10px] font-black tracking-widest hover:bg-brand-blue/90 hover:-translate-y-1 hover:shadow-premium transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer uppercase shadow-lg shadow-brand-blue/10">
-                   <Download className="w-4 h-4" /> Save Pass
+                <button className="flex-1 px-6 py-5 rounded-2xl bg-brand-blue text-white text-[10px] font-black hover:bg-brand-blue/90 hover:-translate-y-1 hover:shadow-premium transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-blue/10">
+                   <Download className="w-4 h-4" /> Save pass
                 </button>
                 <button className="w-16 h-16 rounded-2xl border-2 border-brand-blue/5 flex items-center justify-center text-brand-blue/40 hover:text-brand-accent hover:border-brand-accent/20 hover:bg-brand-accent/5 transition-all duration-300 cursor-pointer">
                    <Share2 className="w-5 h-5" />
@@ -201,14 +201,14 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
              
              <div className="flex items-center justify-between mt-2">
                 <div className="flex flex-col">
-                   <span className="text-[7px] font-black text-brand-blue/20 tracking-[0.4em] uppercase mb-1">Pass Hash</span>
-                   <span className="text-[9px] font-mono font-bold text-brand-blue/30">{liveTicket.id.substring(0, 16).toUpperCase()}</span>
+                   <span className="text-[7px] font-black text-brand-blue/20 mb-1">Pass hash</span>
+                   <span className="text-[9px] font-mono font-bold text-brand-blue/30">{liveTicket.id.substring(0, 16)}</span>
                 </div>
                 <button 
                     onClick={handleUndo}
-                    className="flex items-center gap-2 text-[8px] font-black text-red-500/40 hover:text-red-500 transition-colors uppercase cursor-pointer"
+                    className="flex items-center gap-2 text-[8px] font-black text-red-500/40 hover:text-red-500 transition-colors cursor-pointer"
                 >
-                    <RotateCcw className="w-3 h-3" /> Cancel Protocol
+                    <RotateCcw className="w-3 h-3" /> Cancel protocol
                 </button>
              </div>
           </div>
@@ -222,12 +222,12 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
                     <div key={i} className="bg-brand-blue" style={{ width: `${w}px`, height: '24px' }} />
                  ))}
               </div>
-              <span className="text-[7px] font-mono font-bold text-brand-blue/40 tracking-[0.5em] text-center uppercase">Secure Protocol Auth</span>
+              <span className="text-[7px] font-mono font-bold text-brand-blue/40 text-center">Secure protocol auth</span>
            </div>
            <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                  <RefreshCw className="w-3 h-3 text-brand-accent animate-spin-slow" />
-                 <span className="text-[8px] font-black tracking-widest text-brand-blue/40 uppercase">Syncing protocol</span>
+                 <span className="text-[8px] font-black text-brand-blue/40">Syncing protocol</span>
               </div>
               <div className="flex gap-1">
                  {[0, 1, 2].map((i) => (

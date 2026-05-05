@@ -30,7 +30,7 @@ function TicketContent() {
            <RefreshCw className="w-16 h-16 text-brand-accent animate-spin" />
            <div className="absolute inset-0 bg-brand-accent/20 blur-2xl rounded-full"></div>
         </div>
-        <p className="font-heading text-3xl font-black text-brand-blue tracking-[0.2em] animate-pulse italic">INITIALIZING PROTOCOL...</p>
+        <p className="font-heading text-3xl font-black text-brand-blue animate-pulse italic">Initializing protocol...</p>
       </div>
     );
   }
@@ -41,10 +41,10 @@ function TicketContent() {
         <div className="w-20 h-20 rounded-[32px] bg-red-50 flex items-center justify-center mb-8 border border-red-100">
            <Info className="w-10 h-10 text-red-500" />
         </div>
-        <h2 className="font-heading text-5xl font-black text-brand-blue mb-4 italic tracking-tighter">PROTOCOL ERROR</h2>
+        <h2 className="font-heading text-5xl font-black text-brand-blue mb-4 italic tracking-tighter">Protocol error</h2>
         <p className="text-brand-blue/40 mb-10 font-medium leading-relaxed">The requested session identifier could not be located in the secure local environment. Please re-authenticate.</p>
-        <Link href="/" className="px-10 py-5 rounded-2xl bg-brand-blue text-white font-black text-xs uppercase tracking-[0.2em] shadow-premium hover:bg-brand-accent transition-all">
-          RETURN TO HOME
+        <Link href="/" className="px-10 py-5 rounded-2xl bg-brand-blue text-white font-black text-xs shadow-premium hover:bg-brand-accent transition-all">
+          Return to home
         </Link>
       </div>
     );
@@ -58,11 +58,11 @@ function TicketContent() {
           <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20 group-hover:bg-red-500 group-hover:border-red-500 transition-all duration-300 shadow-sm">
             <X className="w-4 h-4 text-red-500 group-hover:text-white transition-colors" />
           </div>
-          <span className="text-[10px] font-black uppercase tracking-[0.3em]">Exit Session</span>
+          <span className="text-[10px] font-black">Exit session</span>
         </Link>
         <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-brand-blue/10 text-brand-blue/60 hover:text-brand-accent hover:border-brand-accent/30 transition-colors shadow-sm">
           <Share2 className="w-3.5 h-3.5" />
-          <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Share Protocol</span>
+          <span className="text-[10px] font-black hidden sm:inline">Share protocol</span>
         </button>
       </div>
 
@@ -74,9 +74,9 @@ function TicketContent() {
             animate={{ opacity: 1, y: 0 }}
             className="font-heading text-6xl md:text-8xl font-black text-brand-blue italic tracking-tighter leading-none"
           >
-            ACTIVE <span className="text-brand-accent uppercase not-italic">SESSION.</span>
+            Active <span className="text-brand-accent not-italic">session.</span>
           </motion.h1>
-          <p className="text-[10px] font-black text-brand-blue/20 uppercase tracking-[0.8em] mt-6 ml-4">Authorized Personal Interface</p>
+          <p className="text-[10px] font-black text-brand-blue/20 mt-6 ml-4">Authorized personal interface</p>
         </div>
 
         <TicketCard ticket={ticket} />
@@ -88,7 +88,7 @@ function TicketContent() {
             <div className="absolute top-0 left-0 w-2 h-full bg-brand-accent opacity-20 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="flex items-center gap-4 mb-8">
                <Info className="w-6 h-6 text-brand-accent" />
-               <h4 className="font-heading text-2xl font-black text-brand-blue uppercase italic tracking-tight">Security Directives</h4>
+               <h4 className="font-heading text-2xl font-black text-brand-blue italic tracking-tight">Security directives</h4>
             </div>
             <ul className="space-y-6">
                {[
@@ -114,7 +114,7 @@ export default function MyTicketPage() {
       <Suspense fallback={
         <div className="flex flex-col items-center justify-center py-32 gap-8">
           <RefreshCw className="w-12 h-12 text-brand-accent animate-spin" />
-          <p className="font-heading text-xl font-black text-brand-blue uppercase tracking-widest animate-pulse italic">SYNCING SEARCH PARAMS...</p>
+          <p className="font-heading text-xl font-black text-brand-blue animate-pulse italic">Syncing search params...</p>
         </div>
       }>
         <TicketContent />
@@ -122,4 +122,3 @@ export default function MyTicketPage() {
     </Layout>
   );
 }
-

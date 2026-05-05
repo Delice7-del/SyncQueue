@@ -69,9 +69,9 @@ export default function QueueDisplay() {
                <div className="min-w-0">
                   <h3 className="font-heading text-xl font-black text-brand-blue tracking-tighter truncate">{serviceLabels[service]}</h3>
                   <div className="flex items-center gap-2">
-                     <span className="text-[9px] font-black tracking-[0.1em] text-brand-blue/60 italic">Active stack</span>
+                     <span className="text-[9px] font-black text-brand-blue/60 italic">Active stack</span>
                      <div className="w-1 h-1 rounded-full bg-brand-blue/10"></div>
-                     <span className={cn("text-[9px] font-black tracking-widest", `text-${accentColor}`)}>{waiting.length + (serving ? 1 : 0)} active</span>
+                     <span className={cn("text-[9px] font-black", `text-${accentColor}`)}>{waiting.length + (serving ? 1 : 0)} active</span>
                   </div>
                </div>
             </div>
@@ -98,9 +98,9 @@ export default function QueueDisplay() {
                             <h4 className="font-heading text-sm font-black text-brand-blue tracking-tighter italic">
                                {service.substring(0, 3).toUpperCase()}-{ticket.number.toString().padStart(3, '0')}
                             </h4>
-                            <p className="text-[8px] font-bold text-brand-blue/60 tracking-widest">{serviceLabels[service]}</p>
+                            <p className="text-[8px] font-bold text-brand-blue/60">{serviceLabels[service]}</p>
                          </div>
-                         <span className="text-[9px] font-black text-green-600 tracking-[0.1em]">Done</span>
+                         <span className="text-[9px] font-black text-green-600">Done</span>
                       </div>
                     </motion.div>
                   ))}
@@ -126,10 +126,10 @@ export default function QueueDisplay() {
                             <h4 className="font-heading text-xl font-black text-brand-blue tracking-tighter">
                                {service.substring(0, 3).toUpperCase()}-{serving.number.toString().padStart(3, '0')}
                             </h4>
-                            <p className="text-[8px] font-bold text-brand-blue/60 tracking-widest">{serviceLabels[service]}</p>
+                            <p className="text-[8px] font-bold text-brand-blue/60">{serviceLabels[service]}</p>
                          </div>
                          <div className="text-right">
-                            <span className={cn("text-[9px] font-black tracking-[0.1em] block", `text-${accentColor}`)}>Now serving</span>
+                            <span className={cn("text-[9px] font-black block", `text-${accentColor}`)}>Now serving</span>
                             <span className="text-[8px] font-bold text-brand-blue/40 italic">Active protocol</span>
                          </div>
                       </div>
@@ -153,10 +153,10 @@ export default function QueueDisplay() {
                             <h4 className="font-heading text-base font-black text-brand-blue/60 group-hover:text-brand-blue transition-colors tracking-tighter italic">
                                {service.substring(0, 3).toUpperCase()}-{ticket.number.toString().padStart(3, '0')}
                             </h4>
-                            <p className="text-[8px] font-bold text-brand-blue/40 group-hover:text-brand-blue/60 tracking-widest">{serviceLabels[service]}</p>
+                            <p className="text-[8px] font-bold text-brand-blue/40 group-hover:text-brand-blue/60">{serviceLabels[service]}</p>
                          </div>
                          <div className="text-right">
-                             <span className="text-[9px] font-black text-brand-accent tracking-[0.1em] block">
+                             <span className="text-[9px] font-black text-brand-accent block">
                                {serving ? `Position ${idx + 2}` : (idx === 0 ? 'Now serving' : `Position ${idx + 1}`)}
                              </span>
                              <span className="text-[10px] font-black text-brand-blue tracking-tight">
@@ -181,7 +181,7 @@ export default function QueueDisplay() {
                   {/* MORE INDICATOR */}
                   {waiting.length > 4 && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pl-[72px] py-1">
-                       <span className="text-[8px] font-black text-brand-blue/60 tracking-[0.3em]">
+                       <span className="text-[8px] font-black text-brand-blue/60">
                           + {waiting.length - 4} more in stack
                        </span>
                     </motion.div>
@@ -191,7 +191,7 @@ export default function QueueDisplay() {
                   {!serving && waiting.length === 0 && completed.length === 0 && (
                     <div className="flex flex-col items-center justify-center py-12 opacity-40">
                        <Clock className="w-12 h-12 text-brand-blue mb-4" />
-                       <p className="text-[10px] font-black tracking-widest text-brand-blue">Standby mode</p>
+                       <p className="text-[10px] font-black text-brand-blue">Standby mode</p>
                     </div>
                   )}
                </AnimatePresence>

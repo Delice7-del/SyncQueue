@@ -149,7 +149,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   className={isOffline ? "text-red-500 flex items-center gap-2" : "text-brand-accent flex items-center gap-2"}
                 >
                   {isOffline ? <WifiOff className="w-4 h-4" /> : <Wifi className="w-4 h-4" />}
-                  <span className="text-[10px] font-black tracking-widest uppercase italic">
+                  <span className="text-[10px] font-black italic">
                     {isOffline ? 'Offline mode' : 'Protocol active'}
                   </span>
                 </motion.div>
@@ -230,7 +230,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </div>
               <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-brand-accent/10 border border-brand-accent/20 mb-6">
                 <ShieldCheck className="w-4 h-4 text-brand-accent" />
-                <span className="text-[10px] font-black tracking-widest text-brand-accent uppercase">Security first</span>
+                <span className="text-[10px] font-black text-brand-accent">Security first</span>
               </div>
               <h2 className="font-heading text-4xl font-black text-brand-blue tracking-tighter mb-4 leading-tight italic">
                 Optimize flow:<br />Join protocol
@@ -240,7 +240,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </p>
               <button 
                 onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-8 py-4 rounded-xl bg-brand-blue text-white font-black text-[10px] tracking-widest shadow-premium hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                className="px-8 py-4 rounded-xl bg-brand-blue text-white font-black text-[10px] shadow-premium hover:-translate-y-1 transition-all duration-300 cursor-pointer"
               >
                 Access portal
               </button>
@@ -261,9 +261,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <span className="font-heading text-2xl font-black tracking-tighter text-brand-blue">SyncQueue</span>
                 </div>
                 <div className="flex flex-col items-start md:items-end gap-3">
-                  <Link href="#features" className="text-[9px] font-black tracking-[0.2em] text-brand-blue/70 hover:text-brand-accent transition-colors uppercase">Infrastructure</Link>
-                  <Link href="#about" className="text-[9px] font-black tracking-[0.2em] text-brand-blue/70 hover:text-brand-accent transition-colors uppercase">About systems</Link>
-                  <Link href="/#contact" className="text-[9px] font-black tracking-[0.2em] text-brand-blue/70 hover:text-brand-accent transition-colors uppercase">Contact</Link>
+                  <Link href="#features" className="text-[9px] font-black text-brand-blue/70 hover:text-brand-accent transition-colors">Infrastructure</Link>
+                  <Link href="#about" className="text-[9px] font-black text-brand-blue/70 hover:text-brand-accent transition-colors">About systems</Link>
+                  <Link href="/#contact" className="text-[9px] font-black text-brand-blue/70 hover:text-brand-accent transition-colors">Contact</Link>
                 </div>
               </div>
 
@@ -284,7 +284,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         window.location.reload();
                      }
                   }}
-                  className="px-5 py-2.5 rounded-lg border border-red-500/20 bg-red-500/5 text-[8px] font-black tracking-widest text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 cursor-pointer uppercase"
+                  className="px-5 py-2.5 rounded-lg border border-red-500/20 bg-red-500/5 text-[8px] font-black text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 cursor-pointer"
                 >
                   Clear cache
                 </button>
@@ -292,7 +292,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
               <div className="flex items-start gap-4 p-5 rounded-2xl border border-brand-blue/5 bg-brand-blue/[0.02]">
                 <Info className="w-4 h-4 text-brand-blue/60 shrink-0" />
-                <p className="text-[9px] leading-relaxed font-bold text-brand-blue/60 tracking-widest uppercase">
+                <p className="text-[9px] leading-relaxed font-bold text-brand-blue/60">
                   PWA solution. Data stored in IndexedDB. Offline resilient.
                 </p>
               </div>
@@ -300,11 +300,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-brand-blue/5 gap-6">
-            <p className="text-[9px] font-black text-brand-blue/60 tracking-[0.3em] uppercase">© 2026 SyncQueue Protocol</p>
+            <p className="text-[9px] font-black text-brand-blue/60">© 2026 SyncQueue Protocol</p>
             <div className="flex items-center gap-6">
-              <button onClick={() => setLegalModal(legalContent.privacy)} className="text-[9px] font-black text-brand-blue/60 hover:text-brand-accent tracking-widest uppercase cursor-pointer">Privacy</button>
-              <button onClick={() => setLegalModal(legalContent.terms)} className="text-[9px] font-black text-brand-blue/60 hover:text-brand-accent tracking-widest uppercase cursor-pointer">Terms</button>
-              <button onClick={() => setLegalModal(legalContent.security)} className="text-[9px] font-black text-brand-blue/60 hover:text-brand-accent tracking-widest uppercase cursor-pointer">Security</button>
+              <button onClick={() => setLegalModal(legalContent.privacy)} className="text-[9px] font-black text-brand-blue/60 hover:text-brand-accent cursor-pointer">Privacy</button>
+              <button onClick={() => setLegalModal(legalContent.terms)} className="text-[9px] font-black text-brand-blue/60 hover:text-brand-accent cursor-pointer">Terms</button>
+              <button onClick={() => setLegalModal(legalContent.security)} className="text-[9px] font-black text-brand-blue/60 hover:text-brand-accent cursor-pointer">Security</button>
             </div>
           </div>
         </div>
@@ -340,7 +340,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <div className="mt-10 pt-6 border-t border-brand-blue/5">
                 <button 
                   onClick={() => setLegalModal(null)}
-                  className="w-full py-4 rounded-xl bg-brand-blue text-white font-black text-xs tracking-widest uppercase shadow-premium cursor-pointer"
+                  className="w-full py-4 rounded-xl bg-brand-blue text-white font-black text-xs shadow-premium cursor-pointer"
                 >
                   Acknowledge protocol
                 </button>

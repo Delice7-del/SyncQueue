@@ -18,10 +18,10 @@ export default function Dashboard() {
             className="flex items-center gap-3 mb-6"
           >
             <div className="w-10 h-px bg-brand-accent"></div>
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-accent">Administrative Protocol</span>
+            <span className="text-[10px] font-black text-brand-accent">Administrative protocol</span>
           </motion.div>
           <h1 className="font-heading text-5xl md:text-7xl font-black tracking-tighter text-brand-blue italic leading-none">
-            QUEUE <span className="text-brand-blue/20 uppercase not-italic">MONITOR.</span>
+            Queue <span className="text-brand-blue/20 not-italic">monitor.</span>
           </h1>
         </div>
 
@@ -31,7 +31,7 @@ export default function Dashboard() {
                  <BarChart3 className="w-6 h-6 text-brand-blue" />
               </div>
               <div>
-                 <p className="text-[10px] font-black text-brand-blue/20 uppercase tracking-widest mb-0.5">Throughput</p>
+                 <p className="text-[10px] font-black text-brand-blue/20 mb-0.5">Throughput</p>
                  <p className="text-2xl font-black text-brand-blue italic tracking-tighter">98.4%</p>
               </div>
            </div>
@@ -40,7 +40,7 @@ export default function Dashboard() {
                  <ShieldCheck className="w-6 h-6 text-brand-accent" />
               </div>
               <div>
-                 <p className="text-[10px] font-black text-brand-blue/20 uppercase tracking-widest mb-0.5">Security</p>
+                 <p className="text-[10px] font-black text-brand-blue/20 mb-0.5">Security</p>
                  <p className="text-2xl font-black text-brand-accent italic tracking-tighter">AES-256</p>
               </div>
            </div>
@@ -54,11 +54,11 @@ export default function Dashboard() {
                <div className="w-10 h-10 rounded-full bg-brand-blue/[0.03] flex items-center justify-center">
                   <Activity className="w-5 h-5 text-brand-blue animate-pulse" />
                </div>
-               <h2 className="font-heading text-3xl font-black text-brand-blue tracking-tight italic">Active Streams</h2>
+               <h2 className="font-heading text-3xl font-black text-brand-blue tracking-tight italic">Active streams</h2>
             </div>
             <div className="hidden sm:flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-accent/5 border border-brand-accent/10">
                <Zap className="w-3 h-3 text-brand-accent" />
-               <span className="text-[9px] font-black uppercase tracking-widest text-brand-accent">Real-time Node</span>
+               <span className="text-[9px] font-black text-brand-accent">Real-time node</span>
             </div>
          </div>
          
@@ -69,12 +69,12 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12">
          <div className="p-12 rounded-[40px] bg-white border border-brand-blue/5 shadow-soft flex flex-col items-center justify-center text-center group hover:shadow-premium transition-all duration-700">
             <div className="w-1 h-12 bg-brand-blue/10 rounded-full mb-8 group-hover:bg-brand-accent transition-colors duration-700"></div>
-            <span className="text-[10px] font-black uppercase tracking-[0.8em] text-brand-blue/20">Telemetry Alpha</span>
+            <span className="text-[10px] font-black text-brand-blue/20">Telemetry alpha</span>
             <p className="text-xs font-bold text-brand-blue/40 mt-4 max-w-[200px]">Synchronized with edge nodes for minimal latency tracking.</p>
          </div>
          <div className="p-12 rounded-[40px] bg-white border border-brand-blue/5 shadow-soft flex flex-col items-center justify-center text-center group hover:shadow-premium transition-all duration-700">
             <div className="w-1 h-12 bg-brand-blue/10 rounded-full mb-8 group-hover:bg-brand-accent transition-colors duration-700"></div>
-            <span className="text-[10px] font-black uppercase tracking-[0.8em] text-brand-blue/20">Telemetry Beta</span>
+            <span className="text-[10px] font-black text-brand-blue/20">Telemetry beta</span>
             <p className="text-xs font-bold text-brand-blue/40 mt-4 max-w-[200px]">Encrypted protocol verification across global instances.</p>
          </div>
       </div>
