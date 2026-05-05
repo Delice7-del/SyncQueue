@@ -69,7 +69,7 @@ export default function QueueDisplay() {
     const completed = serviceTickets
       .filter(t => t.status === 'done')
       .sort((a, b) => b.createdAt - a.createdAt)
-      .slice(0, 2);
+      .slice(0, 5);
 
     // Serving ticket
     const serving = serviceTickets.find(t => t.status === 'serving');
@@ -121,6 +121,11 @@ export default function QueueDisplay() {
 
                <AnimatePresence mode="popLayout">
                   {/* 1. COMPLETED TICKETS (TOP RANK) */}
+                  {completed.length > 0 && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pl-[72px] mb-2">
+                       <span className="text-[8px] font-black text-green-600/60 uppercase tracking-widest">Historical Protocol</span>
+                    </motion.div>
+                  )}
                   {completed.map((ticket) => (
                     <motion.div
                       key={`done-${ticket.id}`}

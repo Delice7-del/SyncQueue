@@ -188,7 +188,7 @@ export default function Home() {
               <Magnetic>
                  <button 
                    onClick={() => document.getElementById('dashboard')?.scrollIntoView({ behavior: 'smooth' })}
-                   className="group text-xs font-black text-brand-blue hover:text-brand-accent transition-colors flex items-center gap-2 italic relative py-1"
+                   className="group text-xs font-black text-brand-blue hover:text-brand-accent transition-colors flex items-center gap-2 italic relative py-1 cursor-pointer"
                  >
                    View live dashboard
                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -215,20 +215,6 @@ export default function Home() {
             
             <div className="relative">
               {/* TOP RIGHT STATUS BADGE (Restored) */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20, x: 20 }}
-                animate={{ opacity: 1, y: 0, x: 0 }}
-                transition={{ delay: 1.2, duration: 0.8 }}
-                className="absolute -top-10 -right-2 z-30 bg-white rounded-3xl p-5 shadow-premium border border-brand-blue/5 flex items-center gap-4 min-w-[180px]"
-              >
-                <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center border border-green-500/20">
-                  <ShieldCheck className="w-5 h-5 text-green-500" />
-                </div>
-                <div>
-                   <p className="text-[7px] font-black text-brand-blue/20 mb-0.5">Status</p>
-                   <p className="text-[10px] font-black text-green-600 tracking-tight">Secure & synced</p>
-                </div>
-              </motion.div>
 
               {/* BOTTOM LEFT DEPARTMENTS CARD (Restored) */}
               <motion.div 
@@ -639,7 +625,18 @@ export default function Home() {
                      />
                      <div className="absolute bottom-0 left-0 h-[1px] bg-brand-blue/5 w-full -z-10" />
                   </div>
-                  <button className="w-full py-5 rounded-2xl bg-brand-blue text-white font-black text-xs hover:bg-brand-blue/90 hover:-translate-y-1 transition-all shadow-xl shadow-brand-blue/20">Transmit protocol</button>
+                  <Magnetic>
+                     <motion.button 
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full py-5 rounded-2xl bg-brand-blue text-white font-black text-xs hover:shadow-2xl hover:shadow-brand-blue/30 transition-all cursor-pointer relative overflow-hidden group"
+                     >
+                        <span className="relative z-10">Transmit protocol</span>
+                        <motion.div 
+                           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"
+                        />
+                     </motion.button>
+                  </Magnetic>
                </form>
             </div>
             <div className="p-12">

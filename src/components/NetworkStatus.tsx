@@ -22,7 +22,7 @@ export function NetworkStatus() {
   const Icon = current.icon;
 
   return (
-    <div className="fixed top-6 right-6 z-[200]">
+    <div className="z-[200]">
       <AnimatePresence mode="wait">
         <motion.div
           key={networkStatus}

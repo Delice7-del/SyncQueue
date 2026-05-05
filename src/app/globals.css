@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-heading: var(--font-saira);
+  --font-heading: var(--font-outfit);
   --font-body: var(--font-outfit);
   
   /* Premium Light Palette */
@@ -39,13 +39,16 @@
 
 /* ── MASTER NAV (ZERO HORNS - MASKED) ── */
 .nav-container {
-  background: var(--color-brand-blue);
+  background: rgba(10, 37, 64, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 35px;
   position: relative;
   display: flex;
   align-items: center;
   padding: 0 10px;
-  box-shadow: 0 15px 50px -10px rgba(10, 37, 64, 0.4);
+  box-shadow: 0 15px 50px -10px rgba(10, 37, 64, 0.2);
   /* The Secret: Cutting the hole OUT of the bar instead of adding pieces ON TOP */
   mask-image: var(--nav-mask);
   mask-size: 100% 100%;

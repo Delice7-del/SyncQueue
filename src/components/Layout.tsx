@@ -65,8 +65,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, [init, pathname]);
 
   const navItems = [
-    { id: 'home', label: 'Home', icon: Home, href: '/' },
     { id: 'sync', label: 'Sync', icon: RefreshCw, href: '/#features' },
+    { id: 'home', label: 'Home', icon: Home, href: '/' },
     { id: 'queue', label: 'Queue', icon: LayoutDashboard, href: '/dashboard' },
   ];
 
@@ -125,10 +125,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-bg-light selection:bg-brand-blue/10 selection:text-brand-blue font-body">
       {/* ── TOP STATUS BAR ── */}
-      <nav className="fixed top-0 left-0 right-0 z-[120] bg-white/60 backdrop-blur-[40px] border-b border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
+      <nav className="fixed top-0 left-0 right-0 z-[120] bg-white/10 backdrop-blur-[20px] border-b border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
         <div className="max-w-[1700px] mx-auto px-4 md:px-8 h-20 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center gap-3 group">
+            <Link 
+              href="/" 
+              className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/40 backdrop-blur-xl border border-white/20 shadow-premium group transition-all hover:bg-white/60"
+            >
               <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-white shadow-premium group-hover:scale-110 transition-transform border border-brand-blue/5 overflow-hidden">
                 <Image 
                   src="/logo.png" 
@@ -143,20 +146,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex items-center gap-6">
-            <AnimatePresence mode="wait">
-              {mounted && (
-                <motion.div 
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={isOffline ? "text-red-500 flex items-center gap-2" : "text-brand-accent flex items-center gap-2"}
-                >
-                  {isOffline ? <WifiOff className="w-4 h-4" /> : <Wifi className="w-4 h-4" />}
-                  <span className="text-[10px] font-black italic">
-                    {isOffline ? 'Offline mode' : 'Protocol active'}
-                  </span>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <NetworkStatus />
           </div>
         </div>
       </nav>
@@ -353,7 +343,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </AnimatePresence>
 
       {/* ── ADVANCED SYSTEM OVERLAYS ── */}
-      <NetworkStatus />
       <InstallPrompt />
     </div>
   );
