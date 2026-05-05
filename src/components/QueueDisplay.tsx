@@ -20,9 +20,43 @@ const serviceLabels = {
 };
 
 const serviceColors = {
-  consultation: 'brand-accent',
-  lab: 'blue-500',
-  pharmacy: 'emerald-500',
+  consultation: {
+    bg: 'bg-brand-accent',
+    bgLight: 'bg-brand-accent/10',
+    text: 'text-brand-accent',
+    border: 'border-brand-accent/30',
+  },
+  lab: {
+    bg: 'bg-blue-500',
+    bgLight: 'bg-blue-500/10',
+    text: 'text-blue-500',
+    border: 'border-blue-500/30',
+  },
+  pharmacy: {
+    bg: 'bg-emerald-500',
+    bgLight: 'bg-emerald-500/10',
+    text: 'text-emerald-500',
+    border: 'border-emerald-500/30',
+  },
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { 
+    opacity: 1, 
+    x: 0,
+    transition: { duration: 0.5, ease: "circOut" as const }
+  }
 };
 
 export default function QueueDisplay() {
@@ -53,25 +87,29 @@ export default function QueueDisplay() {
       {(['consultation', 'lab', 'pharmacy'] as const).map(service => {
         const { serving, waiting, completed } = getServiceData(service);
         const Icon = serviceIcons[service];
-        const accentColor = serviceColors[service];
+        const colors = serviceColors[service];
         
         return (
           <motion.div 
             layout
             key={service} 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={containerVariants}
             className="flex flex-col bg-white/40 backdrop-blur-sm rounded-[40px] p-8 border border-brand-blue/5 shadow-soft hover:shadow-premium transition-all duration-500"
           >
             {/* Service Header */}
             <div className="flex items-center gap-4 mb-10">
-               <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center border border-brand-blue/5 shadow-soft shrink-0", `bg-${accentColor}/10`)}>
-                  <Icon className={cn("w-7 h-7", `text-${accentColor}`)} />
+               <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center border border-brand-blue/5 shadow-soft shrink-0", colors.bgLight)}>
+                  <Icon className={cn("w-7 h-7", colors.text)} />
                </div>
                <div className="min-w-0">
                   <h3 className="font-heading text-xl font-black text-brand-blue tracking-tighter truncate">{serviceLabels[service]}</h3>
                   <div className="flex items-center gap-2">
                      <span className="text-[9px] font-black text-brand-blue/60 italic">Active stack</span>
                      <div className="w-1 h-1 rounded-full bg-brand-blue/10"></div>
-                     <span className={cn("text-[9px] font-black", `text-${accentColor}`)}>{waiting.length + (serving ? 1 : 0)} active</span>
+                     <span className={cn("text-[9px] font-black", colors.text)}>{waiting.length + (serving ? 1 : 0)} active</span>
                   </div>
                </div>
             </div>
@@ -86,8 +124,7 @@ export default function QueueDisplay() {
                   {completed.map((ticket) => (
                     <motion.div
                       key={`done-${ticket.id}`}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
+                      variants={itemVariants}
                       className="relative z-10 flex items-center gap-4"
                     >
                       <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center border-4 border-white shadow-soft shrink-0">
@@ -115,13 +152,13 @@ export default function QueueDisplay() {
                       className="relative z-10 flex items-center gap-4"
                     >
                       <div className="relative shrink-0">
-                         <div className={cn("w-14 h-14 rounded-full flex items-center justify-center border-4 border-white shadow-premium relative z-10", `bg-${accentColor}`)}>
+                         <div className={cn("w-14 h-14 rounded-full flex items-center justify-center border-4 border-white shadow-premium relative z-10", colors.bg)}>
                             <Loader2 className="w-6 h-6 text-white animate-spin" />
                          </div>
-                         <div className={cn("absolute inset-0 rounded-full animate-ping opacity-20", `bg-${accentColor}`)}></div>
+                         <div className={cn("absolute inset-0 rounded-full animate-ping opacity-20", colors.bg)}></div>
                       </div>
 
-                      <div className={cn("flex-1 bg-white border-2 rounded-2xl p-4 shadow-premium flex justify-between items-center", `border-${accentColor}/30`)}>
+                      <div className={cn("flex-1 bg-white border-2 rounded-2xl p-4 shadow-premium flex justify-between items-center", colors.border)}>
                          <div>
                             <h4 className="font-heading text-xl font-black text-brand-blue tracking-tighter">
                                {service.substring(0, 3).toUpperCase()}-{serving.number.toString().padStart(3, '0')}
@@ -129,7 +166,7 @@ export default function QueueDisplay() {
                             <p className="text-[8px] font-bold text-brand-blue/60">{serviceLabels[service]}</p>
                          </div>
                          <div className="text-right">
-                            <span className={cn("text-[9px] font-black block", `text-${accentColor}`)}>Now serving</span>
+                            <span className={cn("text-[9px] font-black block", colors.text)}>Now serving</span>
                             <span className="text-[8px] font-bold text-brand-blue/40 italic">Active protocol</span>
                          </div>
                       </div>
@@ -137,12 +174,11 @@ export default function QueueDisplay() {
                   )}
 
                   {/* 3. WAITING LIST (QUEUE RANK) */}
-                  {waiting.slice(0, 4).map((ticket, idx) => (
+                   {waiting.slice(0, 4).map((ticket, idx) => (
                     <motion.div
                       key={`waiting-${ticket.id}`}
                       layout
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      variants={itemVariants}
                       className="relative z-10 flex items-center gap-4 group"
                     >
                       <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center border-4 border-white shadow-soft shrink-0 group-hover:border-brand-accent/40 transition-all">

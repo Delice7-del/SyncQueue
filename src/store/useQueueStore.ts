@@ -18,6 +18,9 @@ interface QueueState {
   isOffline: boolean;
   isSyncing: boolean;
   initialized: boolean;
+  networkStatus: 'strong' | 'fair' | 'poor' | 'offline';
+  canInstall: boolean;
+  deferredPrompt: any;
 
   // Actions
   init: () => Promise<void>;
@@ -27,6 +30,7 @@ interface QueueState {
   syncOfflineTickets: () => Promise<void>;
   getQueueData: (ticketId: string) => QueueData;
   deleteTicket: (id: string) => Promise<void>;
+  installApp: () => Promise<void>;
 }
 
 const getServiceDuration = (service: Ticket['service']) => {
@@ -40,22 +44,63 @@ const getServiceDuration = (service: Ticket['service']) => {
   return Math.floor(minutes * 60 * 1000); 
 };
 
+// Singleton broadcast channel for multi-tab sync
+const syncChannel = typeof window !== 'undefined' ? new BroadcastChannel('syncqueue_orchestrator') : null;
+
 export const useQueueStore = create<QueueState>((set, get) => ({
   tickets: [],
   isOffline: false,
   isSyncing: false,
   initialized: false,
+  networkStatus: 'strong',
+  canInstall: false,
+  deferredPrompt: null,
 
   init: async () => {
     if (get().initialized) return;
 
     if (typeof window !== 'undefined') {
-      set({ isOffline: !navigator.onLine });
+      const updateNetwork = () => {
+        const conn = (navigator as any).connection;
+        let status: 'strong' | 'fair' | 'poor' | 'offline' = 'strong';
+        
+        if (!navigator.onLine) {
+          status = 'offline';
+        } else if (conn) {
+          if (conn.effectiveType === '2g') status = 'poor';
+          else if (conn.effectiveType === '3g') status = 'fair';
+        }
+        
+        set({ 
+          isOffline: !navigator.onLine,
+          networkStatus: status
+        });
+      };
+
+      updateNetwork();
+
       window.addEventListener('online', () => {
-        set({ isOffline: false });
+        updateNetwork();
         get().syncOfflineTickets();
       });
-      window.addEventListener('offline', () => set({ isOffline: true }));
+      window.addEventListener('offline', updateNetwork);
+      
+      const conn = (navigator as any).connection;
+      if (conn) conn.addEventListener('change', updateNetwork);
+
+      // PWA Install Prompt
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        set({ deferredPrompt: e, canInstall: true });
+      });
+
+      // Multi-tab Sync
+      syncChannel?.addEventListener('message', async (event) => {
+        if (event.data === 'SYNC_REQUEST') {
+          const tickets = await getTickets();
+          set({ tickets });
+        }
+      });
     }
 
     let tickets = await getTickets();
@@ -96,6 +141,7 @@ export const useQueueStore = create<QueueState>((set, get) => ({
 
     await saveTicket(newTicket);
     set(state => ({ tickets: [...state.tickets, newTicket] }));
+    syncChannel?.postMessage('SYNC_REQUEST');
 
     return newTicket;
   },
@@ -108,6 +154,7 @@ export const useQueueStore = create<QueueState>((set, get) => ({
     set(state => ({
       tickets: state.tickets.map(t => t.id === id ? { ...t, ...fields } : t),
     }));
+    syncChannel?.postMessage('SYNC_REQUEST');
   },
 
   setOffline: (status) => set({ isOffline: status }),
@@ -119,6 +166,7 @@ export const useQueueStore = create<QueueState>((set, get) => ({
     const updatedTickets = get().tickets.map(t => ({ ...t, synced: true }));
     for (const t of updatedTickets) await saveTicket(t);
     set({ tickets: updatedTickets, isSyncing: false });
+    syncChannel?.postMessage('SYNC_REQUEST');
   },
 
   getQueueData: (ticketId) => {
@@ -136,7 +184,6 @@ export const useQueueStore = create<QueueState>((set, get) => ({
       return { position: 1, estimatedWaitTime: 0, message: 'You are now being served' };
     }
 
-    // Is waiting
     const waiting = serviceTickets
       .filter(t => t.status === 'waiting')
       .sort((a, b) => a.createdAt - b.createdAt);
@@ -146,10 +193,8 @@ export const useQueueStore = create<QueueState>((set, get) => ({
 
     const position = serving ? waitIndex + 2 : waitIndex + 1;
 
-    // Smart Wait Time Calculation
     let totalWaitMs = 0;
     
-    // 1. Time remaining for the current person serving
     if (serving) {
       const startTime = serving.servedAt || serving.createdAt;
       const duration = serving.estimatedDuration || (5 * 60 * 1000);
@@ -157,7 +202,6 @@ export const useQueueStore = create<QueueState>((set, get) => ({
       totalWaitMs += remaining;
     }
 
-    // 2. Sum durations of people ahead in waiting list
     for (let i = 0; i < waitIndex; i++) {
       totalWaitMs += (waiting[i].estimatedDuration || (5 * 60 * 1000));
     }
@@ -181,5 +225,18 @@ export const useQueueStore = create<QueueState>((set, get) => ({
     set(state => ({
       tickets: state.tickets.filter(t => t.id !== id),
     }));
+    syncChannel?.postMessage('SYNC_REQUEST');
+  },
+
+  installApp: async () => {
+    const prompt = get().deferredPrompt;
+    if (!prompt) return;
+
+    prompt.prompt();
+    const { outcome } = await prompt.userChoice;
+    
+    if (outcome === 'accepted') {
+      set({ canInstall: false, deferredPrompt: null });
+    }
   },
 }));

@@ -31,6 +31,8 @@ import QueueDisplay from '@/components/QueueDisplay';
 import Magnetic from '@/components/Magnetic';
 
 import HeroVisual from '@/components/HeroVisual';
+import BackgroundParticles from '@/components/BackgroundParticles';
+import { startQueueSimulation } from '@/lib/simulation';
 
 export default function Home() {
   const { createTicket } = useQueueStore();
@@ -79,8 +81,30 @@ export default function Home() {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+    const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "circOut" as const }
+    }
+  };
+
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative">
+      <BackgroundParticles />
+
       {/* ── PROCESSING OVERLAY ── */}
       <AnimatePresence>
         {isProcessing && (
@@ -162,14 +186,22 @@ export default function Home() {
               </Magnetic>
               
               <Magnetic>
-                <button 
-                  onClick={() => document.getElementById('dashboard')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="text-xs font-black text-brand-blue hover:text-brand-accent transition-colors flex items-center gap-2 italic"
-                >
-                  View live dashboard
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </Magnetic>
+                 <button 
+                   onClick={() => document.getElementById('dashboard')?.scrollIntoView({ behavior: 'smooth' })}
+                   className="group text-xs font-black text-brand-blue hover:text-brand-accent transition-colors flex items-center gap-2 italic relative py-1"
+                 >
+                   View live dashboard
+                   <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                   <motion.span 
+                      className="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-accent"
+                      whileHover={{ width: '100%' }}
+                      transition={{ duration: 0.3 }}
+                   />
+                   <motion.span 
+                      className="absolute bottom-0 left-0 w-full h-[1px] bg-brand-blue/5"
+                   />
+                 </button>
+               </Magnetic>
             </div>
           </motion.div>
 
@@ -308,31 +340,41 @@ export default function Home() {
       </div>
     </section>
 
-      {/* 2. Live Dashboard Section */}
-      <section id="dashboard" className="relative scroll-mt-32 pb-32">
-         <div className="text-center mb-16">
-            <h2 className="font-heading text-4xl font-black text-brand-blue tracking-tighter mb-4 italic">Live monitor</h2>
-            <p className="text-[10px] font-black text-brand-blue/60 italic">Real-time protocol synchronization</p>
-         </div>
-         <div className="bg-white rounded-[40px] shadow-premium border border-brand-blue/5 overflow-hidden">
-            <QueueDisplay />
-         </div>
-      </section>
+       <motion.section 
+          id="dashboard" 
+          className="relative scroll-mt-32 pb-32"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
+       >
+          <motion.div variants={itemVariants} className="text-center mb-16">
+             <h2 className="font-heading text-4xl font-black text-brand-blue tracking-tighter mb-4 italic">Live monitor</h2>
+             <p className="text-[10px] font-black text-brand-blue/60 italic">Real-time protocol synchronization</p>
+          </motion.div>
+          <motion.div variants={itemVariants} className="bg-white rounded-[40px] shadow-premium border border-brand-blue/5 overflow-hidden">
+             <QueueDisplay />
+          </motion.div>
+       </motion.section>
 
-      {/* 3. Initialize Session Section */}
-      <section id="services" className="relative scroll-mt-32 pb-32">
-        <div className="text-center mb-20">
+       <motion.section 
+        id="services" 
+        className="relative scroll-mt-32 pb-32"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={containerVariants}
+      >
+        <motion.div variants={itemVariants} className="text-center mb-20">
           <h2 className="font-heading text-4xl font-black text-brand-blue tracking-tighter mb-4 italic">Initialize session</h2>
           <p className="text-[10px] font-black text-brand-blue/60 italic">Select department protocol</p>
-        </div>
+        </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {services.map((service, i) => (
             <Magnetic key={service.id}>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
+               <motion.div
+                variants={itemVariants}
+                whileHover={{ y: -10, transition: { duration: 0.3 } }}
                 className="group relative bg-white rounded-[40px] p-10 shadow-premium border border-brand-blue/5 overflow-hidden flex flex-col h-full cursor-pointer"
                 onClick={() => handleCreateTicket(service.id as any)}
               >
@@ -357,16 +399,22 @@ export default function Home() {
             </Magnetic>
           ))}
         </div>
-      </section>
+      </motion.section>
 
-      {/* 4. About Systems Section (EXACT 4:47 PM NUMBERED GRID) */}
-      <section id="about" className="relative pb-32 scroll-mt-32">
-         <div className="text-center mb-20">
-            <h2 className="font-heading text-5xl font-black text-brand-blue tracking-tighter mb-4 italic leading-none">About systems.</h2>
-            <p className="text-[10px] font-black text-brand-blue/30 italic">Engineering mission-critical infrastructure</p>
-         </div>
-         
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+       <motion.section 
+          id="about" 
+          className="relative pb-32 scroll-mt-32"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
+       >
+          <motion.div variants={itemVariants} className="text-center mb-20">
+             <h2 className="font-heading text-5xl font-black text-brand-blue tracking-tighter mb-4 italic leading-none">About systems.</h2>
+             <p className="text-[10px] font-black text-brand-blue/30 italic">Engineering mission-critical infrastructure</p>
+          </motion.div>
+          
+          <motion.div variants={containerVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {[
               { 
                 title: 'Dynamic Protocol', 
@@ -393,7 +441,12 @@ export default function Home() {
                 num: '04'
               }
             ].map((item, i) => (
-              <div key={i} className="relative group">
+              <motion.div 
+                key={i} 
+                variants={itemVariants}
+                whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+                className="relative group"
+              >
                 {/* LARGE BACKGROUND NUMBER (4:47 PM Style) */}
                 <span className="absolute -top-10 -left-6 text-[120px] font-black text-brand-blue/[0.03] select-none group-hover:text-brand-accent/[0.05] transition-colors duration-700">
                   {item.num}
@@ -409,10 +462,10 @@ export default function Home() {
                   </p>
                   <div className="w-10 h-1 bg-brand-blue/5 rounded-full group-hover:w-20 group-hover:bg-brand-accent transition-all duration-500" />
                 </div>
-              </div>
-            ))}
-         </div>
-      </section>
+               </motion.div>
+             ))}
+          </motion.div>
+       </motion.section>
 
       {/* 5. Blue Offline Section (RESTORED BLUE SECTION) */}
       <section id="features" className="relative pb-32">
@@ -460,22 +513,133 @@ export default function Home() {
                <p className="text-sm font-medium text-brand-blue/60 mb-10 leading-relaxed">
                   For administrative inquiries or infrastructure support, please initiate a contact sequence.
                </p>
-               <form className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                     <div className="space-y-2">
-                        <label className="text-[9px] font-black text-brand-blue/40">Protocol name</label>
-                        <input type="text" className="w-full bg-bg-light border border-brand-blue/5 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-brand-accent/30" placeholder="Identity" />
+               <form className="space-y-12">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                     <div className="relative group">
+                        <input 
+                           type="text" 
+                           id="first-name"
+                           className="peer w-full bg-transparent border-b border-brand-blue/10 py-3 text-sm text-brand-blue focus:outline-none placeholder-transparent" 
+                           placeholder="First name" 
+                        />
+                        <label 
+                           htmlFor="first-name"
+                           className="absolute left-0 -top-3.5 text-brand-blue/40 text-[10px] font-black transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-brand-blue/20 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-brand-accent peer-focus:text-[10px]"
+                        >
+                           First name
+                        </label>
+                        <motion.div 
+                           className="absolute bottom-0 left-0 h-[2px] bg-brand-accent w-0"
+                           whileFocus={{ width: '100%' }}
+                           initial={false}
+                        />
+                        <div className="absolute bottom-0 left-0 h-[1px] bg-brand-blue/5 w-full -z-10" />
                      </div>
-                     <div className="space-y-2">
-                        <label className="text-[9px] font-black text-brand-blue/40">Auth email</label>
-                        <input type="email" className="w-full bg-bg-light border border-brand-blue/5 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-brand-accent/30" placeholder="email@hospital.org" />
+                     <div className="relative group">
+                        <input 
+                           type="text" 
+                           id="second-name"
+                           className="peer w-full bg-transparent border-b border-brand-blue/10 py-3 text-sm text-brand-blue focus:outline-none placeholder-transparent" 
+                           placeholder="Second name" 
+                        />
+                        <label 
+                           htmlFor="second-name"
+                           className="absolute left-0 -top-3.5 text-brand-blue/40 text-[10px] font-black transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-brand-blue/20 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-brand-accent peer-focus:text-[10px]"
+                        >
+                           Second name
+                        </label>
+                        <motion.div 
+                           className="absolute bottom-0 left-0 h-[2px] bg-brand-accent w-0"
+                           whileFocus={{ width: '100%' }}
+                           initial={false}
+                        />
+                        <div className="absolute bottom-0 left-0 h-[1px] bg-brand-blue/5 w-full -z-10" />
                      </div>
                   </div>
-                  <div className="space-y-2">
-                     <label className="text-[9px] font-black text-brand-blue/40">Sequence message</label>
-                     <textarea className="w-full bg-bg-light border border-brand-blue/5 rounded-xl px-4 py-4 text-xs focus:outline-none focus:border-brand-accent/30 h-32" placeholder="Describe the inquiry protocol..."></textarea>
+                  
+                  <div className="relative group">
+                     <input 
+                        type="text" 
+                        id="username"
+                        className="peer w-full bg-transparent border-b border-brand-blue/10 py-3 text-sm text-brand-blue focus:outline-none placeholder-transparent" 
+                        placeholder="Administrative lead" 
+                     />
+                     <label 
+                        htmlFor="username"
+                        className="absolute left-0 -top-3.5 text-brand-blue/40 text-[10px] font-black transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-brand-blue/20 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-brand-accent peer-focus:text-[10px]"
+                     >
+                        Administrative lead
+                     </label>
+                     <motion.div 
+                        className="absolute bottom-0 left-0 h-[2px] bg-brand-accent w-0"
+                        whileFocus={{ width: '100%' }}
+                        initial={false}
+                     />
+                     <div className="absolute bottom-0 left-0 h-[1px] bg-brand-blue/5 w-full -z-10" />
                   </div>
-                  <button className="w-full py-4 rounded-xl bg-brand-blue text-white font-black text-xs hover:bg-brand-blue/90 transition-all shadow-premium">Transmit protocol</button>
+
+                  <div className="relative group">
+                     <input 
+                        type="email" 
+                        id="auth-email"
+                        className="peer w-full bg-transparent border-b border-brand-blue/10 py-3 text-sm text-brand-blue focus:outline-none placeholder-transparent" 
+                        placeholder="Auth email" 
+                     />
+                     <label 
+                        htmlFor="auth-email"
+                        className="absolute left-0 -top-3.5 text-brand-blue/40 text-[10px] font-black transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-brand-blue/20 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-brand-accent peer-focus:text-[10px]"
+                     >
+                        Auth email
+                     </label>
+                     <motion.div 
+                        className="absolute bottom-0 left-0 h-[2px] bg-brand-accent w-0"
+                        whileFocus={{ width: '100%' }}
+                        initial={false}
+                     />
+                     <div className="absolute bottom-0 left-0 h-[1px] bg-brand-blue/5 w-full -z-10" />
+                  </div>
+
+                  <div className="relative group">
+                     <input 
+                        type="text" 
+                        id="priority"
+                        className="peer w-full bg-transparent border-b border-brand-blue/10 py-3 text-sm text-brand-blue focus:outline-none placeholder-transparent" 
+                        placeholder="Priority level" 
+                     />
+                     <label 
+                        htmlFor="priority"
+                        className="absolute left-0 -top-3.5 text-brand-blue/40 text-[10px] font-black transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-brand-blue/20 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-brand-accent peer-focus:text-[10px]"
+                     >
+                        Priority level
+                     </label>
+                     <motion.div 
+                        className="absolute bottom-0 left-0 h-[2px] bg-brand-accent w-0"
+                        whileFocus={{ width: '100%' }}
+                        initial={false}
+                     />
+                     <div className="absolute bottom-0 left-0 h-[1px] bg-brand-blue/5 w-full -z-10" />
+                  </div>
+
+                  <div className="relative group">
+                     <textarea 
+                        id="sequence-message"
+                        className="peer w-full bg-transparent border-b border-brand-blue/10 py-3 text-sm text-brand-blue focus:outline-none placeholder-transparent h-32 resize-none" 
+                        placeholder="Sequence message"
+                     ></textarea>
+                     <label 
+                        htmlFor="sequence-message"
+                        className="absolute left-0 -top-3.5 text-brand-blue/40 text-[10px] font-black transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-brand-blue/20 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-brand-accent peer-focus:text-[10px]"
+                     >
+                        Sequence message
+                     </label>
+                     <motion.div 
+                        className="absolute bottom-0 left-0 h-[2px] bg-brand-accent w-0"
+                        whileFocus={{ width: '100%' }}
+                        initial={false}
+                     />
+                     <div className="absolute bottom-0 left-0 h-[1px] bg-brand-blue/5 w-full -z-10" />
+                  </div>
+                  <button className="w-full py-5 rounded-2xl bg-brand-blue text-white font-black text-xs hover:bg-brand-blue/90 hover:-translate-y-1 transition-all shadow-xl shadow-brand-blue/20">Transmit protocol</button>
                </form>
             </div>
             <div className="p-12">
@@ -518,6 +682,26 @@ export default function Home() {
             </div>
          </div>
       </section>
+      
+      {/* 7. Footer */}
+      <footer className="pt-12 pb-8 border-t border-brand-blue/5 max-w-7xl mx-auto px-6">
+         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="flex items-center gap-3">
+               <div className="w-8 h-8 rounded-lg bg-brand-blue flex items-center justify-center">
+                  <span className="text-white font-black text-[10px]">SQ</span>
+               </div>
+               <span className="font-heading text-lg font-black text-brand-blue italic tracking-tighter">SyncQueue.</span>
+            </div>
+            
+            <div className="flex gap-10">
+               {['Protocols', 'Security', 'Infrastructure', 'Global'].map((link) => (
+                  <a key={link} href="#" className="text-[10px] font-black text-brand-blue/40 hover:text-brand-accent transition-colors italic">{link}</a>
+               ))}
+            </div>
+            
+            <p className="text-[9px] font-black text-brand-blue/20">© 2026 SyncQueue Infrastructure. All rights reserved.</p>
+         </div>
+      </footer>
     </div>
   );
 }

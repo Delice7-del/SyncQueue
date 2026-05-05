@@ -26,6 +26,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { startQueueSimulation, stopQueueSimulation } from '@/lib/simulation';
+import { NetworkStatus } from './NetworkStatus';
+import { InstallPrompt } from './InstallPrompt';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { tickets, isOffline, init } = useQueueStore();
@@ -349,6 +351,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ── ADVANCED SYSTEM OVERLAYS ── */}
+      <NetworkStatus />
+      <InstallPrompt />
     </div>
   );
 }

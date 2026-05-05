@@ -30,14 +30,23 @@ const FloatingNode = ({ delay = 0, x = 0, y = 0, size = 2 }) => (
 );
 
 export default function HeroVisual() {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const nodes = useMemo(() => {
+    if (!mounted) return [];
     return Array.from({ length: 15 }).map((_, i) => ({
       delay: i * 0.5,
       x: (Math.random() - 0.5) * 100,
       y: (Math.random() - 0.5) * 100,
       size: 2 + Math.random() * 3
     }));
-  }, []);
+  }, [mounted]);
+
+  if (!mounted) return null;
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center opacity-40 lg:opacity-100">

@@ -70,8 +70,14 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
       <motion.div 
         initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
+        whileHover={{ 
+          scale: 1.02,
+          rotateY: 2,
+          rotateX: -2,
+          transition: { duration: 0.4, ease: "easeOut" }
+        }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
-        className="w-full max-w-sm bg-white rounded-[40px] shadow-2xl border border-brand-blue/5 relative overflow-visible"
+        className="w-full max-w-sm bg-white rounded-[40px] shadow-2xl border border-brand-blue/5 relative overflow-visible group/card"
       >
         {/* Glow behind card */}
         <motion.div 
@@ -88,7 +94,16 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
 
         <div className={cn("h-2.5 w-full bg-gradient-to-r rounded-t-[40px]", `from-${accentColor} via-blue-400 to-indigo-500`)} />
 
-        <div className="p-10 pb-6 relative z-10">
+        <div className="p-10 pb-6 relative z-10 overflow-hidden rounded-b-[40px]">
+          {/* Shimmer Effect on Hover */}
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 z-20 pointer-events-none"
+            initial={{ x: '-100%' }}
+            whileHover={{ 
+              x: '200%', 
+              transition: { duration: 0.8, ease: "easeInOut" } 
+            }}
+          />
           <div className="flex items-center justify-between mb-8">
             <div className="flex flex-col">
               <span className={cn("text-[9px] font-black mb-1", `text-${accentColor}`)}>Health protocol</span>
