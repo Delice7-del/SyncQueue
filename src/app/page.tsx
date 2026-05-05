@@ -105,7 +105,7 @@ export default function Home() {
     <div className="relative">
       <BackgroundParticles />
 
-      {/* ── PROCESSING OVERLAY ── */}
+      {/* Loading overlay for ticket creation */}
       <AnimatePresence>
         {isProcessing && (
           <motion.div 
@@ -137,7 +137,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* 1. Hero Section */}
+      {/* Hero */}
       <section className="relative pt-4 pb-32 overflow-hidden">
         <HeroVisual />
         
@@ -214,9 +214,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-brand-accent/10 blur-[80px] rounded-full scale-75" />
             
             <div className="relative">
-              {/* TOP RIGHT STATUS BADGE (Restored) */}
-
-              {/* BOTTOM LEFT DEPARTMENTS CARD (Restored) */}
+              {/* Status badges */}
               <motion.div 
                 initial={{ opacity: 0, y: -20, x: -20 }}
                 animate={{ opacity: 1, y: 0, x: 0 }}
@@ -453,7 +451,7 @@ export default function Home() {
           </motion.div>
        </motion.section>
 
-      {/* 5. Blue Offline Section (RESTORED BLUE SECTION) */}
+      {/* Offline resiliency details */}
       <section id="features" className="relative pb-32">
          <div className="bg-brand-blue rounded-[50px] p-16 relative overflow-hidden text-white">
             <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/20 to-transparent opacity-50" />
@@ -487,7 +485,7 @@ export default function Home() {
          </div>
       </section>
 
-      {/* 6. Contact Section */}
+      {/* Contact */}
       <section id="contact" className="relative pb-12 scroll-mt-32">
          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div className="bg-white rounded-[40px] p-12 shadow-premium border border-brand-blue/5">
@@ -680,7 +678,7 @@ export default function Home() {
          </div>
       </section>
       
-      {/* 7. Footer */}
+      {/* Footer */}
       <footer className="pt-12 pb-8 border-t border-brand-blue/5 max-w-7xl mx-auto px-6">
          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex items-center gap-3">

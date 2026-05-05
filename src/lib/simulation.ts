@@ -1,15 +1,11 @@
-/**
- * SyncQueue – Real-time Queue Simulation Engine
- */
-
 import { useQueueStore } from '@/store/useQueueStore';
 import { Ticket } from '@/lib/db';
 
-// Fallback durations (ms) if not defined on ticket
+// fallback durations if missing
 const FALLBACK_DURATION_MS: Record<string, number> = {
-  consultation: 300000, // 5 minutes
-  lab:          300000, // 5 minutes
-  pharmacy:     300000, // 5 minutes
+  consultation: 300000, 
+  lab:          300000, 
+  pharmacy:     300000, 
 };
 
 const POLL_INTERVAL_MS = 2000; 

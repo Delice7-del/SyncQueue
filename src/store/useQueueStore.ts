@@ -22,7 +22,7 @@ interface QueueState {
   canInstall: boolean;
   deferredPrompt: any;
 
-  // Actions
+
   init: () => Promise<void>;
   createTicket: (service: Ticket['service']) => Promise<Ticket>;
   updateStatus: (id: string, status: Ticket['status']) => Promise<void>;
@@ -44,7 +44,7 @@ const getServiceDuration = (service: Ticket['service']) => {
   return Math.floor(minutes * 60 * 1000); 
 };
 
-// Singleton broadcast channel for multi-tab sync
+// broadcast channel for multi-tab sync
 const syncChannel = typeof window !== 'undefined' ? new BroadcastChannel('syncqueue_orchestrator') : null;
 
 export const useQueueStore = create<QueueState>((set, get) => ({
@@ -88,13 +88,13 @@ export const useQueueStore = create<QueueState>((set, get) => ({
       const conn = (navigator as any).connection;
       if (conn) conn.addEventListener('change', updateNetwork);
 
-      // PWA Install Prompt
+      // handle PWA installation
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         set({ deferredPrompt: e, canInstall: true });
       });
 
-      // Multi-tab Sync
+      // sync state across tabs
       syncChannel?.addEventListener('message', async (event) => {
         if (event.data === 'SYNC_REQUEST') {
           const tickets = await getTickets();
@@ -162,6 +162,7 @@ export const useQueueStore = create<QueueState>((set, get) => ({
   syncOfflineTickets: async () => {
     if (get().isOffline) return;
     set({ isSyncing: true });
+    // fake a network delay for the sync animation
     await new Promise(resolve => setTimeout(resolve, 1500));
     const updatedTickets = get().tickets.map(t => ({ ...t, synced: true }));
     for (const t of updatedTickets) await saveTicket(t);
@@ -199,7 +200,7 @@ export const useQueueStore = create<QueueState>((set, get) => ({
       const startTime = serving.servedAt || serving.createdAt;
       const duration = serving.estimatedDuration || (5 * 60 * 1000);
       const remaining = Math.max(0, (startTime + duration) - now);
-      totalWaitMs += remaining;
+      totalWaitMs += remaining; // current person remaining time
     }
 
     for (let i = 0; i < waitIndex; i++) {
