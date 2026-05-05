@@ -159,5 +159,5 @@ Deployed on Vercel with automatic builds.
 
 ---
 
-Built by **Delice Keza**  
+Built with passion by **Delice Keza**  
 Frontend Engineering Challenge · 2026
