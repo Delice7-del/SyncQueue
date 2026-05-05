@@ -105,6 +105,7 @@ export const useQueueStore = create<QueueState>((set, get) => ({
 
     let tickets = await getTickets();
 
+    // ensure only one person is serving per department on reload
     const services = ['consultation', 'lab', 'pharmacy'] as const;
     for (const service of services) {
       const servingTickets = tickets
@@ -112,6 +113,7 @@ export const useQueueStore = create<QueueState>((set, get) => ({
         .sort((a, b) => (a.createdAt ?? 0) - (b.createdAt ?? 0));
 
       if (servingTickets.length > 1) {
+        // if somehow multiple people are serving, reset all but the first one
         const toReset = servingTickets.slice(1);
         for (const t of toReset) {
           await updateTicketInDB(t.id, { status: 'waiting', servedAt: undefined });

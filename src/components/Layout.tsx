@@ -39,8 +39,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [legalModal, setLegalModal] = useState<{ title: string; content: string } | null>(null);
 
   useEffect(() => {
-    setMounted(true);
-    init();
+    const runInit = async () => {
+      await init();
+      setMounted(true);
+      startQueueSimulation();
+    };
+    
+    runInit();
     
     const handleLocationChange = () => {
       setActiveHash(window.location.hash);
@@ -54,8 +59,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     window.addEventListener('hashchange', handleLocationChange);
     window.addEventListener('popstate', handleLocationChange);
     handleLocationChange();
-
-    startQueueSimulation();
 
     return () => {
       window.removeEventListener('hashchange', handleLocationChange);

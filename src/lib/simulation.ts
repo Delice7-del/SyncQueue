@@ -15,6 +15,8 @@ const serveStartTime: Record<string, number> = {};
 
 export function startQueueSimulation() {
   if (masterInterval !== null) return;
+  // Run an immediate tick to catch up on state after reload
+  tick();
   masterInterval = setInterval(tick, POLL_INTERVAL_MS);
 }
 
@@ -47,7 +49,8 @@ function tick() {
 
     if (serving) {
       if (!serveStartTime[serving.id]) {
-        serveStartTime[serving.id] = serving.servedAt ?? now;
+        // catch up from when they actually started serving in the DB
+        serveStartTime[serving.id] = serving.servedAt || now;
       }
 
       const elapsed = now - serveStartTime[serving.id];

@@ -60,7 +60,16 @@ const itemVariants = {
 };
 
 export default function QueueDisplay() {
-  const { tickets } = useQueueStore();
+  const { tickets, initialized } = useQueueStore();
+
+  if (!initialized) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
+        <Loader2 className="w-8 h-8 text-brand-blue animate-spin" />
+        <p className="text-[10px] font-black text-brand-blue uppercase tracking-widest">Synchronizing stack...</p>
+      </div>
+    );
+  }
 
   const getServiceData = (service: Ticket['service']) => {
     const serviceTickets = tickets.filter(t => t.service === service);
