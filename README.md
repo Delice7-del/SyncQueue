@@ -156,6 +156,7 @@ This ensures a smooth and responsive user experience.
 ## Deployment
 
 Deployed on Vercel with automatic builds.
+Link: syncqueue.vercel.app
 
 ---
 
