@@ -116,7 +116,7 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
       whileInView="visible"
       viewport={{ once: true }}
       variants={containerVariants}
-      className="flex flex-col bg-white/40 backdrop-blur-sm rounded-lg p-10 border border-brand-blue/5 hover:bg-white/60 transition-all duration-500 h-fit"
+      className="flex flex-col bg-brand-blue/[0.02] backdrop-blur-md rounded-lg p-10 border border-brand-blue/10 hover:bg-brand-blue/[0.04] transition-all duration-500 h-fit"
     >
       {/* Service Header */}
       <div className="flex items-center gap-4 mb-6">
@@ -189,18 +189,16 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                             {service.substring(0, 3).toUpperCase()}-{serving.number.toString().padStart(3, '0')}
                          </h4>
                          <span className={cn("text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-brand-blue/5", colors.text)}>Serving</span>
+                         <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-blue/5 border border-brand-blue/5">
+                            <span className="w-1 h-1 rounded-full bg-brand-accent animate-pulse" />
+                            <span className="text-[9px] font-bold text-brand-blue/40 uppercase tracking-tighter">Active</span>
+                         </div>
                       </div>
                       <p className="text-[10px] font-medium text-brand-blue/60">{serviceLabels[service]}</p>
                    </div>
-                   <div className="text-right flex flex-col gap-1 items-end">
-                      <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-blue/5 border border-brand-blue/5">
-                         <span className="w-1 h-1 rounded-full bg-brand-accent animate-pulse" />
-                         <span className="text-[9px] font-bold text-brand-blue/40 uppercase tracking-tighter">Active</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-brand-blue/30">
-                         <Clock className="w-2.5 h-2.5" />
-                         <span className="text-[10px] font-medium tracking-tight italic">~5m</span>
-                      </div>
+                   <div className="text-right flex items-center gap-1 text-brand-blue/30">
+                      <Clock className="w-2.5 h-2.5" />
+                      <span className="text-[10px] font-medium tracking-tight italic">~5m</span>
                    </div>
                 </div>
               </motion.div>

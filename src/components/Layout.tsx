@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueueStore } from '@/store/useQueueStore';
@@ -37,6 +37,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [activeHash, setActiveHash] = useState('');
   const [manualTab, setManualTab] = useState<string | null>(null);
   const [legalModal, setLegalModal] = useState<{ title: string; content: string } | null>(null);
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     const runInit = async () => {
@@ -60,9 +62,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     window.addEventListener('popstate', handleLocationChange);
     handleLocationChange();
 
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      // Hide nav if scrolling down past 100px, show if scrolling up
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setIsNavVisible(false);
+      } else {
+        setIsNavVisible(true);
+      }
+      lastScrollY.current = currentScrollY;
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
     return () => {
       window.removeEventListener('hashchange', handleLocationChange);
       window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('scroll', handleScroll);
       stopQueueSimulation();
     };
   }, [init, pathname]);
@@ -128,7 +144,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-bg-light selection:bg-brand-blue/10 selection:text-brand-blue font-body">
       {/* ── TOP STATUS BAR ── */}
-      <nav className="fixed top-0 left-0 right-0 z-[120] bg-white/80 backdrop-blur-[20px] border-b border-white/20">
+      <nav className={cn(
+        "fixed top-0 left-0 right-0 z-[120] bg-white/80 backdrop-blur-[20px] border-b border-white/20 transition-transform duration-500 ease-in-out",
+        isNavVisible ? "translate-y-0" : "-translate-y-full"
+      )}>
         <div className="max-w-[1700px] mx-auto px-4 md:px-8 h-20 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <Link 
@@ -210,7 +229,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <main className="max-w-[1800px] mx-auto px-6 md:px-12 pt-28 pb-16 relative">
+      <main className="max-w-[1800px] mx-auto px-6 md:px-12 pt-20 pb-16 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-gradient-to-b from-brand-accent/[0.04] to-transparent pointer-events-none -z-10" />
         {children}
       </main>
@@ -269,7 +288,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <p className="text-xs font-bold text-white/40 mb-6 italic">support@syncqueue.org</p>
                 <div className="flex items-center gap-3 mb-6">
                   {[Globe, MessageCircle, Share2, Mail].map((Icon, i) => (
-                    <button key={i} className="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-white/20 hover:text-brand-accent hover:border-brand-accent/30 transition-all duration-300 cursor-pointer">
+                    <button key={i} className="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-white/20 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300 cursor-pointer">
                       <Icon className="w-3.5 h-3.5" />
                     </button>
                   ))}

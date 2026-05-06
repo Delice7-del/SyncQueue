@@ -452,7 +452,7 @@ export default function Home() {
        </motion.section>
 
       {/* Offline resiliency details */}
-      <section id="features" className="relative pb-20 max-w-full mx-auto px-8">
+      <section id="features" className="relative pb-20 scroll-mt-28 max-w-full mx-auto px-8">
          <div className="bg-brand-blue rounded-lg px-10 py-8 relative overflow-hidden text-white">
             <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/20 to-transparent opacity-50" />
             <div className="relative z-10 flex flex-col lg:flex-row lg:items-center gap-8">
@@ -492,8 +492,8 @@ export default function Home() {
       {/* Contact */}
       <section id="contact" className="relative pb-20 scroll-mt-32 max-w-full mx-auto px-8">
          <div className="bg-white/40 backdrop-blur-md rounded-lg border border-brand-blue/5 p-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-               <div className="bg-white rounded-lg p-8 border border-brand-blue/5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
+               <div className="bg-white rounded-lg p-8 border border-brand-blue/5 flex flex-col h-full">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-brand-blue/5 border border-brand-blue/10 mb-4">
                     <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
                     <span className="text-[9px] font-medium tracking-widest text-brand-blue uppercase">Contact Protocol</span>
@@ -613,14 +613,14 @@ export default function Home() {
                      </Magnetic>
                   </form>
                </div>
-               <div className="bg-white rounded-lg p-8 border border-brand-blue/5 flex flex-col justify-between min-h-[500px]">
+               <div className="bg-white rounded-lg p-8 border border-brand-blue/5 flex flex-col h-full">
                   <div>
                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-brand-accent/5 border border-brand-accent/10 mb-4">
                        <span className="text-[10px] font-medium tracking-widest text-brand-accent uppercase">Infrastructure</span>
                      </div>
-                     <h3 className="font-heading text-2xl font-black text-brand-blue tracking-tighter italic mb-6 leading-tight">Global Support Systems.</h3>
+                     <h3 className="font-heading text-2xl font-black text-brand-blue tracking-tighter italic mb-4 leading-tight">Global Support Systems.</h3>
                      
-                     <div className="grid grid-cols-2 gap-4 mb-8">
+                     <div className="grid grid-cols-2 gap-4 mb-5">
                         <div className="flex items-center gap-3">
                            <div className="w-10 h-10 rounded-lg bg-brand-blue/5 flex items-center justify-center border border-brand-blue/5 shrink-0">
                               <MapPin className="w-4 h-4 text-brand-blue" />
@@ -641,8 +641,8 @@ export default function Home() {
                         </div>
                      </div>
    
-                     <div className="space-y-4 border-t border-brand-blue/5 pt-6">
-                        <p className="text-[12px] font-black text-brand-blue uppercase tracking-[0.2em] mb-4">Protocol FAQs</p>
+                     <div className="space-y-3 border-t border-brand-blue/5 pt-4">
+                        <p className="text-[12px] font-black text-brand-blue uppercase tracking-[0.2em] mb-2">Protocol FAQs</p>
                         {[
                            { q: 'How to generate ticket?', a: 'Select department and transmit request.' },
                            { q: 'Offline synchronization?', a: 'Edge nodes sync via P2P local protocol.' },
@@ -656,7 +656,7 @@ export default function Home() {
                      </div>
                   </div>
    
-                  <div className="mt-8 relative group">
+                  <div className="mt-auto pt-6 relative group">
                      <div className="relative bg-brand-blue/[0.02] p-5 rounded-lg border border-brand-blue/5 flex items-center justify-between">
                         <div>
                            <p className="text-[8px] font-bold text-brand-blue/40 mb-1 uppercase">Emergency service</p>
