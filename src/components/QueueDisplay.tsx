@@ -188,19 +188,19 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                          <h4 className="font-heading text-lg font-black text-brand-blue tracking-tighter leading-none shrink-0">
                             {service.substring(0, 3).toUpperCase()}-{serving.number.toString().padStart(3, '0')}
                          </h4>
-                         <div className="flex items-center gap-1 shrink-0 overflow-hidden">
-                            <span className={cn("text-[7px] font-black uppercase tracking-widest px-1 py-0.5 rounded bg-brand-blue/5 whitespace-nowrap", colors.text)}>Serving</span>
-                            <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-brand-blue/5 border border-brand-blue/5 whitespace-nowrap">
-                               <span className="w-1 h-1 rounded-full bg-brand-accent animate-pulse shrink-0" />
-                               <span className="text-[7px] font-bold text-brand-blue/40 uppercase tracking-tighter hidden sm:inline-block">Active</span>
-                            </div>
-                         </div>
+                         <span className={cn("text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-brand-blue/5 whitespace-nowrap shrink-0", colors.text)}>Serving</span>
                       </div>
                       <p className="text-[9px] font-medium text-brand-blue/60 truncate">{serviceLabels[service]}</p>
                    </div>
-                   <div className="text-right flex items-center gap-1 text-brand-blue/30 shrink-0">
-                      <Clock className="w-2.5 h-2.5" />
-                      <span className="text-[9px] font-medium tracking-tight italic">~5m</span>
+                   <div className="flex flex-col items-end gap-1.5 shrink-0">
+                      <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-brand-blue/5 border border-brand-blue/5 whitespace-nowrap">
+                         <span className="w-1 h-1 rounded-full bg-brand-accent animate-pulse shrink-0" />
+                         <span className="text-[7px] font-bold text-brand-blue/40 uppercase tracking-tighter">Active</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-brand-blue/30">
+                         <Clock className="w-2.5 h-2.5" />
+                         <span className="text-[9px] font-medium tracking-tight italic">~5m</span>
+                      </div>
                    </div>
                 </div>
               </motion.div>
