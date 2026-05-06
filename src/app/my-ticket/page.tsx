@@ -38,12 +38,12 @@ function TicketContent() {
   if (!ticketId || !ticket) {
     return (
       <div className="flex flex-col items-center justify-center py-32 text-center max-w-md mx-auto">
-        <div className="w-20 h-20 rounded-[32px] bg-red-50 flex items-center justify-center mb-8 border border-red-100">
+        <div className="w-20 h-20 rounded-lg bg-red-50 flex items-center justify-center mb-8 border border-red-100">
            <Info className="w-10 h-10 text-red-500" />
         </div>
         <h2 className="font-heading text-5xl font-black text-brand-blue mb-4 italic tracking-tighter">Protocol error</h2>
         <p className="text-brand-blue/40 mb-10 font-medium leading-relaxed">The requested session identifier could not be located in the secure local environment. Please re-authenticate.</p>
-        <Link href="/" className="px-10 py-5 rounded-2xl bg-brand-blue text-white font-black text-xs shadow-premium hover:bg-brand-accent transition-all">
+        <Link href="/" className="px-10 py-5 rounded-lg bg-brand-blue text-white font-black text-xs hover:bg-brand-accent transition-all">
           Return to home
         </Link>
       </div>
@@ -53,22 +53,22 @@ function TicketContent() {
   return (
     <div className="flex flex-col gap-16">
       {/* Page Header */}
-      <div className="flex justify-between items-center border-b border-brand-blue/5 pb-10">
-        <Link href="/" className="group flex items-center gap-3 text-brand-blue/60 hover:text-brand-accent transition-colors cursor-pointer">
-          <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20 group-hover:bg-red-500 group-hover:border-red-500 transition-all duration-300 shadow-sm">
+      <div className="flex justify-between items-center border-b border-brand-blue/5 pb-6 pt-2 mb-2">
+        <Link href="/" className="group flex items-center h-10 gap-3 text-brand-blue/60 hover:text-brand-accent transition-colors cursor-pointer">
+          <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center border border-red-500/20 group-hover:bg-red-500 group-hover:border-red-500 transition-all duration-300">
             <X className="w-4 h-4 text-red-500 group-hover:text-white transition-colors" />
           </div>
-          <span className="text-[10px] font-black">Exit session</span>
+          <span className="text-[10px] font-black uppercase tracking-widest">Exit session</span>
         </Link>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-brand-blue/10 text-brand-blue/60 hover:text-brand-accent hover:border-brand-accent/30 transition-colors shadow-sm">
+        <button className="flex items-center h-10 gap-2 px-5 rounded-lg bg-white border border-brand-blue/10 text-brand-blue/60 hover:text-brand-accent hover:border-brand-accent/30 transition-colors">
           <Share2 className="w-3.5 h-3.5" />
-          <span className="text-[10px] font-black hidden sm:inline">Share protocol</span>
+          <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Share protocol</span>
         </button>
       </div>
 
       {/* Ticket Visualization */}
-      <div className="py-12">
-        <div className="text-center mb-16">
+      <div className="py-4">
+        <div className="text-center mb-4">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -76,7 +76,7 @@ function TicketContent() {
           >
             Active <span className="text-brand-accent not-italic">session.</span>
           </motion.h1>
-          <p className="text-[10px] font-black text-brand-blue/20 mt-6 ml-4">Authorized personal interface</p>
+          <p className="text-[10px] font-black text-brand-blue/20 mt-2 ml-4">Authorized personal interface</p>
         </div>
 
         <TicketCard ticket={ticket} />
@@ -84,7 +84,7 @@ function TicketContent() {
 
       {/* Instructions / Info */}
       <div className="max-w-2xl mx-auto w-full">
-         <div className="bg-white p-10 rounded-[48px] border border-brand-blue/5 shadow-premium relative overflow-hidden group">
+         <div className="bg-white p-10 rounded-lg border border-brand-blue/5 relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-2 h-full bg-brand-accent opacity-20 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="flex items-center gap-4 mb-8">
                <Info className="w-6 h-6 text-brand-accent" />

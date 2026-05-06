@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import { Saira_Condensed, Outfit } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import Layout from "@/components/Layout";
-
-const sairaCondensed = Saira_Condensed({
-  variable: "--font-saira",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-});
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -46,7 +40,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon.png" />
       </head>
       <body
-        className={`${sairaCondensed.variable} ${outfit.variable} font-body bg-bg-light text-brand-blue min-h-full antialiased`}
+        className={`${outfit.className} bg-bg-light text-brand-blue min-h-full antialiased`}
       >
         <Layout>
           {children}

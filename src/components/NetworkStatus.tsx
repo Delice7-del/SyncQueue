@@ -30,7 +30,7 @@ export function NetworkStatus() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
           className={cn(
-            "px-4 py-2 rounded-2xl backdrop-blur-xl border border-white/10 shadow-premium flex items-center gap-3 transition-colors duration-500",
+            "px-4 py-2 rounded-lg backdrop-blur-xl border border-white/10 flex items-center gap-3 transition-colors duration-500",
             current.bg
           )}
         >
@@ -46,11 +46,11 @@ export function NetworkStatus() {
           </div>
           
           <div className="flex flex-col">
-            <span className={cn("text-[9px] font-black uppercase tracking-widest", current.color)}>
+            <span className={cn("text-[9px] font-medium uppercase tracking-widest", current.color)}>
               {current.text}
             </span>
             {networkStatus === 'poor' && (
-              <span className="text-[7px] font-bold text-orange-500/60 -mt-0.5">
+              <span className="text-[7px] font-medium text-orange-500/60 -mt-0.5">
                 Latency detected
               </span>
             )}

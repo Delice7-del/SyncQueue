@@ -1,28 +1,25 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-heading: var(--font-outfit);
-  --font-body: var(--font-outfit);
-  
   /* Premium Light Palette */
   --color-brand-blue: #0A2540;
-  --color-brand-accent: #3B82F6;
+  --color-brand-accent: #0A2540;
   --color-bg-light: #F6F9FC;
   --color-brand-gray: #64748B;
 }
 
 @layer base {
   body {
-    @apply font-body text-brand-blue antialiased;
+    @apply text-brand-blue antialiased;
   }
 }
 
 .font-heading {
-  font-family: var(--font-heading);
+  font-family: inherit;
 }
 
 .font-body {
-  font-family: var(--font-body);
+  font-family: inherit;
 }
 
 /* Glassmorphism Utilities */
@@ -34,7 +31,7 @@
 
 /* Premium Shadows */
 .shadow-premium {
-  box-shadow: 0 20px 40px -15px rgba(10, 37, 64, 0.1);
+  /* box-shadow removed */
 }
 
 /* ── MASTER NAV (ZERO HORNS - MASKED) ── */
@@ -43,12 +40,12 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 35px;
+  border-radius: 0.5rem;
   position: relative;
   display: flex;
   align-items: center;
   padding: 0 10px;
-  box-shadow: 0 15px 50px -10px rgba(10, 37, 64, 0.2);
+  /* box-shadow removed */
   /* The Secret: Cutting the hole OUT of the bar instead of adding pieces ON TOP */
   mask-image: var(--nav-mask);
   mask-size: 100% 100%;
@@ -74,7 +71,7 @@
   height: 60px;
   background: white;
   border-radius: 50%;
-  box-shadow: 0 8px 25px rgba(10, 37, 64, 0.15);
+  /* box-shadow removed */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,16 +81,18 @@
 /* No more curves needed in CSS! The Mask handles it perfectly */
 .nav-label {
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: 0.05em;
   color: white;
+  opacity: 0.4;
   margin-top: 4px;
   transition: all 0.3s ease;
 }
 
 .nav-label-active {
-  color: var(--color-brand-accent);
-  font-weight: 900;
+  color: white;
+  opacity: 1;
+  font-weight: 600;
   transform: translateY(2px);
 }
 

@@ -128,14 +128,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-bg-light selection:bg-brand-blue/10 selection:text-brand-blue font-body">
       {/* ── TOP STATUS BAR ── */}
-      <nav className="fixed top-0 left-0 right-0 z-[120] bg-white/80 backdrop-blur-[20px] border-b border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+      <nav className="fixed top-0 left-0 right-0 z-[120] bg-white/80 backdrop-blur-[20px] border-b border-white/20">
         <div className="max-w-[1700px] mx-auto px-4 md:px-8 h-20 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <Link 
               href="/" 
-              className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/40 backdrop-blur-xl border border-white/20 shadow-premium group transition-all hover:bg-white/60"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg bg-white/40 backdrop-blur-xl border border-white/20 group transition-all hover:bg-white/60"
             >
-              <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-white shadow-premium group-hover:scale-110 transition-transform border border-brand-blue/5 overflow-hidden">
+              <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-white group-hover:scale-110 transition-transform border border-brand-blue/5 overflow-hidden">
                 <Image 
                   src="/logo.png" 
                   alt="SyncQueue Logo" 
@@ -161,7 +161,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             className="absolute top-0 w-1/3 h-full flex flex-col items-center justify-center"
             initial={false}
             animate={{ left: `${activeIndex * 33.33}%` }} 
-            transition={{ type: "spring", stiffness: 450, damping: 35 }}
+            transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
             style={{ zIndex: 110 }}
           >
             <div className="nav-circle-bg">
@@ -210,64 +210,66 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <main className="max-w-[1700px] mx-auto px-4 md:px-8 pt-20 pb-16 relative">
+      <main className="max-w-[1800px] mx-auto px-6 md:px-12 pt-28 pb-16 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-gradient-to-b from-brand-accent/[0.04] to-transparent pointer-events-none -z-10" />
         {children}
       </main>
 
-      {/* ── REFINED FOOTER ── */}
-      <footer className="bg-white border-t border-brand-blue/5 pt-16 pb-16">
-        <div className="max-w-[1700px] mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            <div className="bg-brand-blue/[0.02] border border-brand-blue/5 rounded-[40px] p-10 flex flex-col items-start relative overflow-hidden group">
+      {/* ── UNIFIED NAVY FOOTER ── */}
+      <footer className="bg-brand-blue pt-20 pb-12 text-white">
+        <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            {/* Left Card: CTA */}
+            <div className="bg-white/[0.03] border border-white/5 rounded-lg p-10 flex flex-col items-start relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
-                <Globe className="w-48 h-48 text-brand-blue" />
+                <Globe className="w-48 h-48 text-white" />
               </div>
-              <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-brand-accent/10 border border-brand-accent/20 mb-6">
+              <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-brand-accent/20 border border-brand-accent/30 mb-6">
                 <ShieldCheck className="w-4 h-4 text-brand-accent" />
-                <span className="text-[10px] font-black text-brand-accent">Security first</span>
+                <span className="text-[10px] font-black text-brand-accent uppercase tracking-widest">Security Protocol</span>
               </div>
-              <h2 className="font-heading text-4xl font-black text-brand-blue tracking-tighter mb-4 leading-tight italic">
+              <h2 className="font-heading text-4xl font-black text-white tracking-tighter mb-4 leading-tight italic">
                 Optimize flow:<br />Join protocol
               </h2>
-              <p className="text-xs font-medium text-brand-blue/70 max-w-sm leading-relaxed mb-8">
-                Engineering high-precision queue management protocols for modern infrastructure.
+              <p className="text-xs font-medium text-white/50 max-w-sm leading-relaxed mb-8">
+                Engineering high-precision queue management protocols for modern healthcare infrastructure.
               </p>
               <button 
-                onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-8 py-4 rounded-xl bg-brand-blue text-white font-black text-[10px] shadow-premium hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-8 py-4 rounded-lg bg-transparent border border-white/20 text-white font-black text-[10px] hover:bg-white hover:text-brand-blue cursor-pointer"
               >
-                Access portal
+                ACCESS PORTAL
               </button>
             </div>
 
-            <div className="bg-white rounded-[40px] p-10 shadow-premium border border-brand-blue/5 flex flex-col justify-between">
+            {/* Right Card: Brand & Connect */}
+            <div className="bg-white/[0.03] border border-white/5 rounded-lg p-10 flex flex-col justify-between">
               <div className="flex flex-col md:flex-row justify-between items-start mb-10 gap-8">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-white border border-brand-blue/5 overflow-hidden">
+                  <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-transparent border border-white/10 overflow-hidden shadow-premium">
                     <Image 
                       src="/logo.png" 
                       alt="SyncQueue Logo" 
                       width={48} 
                       height={48} 
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover p-1"
                     />
                   </div>
-                  <span className="font-heading text-2xl font-black tracking-tighter text-brand-blue">SyncQueue</span>
+                  <span className="font-heading text-2xl font-black tracking-tighter text-white">SyncQueue.</span>
                 </div>
                 <div className="flex flex-col items-start md:items-end gap-3">
-                  <Link href="#features" className="text-[9px] font-black text-brand-blue/70 hover:text-brand-accent transition-colors">Infrastructure</Link>
-                  <Link href="#about" className="text-[9px] font-black text-brand-blue/70 hover:text-brand-accent transition-colors">About systems</Link>
-                  <Link href="/#contact" className="text-[9px] font-black text-brand-blue/70 hover:text-brand-accent transition-colors">Contact</Link>
+                  <Link href="#features" className="text-[9px] font-black text-white/40 hover:text-white transition-colors uppercase tracking-widest">Infrastructure</Link>
+                  <Link href="#about" className="text-[9px] font-black text-white/40 hover:text-white transition-colors uppercase tracking-widest">About systems</Link>
+                  <Link href="/#contact" className="text-[9px] font-black text-white/40 hover:text-white transition-colors uppercase tracking-widest">Contact</Link>
                 </div>
               </div>
 
               <div className="mb-10">
-                <p className="text-lg font-black tracking-tight text-brand-blue mb-1">+250 791 926 765</p>
-                <p className="text-xs font-bold text-brand-blue/70 mb-6 italic">support@syncqueue.org</p>
+                <p className="text-2xl font-black tracking-tight text-white mb-1">+250 791 926 765</p>
+                <p className="text-xs font-bold text-white/40 mb-6 italic">support@syncqueue.org</p>
                 <div className="flex items-center gap-3 mb-6">
                   {[Globe, MessageCircle, Share2, Mail].map((Icon, i) => (
-                    <button key={i} className="w-10 h-10 rounded-full border border-brand-blue/10 flex items-center justify-center text-brand-blue/40 hover:text-brand-accent hover:border-brand-accent/30 transition-all duration-300 cursor-pointer">
+                    <button key={i} className="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-white/20 hover:text-brand-accent hover:border-brand-accent/30 transition-all duration-300 cursor-pointer">
                       <Icon className="w-3.5 h-3.5" />
                     </button>
                   ))}
@@ -279,27 +281,27 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         window.location.reload();
                      }
                   }}
-                  className="px-5 py-2.5 rounded-lg border border-red-500/20 bg-red-500/5 text-[8px] font-black text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 cursor-pointer"
+                  className="px-5 py-2.5 rounded-lg border border-red-500/30 bg-red-500/10 text-[8px] font-black text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 cursor-pointer"
                 >
-                  Clear cache
+                  TERMINATE LOCAL CACHE
                 </button>
               </div>
 
-              <div className="flex items-start gap-4 p-5 rounded-2xl border border-brand-blue/5 bg-brand-blue/[0.02]">
-                <Info className="w-4 h-4 text-brand-blue/60 shrink-0" />
-                <p className="text-[9px] leading-relaxed font-bold text-brand-blue/60">
-                  PWA solution. Data stored in IndexedDB. Offline resilient.
+              <div className="flex items-start gap-4 p-5 rounded-lg border border-white/5 bg-white/[0.02]">
+                <Info className="w-4 h-4 text-white/40 shrink-0" />
+                <p className="text-[9px] leading-relaxed font-bold text-white/40 uppercase tracking-tight">
+                  PWA solution. Data stored in IndexedDB. Offline resilient protocol active.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-brand-blue/5 gap-6">
-            <p className="text-[9px] font-black text-brand-blue/60">© 2026 SyncQueue Protocol</p>
+          <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5 gap-6">
+            <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">© 2026 SyncQueue Protocol Infrastructure</p>
             <div className="flex items-center gap-6">
-              <button onClick={() => setLegalModal(legalContent.privacy)} className="text-[9px] font-black text-brand-blue/60 hover:text-brand-accent cursor-pointer">Privacy</button>
-              <button onClick={() => setLegalModal(legalContent.terms)} className="text-[9px] font-black text-brand-blue/60 hover:text-brand-accent cursor-pointer">Terms</button>
-              <button onClick={() => setLegalModal(legalContent.security)} className="text-[9px] font-black text-brand-blue/60 hover:text-brand-accent cursor-pointer">Security</button>
+              <button onClick={() => setLegalModal(legalContent.privacy)} className="text-[9px] font-black text-white/40 hover:text-white cursor-pointer uppercase tracking-widest">Privacy</button>
+              <button onClick={() => setLegalModal(legalContent.terms)} className="text-[9px] font-black text-white/40 hover:text-white cursor-pointer uppercase tracking-widest">Terms</button>
+              <button onClick={() => setLegalModal(legalContent.security)} className="text-[9px] font-black text-white/40 hover:text-white cursor-pointer uppercase tracking-widest">Security</button>
             </div>
           </div>
         </div>
@@ -319,12 +321,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="w-full max-w-lg bg-white rounded-[32px] p-10 shadow-2xl relative"
+              className="w-full max-w-lg bg-white rounded-lg p-10 relative"
               onClick={(e) => e.stopPropagation()}
             >
               <button 
                 onClick={() => setLegalModal(null)}
-                className="absolute top-6 right-6 w-10 h-10 rounded-full bg-brand-blue/5 flex items-center justify-center text-brand-blue/40 hover:text-brand-blue transition-colors cursor-pointer"
+                className="absolute top-6 right-6 w-10 h-10 rounded-lg bg-brand-blue/5 flex items-center justify-center text-brand-blue/40 hover:text-brand-blue transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -335,7 +337,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <div className="mt-10 pt-6 border-t border-brand-blue/5">
                 <button 
                   onClick={() => setLegalModal(null)}
-                  className="w-full py-4 rounded-xl bg-brand-blue text-white font-black text-xs shadow-premium cursor-pointer"
+                  className="w-full py-4 rounded-lg bg-brand-blue text-white font-black text-xs cursor-pointer"
                 >
                   Acknowledge protocol
                 </button>

@@ -19,9 +19,9 @@ export function InstallPrompt() {
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
-          className="bg-brand-blue/90 backdrop-blur-2xl rounded-[32px] p-6 shadow-2xl border border-white/10 flex items-center gap-6"
+          className="bg-brand-blue/90 backdrop-blur-2xl rounded-lg p-6 border border-white/10 flex items-center gap-6"
         >
-          <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10 shrink-0">
+          <div className="w-14 h-14 rounded-lg bg-white/10 flex items-center justify-center border border-white/10 shrink-0">
              <Smartphone className="w-7 h-7 text-brand-accent" />
           </div>
           
@@ -35,13 +35,13 @@ export function InstallPrompt() {
           <div className="flex flex-col gap-2">
              <button 
                onClick={installApp}
-               className="px-4 py-2 rounded-xl bg-brand-accent text-brand-blue font-black text-[10px] hover:bg-white transition-colors"
+               className="px-4 py-2 rounded-lg bg-white text-brand-blue font-medium text-[10px] hover:bg-white transition-colors"
              >
                Install
              </button>
              <button 
                onClick={() => setDismissed(true)}
-               className="text-[9px] font-black text-white/40 hover:text-white transition-colors uppercase tracking-widest text-center"
+               className="text-[9px] font-medium text-white/40 hover:text-white transition-colors uppercase tracking-widest text-center"
              >
                Later
              </button>
@@ -49,7 +49,7 @@ export function InstallPrompt() {
           
           <button 
             onClick={() => setDismissed(true)}
-            className="absolute top-4 right-4 p-1 rounded-full hover:bg-white/10 transition-colors"
+            className="absolute top-4 right-4 p-1 rounded-lg hover:bg-white/10 transition-colors"
           >
             <X className="w-3 h-3 text-white/40" />
           </button>

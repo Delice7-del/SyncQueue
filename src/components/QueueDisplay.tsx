@@ -21,22 +21,22 @@ const serviceLabels = {
 
 const serviceColors = {
   consultation: {
-    bg: 'bg-brand-accent',
-    bgLight: 'bg-brand-accent/10',
-    text: 'text-brand-accent',
-    border: 'border-brand-accent/30',
+    bg: 'bg-brand-blue',
+    bgLight: 'bg-brand-blue/10',
+    text: 'text-brand-blue',
+    border: 'border-brand-blue/30',
   },
   lab: {
-    bg: 'bg-blue-500',
-    bgLight: 'bg-blue-500/10',
-    text: 'text-blue-500',
-    border: 'border-blue-500/30',
+    bg: 'bg-brand-blue',
+    bgLight: 'bg-brand-blue/10',
+    text: 'text-brand-blue',
+    border: 'border-brand-blue/30',
   },
   pharmacy: {
-    bg: 'bg-emerald-500',
-    bgLight: 'bg-emerald-500/10',
-    text: 'text-emerald-500',
-    border: 'border-emerald-500/30',
+    bg: 'bg-brand-blue',
+    bgLight: 'bg-brand-blue/10',
+    text: 'text-brand-blue',
+    border: 'border-brand-blue/30',
   },
 };
 
@@ -71,7 +71,19 @@ export default function QueueDisplay() {
     );
   }
 
-  const getServiceData = (service: Ticket['service']) => {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16 min-w-[900px] lg:min-w-0">
+      {(['consultation', 'lab', 'pharmacy'] as const).map(service => (
+        <ServiceColumn key={service} service={service} tickets={tickets} />
+      ))}
+    </div>
+  );
+}
+
+function ServiceColumn({ service, tickets }: { service: Ticket['service'], tickets: Ticket[] }) {
+  const [isExpanded, setIsExpanded] = React.useState(false);
+
+  const getServiceData = () => {
     const serviceTickets = tickets.filter(t => t.service === service);
     
     // Done tickets (at the top)
@@ -91,164 +103,179 @@ export default function QueueDisplay() {
     return { serving, waiting, completed };
   };
 
+  const { serving, waiting, completed } = getServiceData();
+  const Icon = serviceIcons[service];
+  const colors = serviceColors[service];
+
+  const visibleWaiting = isExpanded ? waiting : waiting.slice(0, 4);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 min-w-[900px] lg:min-w-0">
-      {(['consultation', 'lab', 'pharmacy'] as const).map(service => {
-        const { serving, waiting, completed } = getServiceData(service);
-        const Icon = serviceIcons[service];
-        const colors = serviceColors[service];
-        
-        return (
-          <motion.div 
-            layout
-            key={service} 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={containerVariants}
-            className="flex flex-col bg-white/40 backdrop-blur-sm rounded-[40px] p-8 border border-brand-blue/5 shadow-soft hover:shadow-premium transition-all duration-500"
-          >
-            {/* Service Header */}
-            <div className="flex items-center gap-4 mb-10">
-               <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center border border-brand-blue/5 shadow-soft shrink-0", colors.bgLight)}>
-                  <Icon className={cn("w-7 h-7", colors.text)} />
-               </div>
-               <div className="min-w-0">
-                  <h3 className="font-heading text-xl font-black text-brand-blue tracking-tighter truncate">{serviceLabels[service]}</h3>
-                  <div className="flex items-center gap-2">
-                     <span className="text-[9px] font-black text-brand-blue/60 italic">Active stack</span>
-                     <div className="w-1 h-1 rounded-full bg-brand-blue/10"></div>
-                     <span className={cn("text-[9px] font-black", colors.text)}>{waiting.length + (serving ? 1 : 0)} active</span>
-                  </div>
-               </div>
+    <motion.div 
+      layout
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={containerVariants}
+      className="flex flex-col bg-white/40 backdrop-blur-sm rounded-lg p-10 border border-brand-blue/5 hover:bg-white/60 transition-all duration-500 h-fit"
+    >
+      {/* Service Header */}
+      <div className="flex items-center gap-4 mb-6">
+         <div className={cn("w-12 h-12 rounded-lg flex items-center justify-center border border-brand-blue/5 shrink-0", colors.bgLight)}>
+            <Icon className={cn("w-7 h-7", colors.text)} />
+         </div>
+         <div className="min-w-0">
+            <h3 className="font-heading text-xl font-black text-brand-blue tracking-tighter truncate">{serviceLabels[service]}</h3>
+            <div className="flex items-center gap-2">
+               <span className="text-[9px] font-medium text-brand-blue/60 italic">Active stack</span>
+               <div className="w-1 h-1 rounded-full bg-brand-blue/10"></div>
+               <span className={cn("text-[9px] font-medium", colors.text)}>{waiting.length + (serving ? 1 : 0)} active</span>
             </div>
+         </div>
+      </div>
 
-            {/* Ranking Timeline Flow */}
-            <div className="relative flex flex-col gap-3">
-               {/* Vertical Connector Line */}
-               <div className="absolute left-[27px] top-6 bottom-6 w-[2px] bg-brand-blue/[0.1] z-0"></div>
+      {/* Ranking Timeline Flow */}
+      <div className="relative flex flex-col gap-6">
+         {/* Vertical Connector Line */}
+         <div className="absolute left-[27px] top-6 bottom-6 w-[2px] bg-brand-blue/[0.1] z-0"></div>
 
-               <AnimatePresence mode="popLayout">
-                  {/* 1. COMPLETED TICKETS (TOP RANK) */}
-                  {completed.length > 0 && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pl-[72px] mb-2">
-                       <span className="text-[8px] font-black text-green-600/60 uppercase tracking-widest">Historical Protocol</span>
-                    </motion.div>
-                  )}
-                  {completed.map((ticket) => (
-                    <motion.div
-                      key={`done-${ticket.id}`}
-                      variants={itemVariants}
-                      className="relative z-10 flex items-center gap-4"
-                    >
-                      <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center border-4 border-white shadow-soft shrink-0">
-                         <CheckCircle2 className="w-5 h-5 text-green-500" />
-                      </div>
-                      <div className="flex-1 bg-white/60 border border-brand-blue/5 rounded-2xl p-4 flex justify-between items-center opacity-80">
-                         <div>
-                            <h4 className="font-heading text-sm font-black text-brand-blue tracking-tighter italic">
-                               {service.substring(0, 3).toUpperCase()}-{ticket.number.toString().padStart(3, '0')}
-                            </h4>
-                            <p className="text-[8px] font-bold text-brand-blue/60">{serviceLabels[service]}</p>
-                         </div>
-                         <span className="text-[9px] font-black text-green-600">Done</span>
-                      </div>
-                    </motion.div>
-                  ))}
+         <AnimatePresence mode="popLayout">
+            {/* 1. COMPLETED TICKETS (TOP RANK) */}
+            {completed.length > 0 && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pl-[72px] mb-4">
+                 <span className="text-[8px] font-medium text-green-600/60 uppercase tracking-widest">Historical Protocol</span>
+              </motion.div>
+            )}
+            {completed.map((ticket) => (
+              <motion.div
+                key={`done-${ticket.id}`}
+                variants={itemVariants}
+                className="relative z-10 flex items-center gap-4"
+              >
+                <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center border-4 border-white shrink-0">
+                   <CheckCircle2 className="w-5 h-5 text-green-500" />
+                </div>
+                <div className="flex-1 bg-white/60 border border-brand-blue/5 rounded-lg px-6 py-4 flex justify-between items-center opacity-80">
+                   <div>
+                      <h4 className="font-heading text-sm font-medium text-brand-blue tracking-tighter italic">
+                         {service.substring(0, 3).toUpperCase()}-{ticket.number.toString().padStart(3, '0')}
+                      </h4>
+                      <p className="text-[8px] font-medium text-brand-blue/60">{serviceLabels[service]}</p>
+                   </div>
+                   <span className="text-[9px] font-medium text-green-600/60">Status: Done</span>
+                </div>
+              </motion.div>
+            ))}
 
-                  {/* 2. NOW SERVING (PRIMARY RANK) */}
-                  {serving && (
-                    <motion.div
-                      key={`serving-${serving.id}`}
-                      layout
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="relative z-10 flex items-center gap-4"
-                    >
-                      <div className="relative shrink-0">
-                         <div className={cn("w-14 h-14 rounded-full flex items-center justify-center border-4 border-white shadow-premium relative z-10", colors.bg)}>
-                            <Loader2 className="w-6 h-6 text-white animate-spin" />
-                         </div>
-                         <div className={cn("absolute inset-0 rounded-full animate-ping opacity-20", colors.bg)}></div>
-                      </div>
+            {/* 2. NOW SERVING (PRIMARY RANK) */}
+            {serving && (
+              <motion.div
+                key={`serving-${serving.id}`}
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="relative z-10 flex items-center gap-4"
+              >
+                <div className="relative shrink-0">
+                   <div className={cn("w-14 h-14 rounded-full flex items-center justify-center border-4 border-white relative z-10", colors.bg)}>
+                      <Loader2 className="w-6 h-6 text-white animate-spin" />
+                   </div>
+                   <div className={cn("absolute inset-0 rounded-full animate-ping opacity-20", colors.bg)}></div>
+                </div>
 
-                      <div className={cn("flex-1 bg-white border-2 rounded-2xl p-4 shadow-premium flex justify-between items-center", colors.border)}>
-                         <div>
-                            <h4 className="font-heading text-xl font-black text-brand-blue tracking-tighter">
-                               {service.substring(0, 3).toUpperCase()}-{serving.number.toString().padStart(3, '0')}
-                            </h4>
-                            <p className="text-[8px] font-bold text-brand-blue/60">{serviceLabels[service]}</p>
-                         </div>
-                         <div className="text-right">
-                            <span className={cn("text-[9px] font-black block", colors.text)}>Now serving</span>
-                            <span className="text-[8px] font-bold text-brand-blue/40 italic">Active protocol</span>
-                         </div>
+                <div className={cn("flex-1 bg-white border-2 rounded-lg px-6 py-3 flex items-center justify-between", colors.border)}>
+                   <div className="flex flex-col gap-0.5">
+                      <div className="flex items-center gap-2">
+                         <h4 className="font-heading text-xl font-black text-brand-blue tracking-tighter leading-none">
+                            {service.substring(0, 3).toUpperCase()}-{serving.number.toString().padStart(3, '0')}
+                         </h4>
+                         <span className={cn("text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-brand-blue/5", colors.text)}>Serving</span>
                       </div>
-                    </motion.div>
-                  )}
+                      <p className="text-[10px] font-medium text-brand-blue/60">{serviceLabels[service]}</p>
+                   </div>
+                   <div className="text-right flex flex-col gap-1 items-end">
+                      <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-blue/5 border border-brand-blue/5">
+                         <span className="w-1 h-1 rounded-full bg-brand-accent animate-pulse" />
+                         <span className="text-[9px] font-bold text-brand-blue/40 uppercase tracking-tighter">Active</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-brand-blue/30">
+                         <Clock className="w-2.5 h-2.5" />
+                         <span className="text-[10px] font-medium tracking-tight italic">~5m</span>
+                      </div>
+                   </div>
+                </div>
+              </motion.div>
+            )}
 
-                  {/* 3. WAITING LIST (QUEUE RANK) */}
-                   {waiting.slice(0, 4).map((ticket, idx) => (
-                    <motion.div
-                      key={`waiting-${ticket.id}`}
-                      layout
-                      variants={itemVariants}
-                      className="relative z-10 flex items-center gap-4 group"
-                    >
-                      <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center border-4 border-white shadow-soft shrink-0 group-hover:border-brand-accent/40 transition-all">
-                         <span className="text-xs font-black text-brand-blue/60 group-hover:text-brand-accent transition-colors">{serving ? idx + 2 : idx + 1}</span>
-                      </div>
-                      <div className="flex-1 bg-white border border-brand-blue/10 rounded-2xl p-4 group-hover:border-brand-blue/30 group-hover:bg-white transition-all flex justify-between items-center">
-                         <div>
-                            <h4 className="font-heading text-base font-black text-brand-blue/60 group-hover:text-brand-blue transition-colors tracking-tighter italic">
-                               {service.substring(0, 3).toUpperCase()}-{ticket.number.toString().padStart(3, '0')}
-                            </h4>
-                            <p className="text-[8px] font-bold text-brand-blue/40 group-hover:text-brand-blue/60">{serviceLabels[service]}</p>
-                         </div>
-                         <div className="text-right">
-                             <span className="text-[9px] font-black text-brand-accent block">
-                               {serving ? `Position ${idx + 2}` : (idx === 0 ? 'Now serving' : `Position ${idx + 1}`)}
-                             </span>
-                             <span className="text-[10px] font-black text-brand-blue tracking-tight">
-                               {(() => {
-                                 let totalMs = 0;
-                                 if (serving) {
-                                   const remain = Math.max(0, (serving.servedAt || Date.now()) + (serving.estimatedDuration || 300000) - Date.now());
-                                   totalMs += remain;
-                                 }
-                                 for (let i = 0; i < idx; i++) {
-                                   totalMs += (waiting[i].estimatedDuration || 300000);
-                                 }
-                                 const mins = Math.ceil(totalMs / 60000);
-                                 return serving ? `~${mins}m` : (idx === 0 ? 'Now' : `~${mins}m`);
-                               })()}
-                             </span>
-                         </div>
-                      </div>
-                    </motion.div>
-                  ))}
-
-                  {/* MORE INDICATOR */}
-                  {waiting.length > 4 && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pl-[72px] py-1">
-                       <span className="text-[8px] font-black text-brand-blue/60">
-                          + {waiting.length - 4} more in stack
+            {/* 3. WAITING LIST (QUEUE RANK) */}
+             {visibleWaiting.map((ticket, idx) => (
+              <motion.div
+                key={`waiting-${ticket.id}`}
+                layout
+                variants={itemVariants}
+                className="relative z-10 flex items-center gap-4 group"
+              >
+                <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center border-4 border-white shrink-0 group-hover:border-brand-accent/40 transition-all">
+                   <span className="text-xs font-medium text-brand-blue/60 group-hover:text-brand-accent transition-colors">{serving ? idx + 2 : idx + 1}</span>
+                </div>
+                <div className="flex-1 bg-white border border-brand-blue/10 rounded-lg px-6 py-3 flex items-center justify-between group-hover:border-brand-blue/30 transition-all">
+                   <div className="flex flex-col gap-0.5">
+                      <h4 className="font-heading text-lg font-black text-brand-blue/60 group-hover:text-brand-blue transition-colors tracking-tighter leading-none">
+                         {service.substring(0, 3).toUpperCase()}-{ticket.number.toString().padStart(3, '0')}
+                      </h4>
+                      <p className="text-[10px] font-medium text-brand-blue/40 group-hover:text-brand-blue/60 transition-colors">{serviceLabels[service]}</p>
+                   </div>
+                   <div className="text-right flex flex-col gap-1 items-end">
+                       <span className="text-[9px] font-black text-brand-accent uppercase tracking-widest px-1.5 py-0.5 rounded bg-brand-accent/5">
+                         Pos {serving ? idx + 2 : idx + 1}
                        </span>
-                    </motion.div>
-                  )}
+                       <div className="flex items-center gap-1 text-brand-blue/20 group-hover:text-brand-blue/30 transition-colors">
+                         <Clock className="w-2.5 h-2.5" />
+                         <span className="text-[10px] font-medium tracking-tight">
+                          {(() => {
+                            let totalMs = 0;
+                            if (serving) {
+                              const remain = Math.max(0, (serving.servedAt || Date.now()) + (serving.estimatedDuration || 300000) - Date.now());
+                              totalMs += remain;
+                            }
+                            for (let i = 0; i < idx; i++) {
+                              totalMs += (waiting[i].estimatedDuration || 300000);
+                            }
+                            const mins = Math.ceil(totalMs / 60000);
+                            return `~${mins}m`;
+                          })()}
+                         </span>
+                      </div>
+                   </div>
+                </div>
+              </motion.div>
+            ))}
 
-                  {/* EMPTY STATE */}
-                  {!serving && waiting.length === 0 && completed.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-12 opacity-40">
-                       <Clock className="w-12 h-12 text-brand-blue mb-4" />
-                       <p className="text-[10px] font-black text-brand-blue">Standby mode</p>
-                    </div>
-                  )}
-               </AnimatePresence>
-            </div>
-          </motion.div>
-        );
-      })}
-    </div>
+            {waiting.length > 4 && (
+              <motion.div layout className="pl-[72px] mt-2">
+                 <button 
+                   onClick={() => setIsExpanded(!isExpanded)}
+                   className="text-[9px] font-black text-brand-accent uppercase tracking-widest hover:text-brand-blue transition-colors flex items-center gap-2 group/btn"
+                 >
+                   {isExpanded ? 'Compress sequence' : `View full stack (+${waiting.length - 4})`}
+                   <Clock className={cn("w-3 h-3 transition-transform duration-500", isExpanded ? "rotate-180" : "group-hover:rotate-90")} />
+                 </button>
+              </motion.div>
+            )}
+
+            {!serving && waiting.length === 0 && completed.length === 0 && (
+              <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center py-12 gap-4 opacity-30"
+              >
+                <div className="w-16 h-16 rounded-full border border-brand-blue/10 flex items-center justify-center">
+                  <Clock className="w-8 h-8 text-brand-blue" />
+                </div>
+                <p className="text-[10px] font-black text-brand-blue uppercase tracking-widest">Standby mode</p>
+              </motion.div>
+            )}
+         </AnimatePresence>
+      </div>
+    </motion.div>
   );
 }
