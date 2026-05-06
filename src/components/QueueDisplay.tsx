@@ -182,19 +182,19 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                    <div className={cn("absolute inset-0 rounded-full animate-ping opacity-20", colors.bg)}></div>
                 </div>
 
-                <div className={cn("flex-1 bg-white border-2 rounded-lg px-6 py-3 flex items-center justify-between", colors.border)}>
-                   <div className="flex flex-col gap-0.5">
-                      <div className="flex items-center gap-2">
-                         <h4 className="font-heading text-xl font-black text-brand-blue tracking-tighter leading-none">
+                <div className={cn("flex-1 min-w-0 bg-white border-2 rounded-lg px-4 md:px-6 py-3 flex items-center justify-between gap-2", colors.border)}>
+                   <div className="flex flex-col gap-0.5 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                         <h4 className="font-heading text-xl font-black text-brand-blue tracking-tighter leading-none truncate">
                             {service.substring(0, 3).toUpperCase()}-{serving.number.toString().padStart(3, '0')}
                          </h4>
-                         <span className={cn("text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-brand-blue/5", colors.text)}>Serving</span>
-                         <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-blue/5 border border-brand-blue/5">
+                         <span className={cn("text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-brand-blue/5 whitespace-nowrap", colors.text)}>Serving</span>
+                         <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-blue/5 border border-brand-blue/5 whitespace-nowrap">
                             <span className="w-1 h-1 rounded-full bg-brand-accent animate-pulse" />
                             <span className="text-[9px] font-bold text-brand-blue/40 uppercase tracking-tighter">Active</span>
                          </div>
                       </div>
-                      <p className="text-[10px] font-medium text-brand-blue/60">{serviceLabels[service]}</p>
+                      <p className="text-[10px] font-medium text-brand-blue/60 truncate">{serviceLabels[service]}</p>
                    </div>
                    <div className="text-right flex items-center gap-1 text-brand-blue/30">
                       <Clock className="w-2.5 h-2.5" />
