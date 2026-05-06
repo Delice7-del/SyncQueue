@@ -157,10 +157,7 @@ This ensures a smooth and responsive user experience.
 
 Deployed on Vercel with automatic builds.
 
-###
-
-Link: syncqueue.vercel.app
-
+Link: [syncqueue.vercel.app](https://syncqueue.vercel.app)
 ---
 
 Built with passion by **Delice Keza**  
