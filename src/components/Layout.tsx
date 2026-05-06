@@ -128,7 +128,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-bg-light selection:bg-brand-blue/10 selection:text-brand-blue font-body">
       {/* ── TOP STATUS BAR ── */}
-      <nav className="fixed top-0 left-0 right-0 z-[120] bg-white/10 backdrop-blur-[20px] border-b border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+      <nav className="fixed top-0 left-0 right-0 z-[120] bg-white/80 backdrop-blur-[20px] border-b border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
         <div className="max-w-[1700px] mx-auto px-4 md:px-8 h-20 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <Link 
@@ -263,7 +263,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </div>
 
               <div className="mb-10">
-                <p className="text-lg font-black tracking-tight text-brand-blue mb-1">+250 788 000 000</p>
+                <p className="text-lg font-black tracking-tight text-brand-blue mb-1">+250 791 926 765</p>
                 <p className="text-xs font-bold text-brand-blue/70 mb-6 italic">support@syncqueue.org</p>
                 <div className="flex items-center gap-3 mb-6">
                   {[Globe, MessageCircle, Share2, Mail].map((Icon, i) => (

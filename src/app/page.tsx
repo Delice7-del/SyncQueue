@@ -667,7 +667,7 @@ export default function Home() {
                   <div className="relative bg-white p-10 rounded-[35px] border border-brand-blue/5 flex items-center justify-between shadow-premium">
                      <div>
                         <p className="text-[9px] font-black text-brand-blue/40 mb-1">Emergency service</p>
-                        <p className="text-3xl font-black text-brand-blue tracking-tighter">+250 788 000 000</p>
+                        <p className="text-3xl font-black text-brand-blue tracking-tighter">+250 791 926 765</p>
                      </div>
                      <div className="w-14 h-14 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20">
                         <ShieldCheck className="w-7 h-7 text-red-500" />
