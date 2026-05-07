@@ -39,6 +39,7 @@ export default function Home() {
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [targetService, setTargetService] = useState('');
+  const [generatedTicket, setGeneratedTicket] = useState<any>(null);
 
   React.useEffect(() => {
     // Broad prefetch to ensure all possible code chunks are in cache for offline
@@ -55,9 +56,10 @@ export default function Home() {
       await new Promise(resolve => setTimeout(resolve, 2000));
       const ticket = await createTicket(service);
       
-      // If offline, use a hard navigation to force the Service Worker to intercept
-      // and serve the App Shell. This is more reliable than SPA routing in some offline scenarios.
+      // If offline, use a hard navigation and show immediate feedback
       if (!navigator.onLine) {
+        setGeneratedTicket(ticket);
+        setIsProcessing(false);
         window.location.href = `/my-ticket/${ticket.id}`;
       } else {
         router.push(`/my-ticket/${ticket.id}`);
@@ -146,6 +148,49 @@ export default function Home() {
                  transition={{ duration: 2, ease: "easeInOut" }}
                  className="h-full bg-brand-accent"
                />
+            </div>
+          </motion.div>
+        {generatedTicket && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 z-[400] bg-brand-blue/90 backdrop-blur-2xl flex flex-col items-center justify-center p-6"
+          >
+            <div className="w-full max-w-sm">
+               <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-white font-heading text-2xl font-black italic uppercase tracking-tighter">Protocol Success</h2>
+                  <button 
+                    onClick={() => setGeneratedTicket(null)}
+                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white"
+                  >
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+               </div>
+               <motion.div 
+                 initial={{ scale: 0.9, y: 20 }}
+                 animate={{ scale: 1, y: 0 }}
+                 className="bg-white rounded-2xl overflow-hidden shadow-2xl"
+               >
+                  <div className="p-1 bg-brand-accent" />
+                  <div className="p-8">
+                    <div className="flex justify-between items-center mb-6">
+                       <span className="text-[10px] font-black text-brand-blue/40 uppercase tracking-widest">Digital Boarding Pass</span>
+                       <span className="px-3 py-1 rounded-full bg-green-50 text-green-600 text-[10px] font-black uppercase">Active</span>
+                    </div>
+                    <p className="font-heading text-6xl font-black text-brand-blue tracking-tighter mb-2">
+                       {generatedTicket.service === 'consultation' ? 'CN' : generatedTicket.service === 'lab' ? 'LB' : 'PH'}
+                       <span className="text-brand-accent">-{String(generatedTicket.number).padStart(3, '0')}</span>
+                    </p>
+                    <p className="text-xs font-bold text-brand-blue/60 mb-8 uppercase tracking-widest">Stored in local vault</p>
+                    
+                    <button 
+                      onClick={() => window.location.href = `/my-ticket/${generatedTicket.id}`}
+                      className="w-full py-4 rounded-xl bg-brand-blue text-white font-black text-[11px] uppercase tracking-[0.2em] hover:bg-brand-accent transition-colors"
+                    >
+                      Enter Session View
+                    </button>
+                  </div>
+               </motion.div>
             </div>
           </motion.div>
         )}

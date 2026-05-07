@@ -1,9 +1,11 @@
-const CACHE_NAME = 'syncqueue-v7';
+const CACHE_NAME = 'syncqueue-v8';
 const CORE_ASSETS = [
   '/',
   '/manifest.json',
   '/logo.png',
   '/icon.png',
+  '/icon-192x192.png',
+  '/icon-512x512.png',
   '/offline',
 ];
 
@@ -11,7 +13,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return Promise.allSettled(
-        CORE_ASSETS.map(url => fetch(url).then(res => cache.put(url, res)))
+        CORE_ASSETS.map(url => fetch(url, { cache: 'reload' }).then(res => cache.put(url, res)))
       );
     })
   );
@@ -27,44 +29,50 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Universal responder to ensure we NEVER return undefined/null to respondWith
+async function safeResponse(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const url = new URL(request.url);
+
+  // 1. Try Cache Match first (even if online, for speed of system assets)
+  const cached = await cache.match(request);
+  if (cached) return cached;
+
+  // 2. Try Network
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok && (url.origin === self.location.origin)) {
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (err) {
+    // 3. OFFLINE FALLBACKS
+    
+    // A. Next.js Data / Navigation Fallback
+    // If it's a ticket page or a data request for one, serve the root shell
+    if (url.pathname.includes('/my-ticket/') || url.search.includes('_rsc') || request.mode === 'navigate') {
+      const shell = await cache.match('/');
+      if (shell) return shell;
+    }
+
+    // B. Offline page
+    const offline = await cache.match('/offline');
+    if (offline) return offline;
+
+    // C. Hardcoded fallback
+    return new Response('SyncQueue Protocol Offline', {
+      status: 200,
+      headers: { 'Content-Type': 'text/html' }
+    });
+  }
+}
+
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  
+  // Ignore external analytics/extensions
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
 
-  event.respondWith((async () => {
-    try {
-      // 1. Try Network first for everything
-      const networkResponse = await fetch(event.request);
-      
-      // Cache successful system responses
-      const url = new URL(event.request.url);
-      if (networkResponse.ok && (url.origin === self.location.origin)) {
-        const cache = await caches.open(CACHE_NAME);
-        cache.put(event.request, networkResponse.clone());
-      }
-      
-      return networkResponse;
-    } catch (error) {
-      // 2. Network Failed (Offline) - Try Cache
-      const cachedResponse = await caches.match(event.request);
-      if (cachedResponse) return cachedResponse;
-
-      // 3. SPA Fallback: If it's a page navigation OR Next.js data request (_rsc)
-      // return the root shell (/) to keep the app running.
-      const url = new URL(event.request.url);
-      if (event.request.mode === 'navigate' || url.search.includes('_rsc')) {
-        const cache = await caches.open(CACHE_NAME);
-        const shell = await cache.match('/');
-        if (shell) return shell;
-      }
-
-      // 4. Absolute Final Fallback to prevent "TypeError: Failed to convert value to Response"
-      return new Response(
-        '<!DOCTYPE html><html><body><h1>Offline Protocol Active</h1><script>window.location.href="/";</script></body></html>',
-        {
-          status: 200,
-          headers: { 'Content-Type': 'text/html' }
-        }
-      );
-    }
-  })());
+  event.respondWith(safeResponse(event.request));
 });
