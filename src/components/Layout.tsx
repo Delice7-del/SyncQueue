@@ -39,6 +39,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [manualTab, setManualTab] = useState<string | null>(null);
   const [legalModal, setLegalModal] = useState<{ title: string; content: string } | null>(null);
   const [isNavVisible, setIsNavVisible] = useState(true);
+  const [isBottomHovered, setIsBottomHovered] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
@@ -76,10 +77,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     
     window.addEventListener('scroll', handleScroll, { passive: true });
 
+    const handleMouseMove = (e: MouseEvent) => {
+      // Show nav if mouse is in the bottom 100px of the viewport
+      if (window.innerHeight - e.clientY < 100) {
+        setIsBottomHovered(true);
+      } else {
+        setIsBottomHovered(false);
+      }
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+
     return () => {
       window.removeEventListener('hashchange', handleLocationChange);
       window.removeEventListener('popstate', handleLocationChange);
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
       stopQueueSimulation();
     };
   }, [init, pathname]);
@@ -146,8 +159,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-bg-light selection:bg-brand-blue/10 selection:text-brand-blue font-body">
       {/* ── TOP STATUS BAR ── */}
       <nav className={cn(
-        "fixed top-0 left-0 right-0 z-[120] bg-white/80 backdrop-blur-[20px] border-b border-white/20 transition-transform duration-500 ease-in-out",
-        isNavVisible ? "translate-y-0" : "-translate-y-full"
+        "fixed top-0 left-0 right-0 z-[120] bg-white/80 backdrop-blur-[20px] border-b border-white/20 transition-all duration-700 ease-in-out",
+        (isNavVisible || isBottomHovered) ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
       )}>
         <div className="max-w-[1700px] mx-auto px-4 md:px-8 h-20 flex justify-between items-center">
           <div className="flex items-center gap-4">
@@ -175,7 +188,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </nav>
 
       {/* ── MASTER NAV SYSTEM ── */}
-      <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[400px] px-6">
+      <div className={cn(
+        "fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[400px] px-6 transition-all duration-700 ease-in-out",
+        (isNavVisible || isBottomHovered) ? "translate-y-0 opacity-100" : "translate-y-32 opacity-0"
+      )}>
         <div className="relative w-full h-20">
           <motion.div 
             className="absolute top-0 w-1/3 h-full flex flex-col items-center justify-center"
