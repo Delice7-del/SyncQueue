@@ -1,4 +1,4 @@
-const CACHE_NAME = 'syncqueue-v4';
+const CACHE_NAME = 'syncqueue-v5';
 const OFFLINE_URL = '/offline';
 
 const ASSETS_TO_CACHE = [
@@ -14,17 +14,13 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Pre-caching core assets');
       return Promise.allSettled(
         ASSETS_TO_CACHE.map(async (url) => {
           try {
             const response = await fetch(url);
-            if (response.ok) {
-              await cache.put(url, response);
-              console.log(`[SW] Cached: ${url}`);
-            }
+            if (response.ok) await cache.put(url, response);
           } catch (e) {
-            console.error(`[SW] Failed to cache ${url}:`, e);
+            console.error(`[SW] Pre-cache failed for ${url}`);
           }
         })
       );
@@ -38,9 +34,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
+          if (cacheName !== CACHE_NAME) return caches.delete(cacheName);
         })
       );
     })
@@ -53,7 +47,7 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // 1. Navigation requests - serve App Shell fallback
+  // 1. Navigation Fallback (SPA Shell)
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(async () => {
@@ -61,23 +55,35 @@ self.addEventListener('fetch', (event) => {
         const cachedResponse = await cache.match(event.request);
         if (cachedResponse) return cachedResponse;
 
-        // For ANY navigation error (like dynamic tickets), serve the root '/' 
-        // as the App Shell. Next.js will handle the routing client-side.
-        const shellResponse = await cache.match('/');
-        if (shellResponse) return shellResponse;
-
-        // Last resort: offline page
-        return cache.match(OFFLINE_URL);
+        // Serve the root '/' as the shell for any navigation failure
+        const shell = await cache.match('/');
+        return shell || cache.match(OFFLINE_URL);
       })
     );
     return;
   }
 
-  // 2. Static Assets & Internal Chunks
-  // Network first, but cache everything we see
+  // 2. System Assets (Static files, chunks) - STRICT CACHE-FIRST
+  if (url.pathname.startsWith('/_next/static/') || url.pathname.startsWith('/icon') || url.pathname.endsWith('.png')) {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(event.request).then((response) => {
+          if (response && response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        });
+      })
+    );
+    return;
+  }
+
+  // 3. Generic Resources
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      const networkFetch = fetch(event.request).then((response) => {
+      const network = fetch(event.request).then((response) => {
         if (response && response.status === 200) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
@@ -85,12 +91,7 @@ self.addEventListener('fetch', (event) => {
         return response;
       }).catch(() => null);
 
-      // Return cached immediately if it's a static asset, otherwise wait for network
-      if (url.pathname.startsWith('/_next/static/') && cached) {
-        return cached;
-      }
-
-      return networkFetch || cached;
+      return network || cached;
     })
   );
 });

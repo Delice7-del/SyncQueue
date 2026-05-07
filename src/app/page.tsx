@@ -40,6 +40,13 @@ export default function Home() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [targetService, setTargetService] = useState('');
 
+  React.useEffect(() => {
+    // Broad prefetch to ensure all possible code chunks are in cache for offline
+    router.prefetch('/dashboard');
+    router.prefetch('/my-ticket/preheat');
+    router.prefetch('/offline');
+  }, [router]);
+
   const handleCreateTicket = async (service: 'consultation' | 'lab' | 'pharmacy') => {
     setIsProcessing(true);
     setTargetService(service);
