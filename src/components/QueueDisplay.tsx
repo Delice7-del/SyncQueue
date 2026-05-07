@@ -182,14 +182,14 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                    <div className={cn("absolute inset-0 rounded-full animate-ping opacity-20", colors.bg)}></div>
                 </div>
 
-                <div className={cn("flex-1 min-w-0 bg-white border-2 rounded-lg px-4 py-3 grid grid-cols-[auto_1fr_auto] items-center gap-6 overflow-hidden", colors.border)}>
+                <div className={cn("flex-1 min-w-0 bg-white border-2 rounded-lg px-4 py-3 flex items-center justify-between gap-4 overflow-hidden", colors.border)}>
                    {/* 1. Ticket ID */}
                    <h4 className="font-heading text-lg font-black text-brand-blue tracking-tighter leading-none shrink-0">
                       {service.substring(0, 3).toUpperCase()}-{serving.number.toString().padStart(3, '0')}
                    </h4>
 
                    {/* 2. Service & Serving Tag */}
-                   <div className="flex flex-col gap-0.5 min-w-0">
+                   <div className="flex-1 flex flex-col gap-0.5 min-w-0">
                       <div className="flex items-center gap-2">
                          <span className={cn("text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-brand-blue/5 whitespace-nowrap", colors.text)}>Serving</span>
                       </div>
@@ -197,7 +197,7 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                    </div>
 
                    {/* 3. Active Status & Time */}
-                   <div className="flex flex-col items-end gap-1.5 shrink-0">
+                   <div className="flex flex-col items-end gap-1.5 shrink-0 ml-auto">
                       <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-blue/5 border border-brand-blue/5 whitespace-nowrap">
                          <span className="w-1 h-1 rounded-full bg-brand-accent animate-pulse shrink-0" />
                          <span className="text-[7px] font-bold text-brand-blue/40 uppercase tracking-tighter">Active</span>
