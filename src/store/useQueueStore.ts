@@ -124,7 +124,22 @@ export const useQueueStore = create<QueueState>((set, get) => ({
       }
     }
 
-    set({ tickets, initialized: true });
+    // Fix any missing durations in old tickets
+    const updatedTickets = tickets.map(t => {
+      if (!t.estimatedDuration) {
+        return { ...t, estimatedDuration: getServiceDuration(t.service) };
+      }
+      return t;
+    });
+    
+    // Save fixed tickets back to DB
+    for (const t of updatedTickets) {
+      if (t.estimatedDuration !== tickets.find(old => old.id === t.id)?.estimatedDuration) {
+         await updateTicketInDB(t.id, { estimatedDuration: t.estimatedDuration });
+      }
+    }
+
+    set({ tickets: updatedTickets, initialized: true });
   },
 
   createTicket: async (service) => {
@@ -198,15 +213,20 @@ export const useQueueStore = create<QueueState>((set, get) => ({
 
     let totalWaitMs = 0;
     
+    const getFallback = (svc: string) => {
+      const fallbacks: Record<string, number> = { consultation: 4.5, lab: 3.5, pharmacy: 2 };
+      return (fallbacks[svc] || 5) * 60 * 1000;
+    };
+
     if (serving) {
       const startTime = serving.servedAt || serving.createdAt;
-      const duration = serving.estimatedDuration || (5 * 60 * 1000);
+      const duration = serving.estimatedDuration || getFallback(serving.service);
       const remaining = Math.max(0, (startTime + duration) - now);
       totalWaitMs += remaining; // current person remaining time
     }
 
     for (let i = 0; i < waitIndex; i++) {
-      totalWaitMs += (waiting[i].estimatedDuration || (5 * 60 * 1000));
+      totalWaitMs += (waiting[i].estimatedDuration || getFallback(waiting[i].service));
     }
 
     const estimatedWaitMinutes = Math.ceil(totalWaitMs / (60 * 1000));

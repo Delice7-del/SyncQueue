@@ -3,9 +3,9 @@ import { Ticket } from '@/lib/db';
 
 // fallback durations if missing
 const FALLBACK_DURATION_MS: Record<string, number> = {
-  consultation: 300000, 
-  lab:          300000, 
-  pharmacy:     300000, 
+  consultation: 270000, // 4.5m
+  lab:          210000, // 3.5m
+  pharmacy:     120000, // 2.0m
 };
 
 const POLL_INTERVAL_MS = 2000; 
