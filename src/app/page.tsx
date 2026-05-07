@@ -399,7 +399,7 @@ export default function Home() {
               <p className="text-[12px] font-medium text-brand-blue/80 max-w-lg mx-auto leading-relaxed">Explore the mission-critical engineering and resilient infrastructure protocols that power our zero-latency smart queue orchestration.</p>
            </motion.div>
           
-          <motion.div variants={containerVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          <motion.div variants={containerVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-20">
             {[
               { 
                 title: 'Dynamic Protocol', 
@@ -429,22 +429,22 @@ export default function Home() {
                <motion.div 
                  key={i} 
                  variants={itemVariants}
-                 className="relative group p-6 rounded-lg border border-brand-blue/5 bg-white/50 backdrop-blur-sm"
+                 className="relative group py-10"
                >
-                {/* LARGE BACKGROUND NUMBER (4:47 PM Style) */}
-                <span className="absolute -top-10 -left-6 text-[120px] font-black text-brand-blue/[0.03] select-none group-hover:text-brand-accent/[0.05] transition-colors duration-700">
+                {/* LARGE BACKGROUND NUMBER */}
+                <span className="absolute -top-4 -left-8 text-[140px] font-black text-brand-blue/[0.03] select-none group-hover:text-brand-accent/[0.06] transition-colors duration-700 leading-none">
                   {item.num}
                 </span>
                 
-                <div className="relative z-10">
-                  <div className="w-12 h-12 rounded-lg bg-brand-blue/5 flex items-center justify-center mb-6 group-hover:bg-brand-accent/10 transition-colors">
+                <div className="relative z-10 flex flex-col">
+                  <div className="w-12 h-12 rounded-lg bg-brand-blue/5 flex items-center justify-center mb-8 group-hover:bg-brand-accent/10 transition-colors">
                     <item.icon className="w-6 h-6 text-brand-blue group-hover:text-brand-accent transition-colors" />
                   </div>
-                   <h4 className="font-heading text-2xl font-black italic mb-4 tracking-tight text-brand-blue">{item.title}</h4>
-                  <p className="text-[12px] font-medium text-brand-blue/80 leading-relaxed mb-6">
+                   <h4 className="font-heading text-2xl font-black italic mb-4 tracking-tight text-brand-blue group-hover:text-brand-accent transition-colors">{item.title}</h4>
+                  <p className="text-[12px] font-medium text-brand-blue/60 leading-relaxed mb-6 max-w-[200px]">
                     {item.desc}
                   </p>
-                  <div className="w-10 h-1 bg-brand-blue/5 rounded-full group-hover:w-20 group-hover:bg-brand-accent transition-all duration-500" />
+                  <div className="w-10 h-1 bg-brand-blue/10 rounded-full group-hover:w-16 group-hover:bg-brand-accent transition-all duration-500" />
                 </div>
                </motion.div>
              ))}
