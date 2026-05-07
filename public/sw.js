@@ -1,4 +1,4 @@
-const CACHE_NAME = 'syncqueue-v2';
+const CACHE_NAME = 'syncqueue-v3';
 const OFFLINE_URL = '/offline';
 
 const ASSETS_TO_CACHE = [
@@ -53,9 +53,15 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(event.request).catch(() => {
         return caches.match(event.request).then((response) => {
-          // If the specific page isn't cached, return the root page (SPA will handle the rest)
-          // or the offline fallback if even the root is gone.
-          return response || caches.match('/') || caches.match(OFFLINE_URL);
+          if (response) return response;
+
+          // Special case for dynamic tickets while offline
+          if (url.pathname.startsWith('/my-ticket/')) {
+            return caches.match('/my-ticket/offline-preheat') || caches.match('/') || caches.match(OFFLINE_URL);
+          }
+
+          // Default fallback
+          return caches.match('/') || caches.match(OFFLINE_URL);
         });
       })
     );
@@ -63,7 +69,6 @@ self.addEventListener('fetch', (event) => {
   }
 
   // 2. Static Assets (Next.js chunks, images, etc.)
-  // Cache-First strategy for internal assets
   if (url.pathname.startsWith('/_next/static/') || url.pathname.startsWith('/images/') || url.pathname.endsWith('.png')) {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
@@ -82,8 +87,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 3. Everything else (API, etc.)
-  // Network First
+  // 3. Everything else
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
