@@ -54,7 +54,14 @@ export default function Home() {
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
       const ticket = await createTicket(service);
-      router.push(`/my-ticket/${ticket.id}`);
+      
+      // If offline, use a hard navigation to force the Service Worker to intercept
+      // and serve the App Shell. This is more reliable than SPA routing in some offline scenarios.
+      if (!navigator.onLine) {
+        window.location.href = `/my-ticket/${ticket.id}`;
+      } else {
+        router.push(`/my-ticket/${ticket.id}`);
+      }
     } catch (error) {
       console.error(error);
       setIsProcessing(false);
