@@ -194,7 +194,7 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                    </div>
 
                    {/* 3. Serving Status & Time */}
-                   <div className="flex flex-col items-end gap-1.5 shrink-0">
+                   <div className="flex flex-col items-end gap-1.5 shrink-0 pr-2">
                       <span className={cn("text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded bg-brand-blue/5 whitespace-nowrap", colors.text)}>Serving</span>
                       <div className="flex items-center gap-1.5 text-brand-blue">
                          <Clock className="w-3 h-3" />
