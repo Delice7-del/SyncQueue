@@ -119,6 +119,7 @@ export default function Home() {
 
   return (
     <div className="relative">
+      {/* Smart queue orchestration protocol - version 2.0 */}
       <BackgroundParticles />
 
       {/* Loading overlay for ticket creation */}
