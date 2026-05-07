@@ -198,7 +198,9 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                       <span className={cn("text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded bg-brand-blue/5 whitespace-nowrap", colors.text)}>Serving</span>
                       <div className="flex items-center gap-1.5 text-brand-blue">
                          <Clock className="w-3 h-3" />
-                         <span className="text-xs font-black tracking-tight italic">~5m</span>
+                         <span className="text-xs font-black tracking-tight italic">
+                            ~{Math.ceil((serving.estimatedDuration || 120000) / 60000)}m
+                         </span>
                       </div>
                    </div>
                 </div>
