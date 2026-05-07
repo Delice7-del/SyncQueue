@@ -28,6 +28,7 @@ import Image from 'next/image';
 import { startQueueSimulation, stopQueueSimulation } from '@/lib/simulation';
 import { NetworkStatus } from './NetworkStatus';
 import { InstallPrompt } from './InstallPrompt';
+import { SyncOverlay } from './SyncOverlay';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { tickets, isOffline, init } = useQueueStore();
@@ -368,6 +369,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* ── ADVANCED SYSTEM OVERLAYS ── */}
       <InstallPrompt />
+      <SyncOverlay />
     </div>
   );
 }
