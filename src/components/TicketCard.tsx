@@ -25,6 +25,7 @@ import { useRouter } from 'next/navigation';
 export default function TicketCard({ ticket }: { ticket: Ticket }) {
   const { getQueueData, tickets, deleteTicket } = useQueueStore();
   const [queueData, setQueueData] = useState(getQueueData(ticket.id));
+  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'info' } | null>(null);
   const liveTicket = tickets.find(t => t.id === ticket.id) || ticket;
   const router = useRouter();
 
@@ -38,11 +39,40 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
     return () => clearInterval(interval);
   }, [ticket.id, getQueueData, tickets]);
 
+  const showNotification = (message: string, type: 'success' | 'info' = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
   const handleUndo = async () => {
     if (confirm('Undo ticket creation? This will remove you from the queue protocol.')) {
       await deleteTicket(ticket.id);
       router.push('/');
     }
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: 'SyncQueue Ticket',
+      text: `My queue position for ${ticket.service} is #${queueData.position}. Check it live!`,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        showNotification('Link copied to clipboard', 'info');
+      }
+    } catch (err) {
+      console.log('Error sharing:', err);
+    }
+  };
+
+  const handleSave = () => {
+    // Simulate wallet pass generation
+    showNotification('Ticket saved to protocol wallet', 'success');
   };
 
   const serviceLabels = {
@@ -61,7 +91,21 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
   const progress = Math.max(5, 100 - (queueData.position * 15));
 
   return (
-    <div className="w-full h-full flex items-center justify-center py-4">
+    <div className="w-full h-full flex items-center justify-center py-4 relative">
+      <AnimatePresence>
+        {notification && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-xl bg-brand-blue text-white shadow-2xl flex items-center gap-3 border border-white/10"
+          >
+            {notification.type === 'success' ? <CheckCircle2 className="w-4 h-4 text-green-400" /> : <Info className="w-4 h-4 text-brand-accent" />}
+            <span className="text-[10px] font-black uppercase tracking-widest">{notification.message}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div 
         initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -86,8 +130,6 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
         {/* Boarding Pass Notches */}
         <div className="absolute left-[-12px] top-[68%] w-6 h-6 bg-bg-light rounded-full border border-brand-blue/5 z-20" />
         <div className="absolute right-[-12px] top-[68%] w-6 h-6 bg-bg-light rounded-full border border-brand-blue/5 z-20" />
-
-
 
         <div className="p-6 pb-2 relative z-10 overflow-hidden">
           {/* Shimmer Effect on Hover */}
@@ -201,10 +243,16 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
 
           <div className="flex flex-col gap-4">
              <div className="flex gap-4">
-                <button className="flex-1 px-4 py-3 rounded-lg bg-brand-blue text-white text-[10px] font-medium hover:bg-brand-blue/90 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer border border-brand-blue/10">
+                <button 
+                  onClick={handleSave}
+                  className="flex-1 px-4 py-3 rounded-lg bg-brand-blue text-white text-[10px] font-medium hover:bg-brand-blue/90 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer border border-brand-blue/10"
+                >
                    <Download className="w-4 h-4" /> Save pass
                 </button>
-                <button className="w-12 h-12 rounded-lg border-2 border-brand-blue/5 flex items-center justify-center text-brand-blue/40 hover:text-brand-accent hover:border-brand-accent/20 hover:bg-brand-accent/5 transition-all duration-300 cursor-pointer">
+                <button 
+                  onClick={handleShare}
+                  className="w-12 h-12 rounded-lg border-2 border-brand-blue/5 flex items-center justify-center text-brand-blue/40 hover:text-brand-accent hover:border-brand-accent/20 hover:bg-brand-accent/5 transition-all duration-300 cursor-pointer"
+                >
                    <Share2 className="w-5 h-5" />
                 </button>
              </div>
