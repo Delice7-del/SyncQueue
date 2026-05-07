@@ -64,6 +64,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     window.addEventListener('popstate', handleLocationChange);
     handleLocationChange();
 
+    // Prefetch common routes to ensure JS chunks are cached for offline use
+    router.prefetch('/dashboard');
+    router.prefetch('/my-ticket/offline-preheat');
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       // Hide nav if scrolling down past 100px, show if scrolling up
