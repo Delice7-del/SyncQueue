@@ -194,7 +194,7 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                    </div>
 
                    {/* 3. Status Badges & Time */}
-                   <div className="flex flex-col items-end gap-2 shrink-0">
+                   <div className="flex flex-col items-end gap-1.5 shrink-0">
                       <div className="flex items-center gap-2">
                          <span className={cn("text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-brand-blue/5 whitespace-nowrap", colors.text)}>Serving</span>
                          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-blue/5 border border-brand-blue/5 whitespace-nowrap">
@@ -202,9 +202,9 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                             <span className="text-[7px] font-bold text-brand-blue/40 uppercase tracking-tighter">Active</span>
                          </div>
                       </div>
-                      <div className="flex items-center gap-1 text-brand-blue/30">
+                      <div className="flex items-center gap-1 text-brand-blue/60">
                          <Clock className="w-2.5 h-2.5" />
-                         <span className="text-[9px] font-medium tracking-tight italic">~5m</span>
+                         <span className="text-[8px] font-black tracking-tight italic">~5m</span>
                       </div>
                    </div>
                 </div>
