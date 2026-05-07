@@ -40,6 +40,13 @@ export default function Home() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [targetService, setTargetService] = useState('');
   const [generatedTicket, setGeneratedTicket] = useState<any>(null);
+  const [isTransmitted, setIsTransmitted] = useState(false);
+
+  const handleTransmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsTransmitted(true);
+    setTimeout(() => setIsTransmitted(null as any), 4000);
+  };
 
   React.useEffect(() => {
     // Broad prefetch to ensure all possible code chunks are in cache for offline
@@ -563,7 +570,7 @@ export default function Home() {
                   <p className="text-[12px] font-medium text-brand-blue/80 mb-6 leading-relaxed">
                      Fill out the form below to initiate an administrative support sequence or request a technical consultation.
                   </p>
-                  <form className="space-y-5">
+                  <form className="space-y-5" onSubmit={handleTransmit}>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div className="relative group">
                            <input 
@@ -660,18 +667,35 @@ export default function Home() {
                         </label>
                         <div className="absolute bottom-0 left-0 h-[1px] bg-brand-blue/5 w-full -z-10" />
                      </div>
-                     <Magnetic>
-                        <motion.button 
-                           whileHover={{ scale: 1.02 }}
-                           whileTap={{ scale: 0.98 }}
-                           className="w-fit px-10 py-3 rounded-lg bg-brand-blue text-white font-normal text-[12px] transition-all cursor-pointer relative overflow-hidden group"
-                        >
-                           <span className="relative z-10">Transmit protocol</span>
-                           <motion.div 
-                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"
-                           />
-                        </motion.button>
-                     </Magnetic>
+                      <div className="flex flex-col gap-4">
+                        <Magnetic>
+                           <motion.button 
+                              type="submit"
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                              className="w-fit px-10 py-3 rounded-lg bg-brand-blue text-white font-normal text-[12px] transition-all cursor-pointer relative overflow-hidden group"
+                           >
+                              <span className="relative z-10">Transmit protocol</span>
+                              <motion.div 
+                                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"
+                              />
+                           </motion.button>
+                        </Magnetic>
+
+                        <AnimatePresence>
+                           {isTransmitted && (
+                              <motion.div 
+                                 initial={{ opacity: 0, x: -20 }}
+                                 animate={{ opacity: 1, x: 0 }}
+                                 exit={{ opacity: 0, x: 10 }}
+                                 className="flex items-center gap-3 py-2 px-4 rounded-lg bg-green-50 border border-green-200 w-fit"
+                              >
+                                 <ShieldCheck className="w-4 h-4 text-green-500" />
+                                 <span className="text-[10px] font-black text-green-600 uppercase tracking-widest">Protocol Transmitted Successfully</span>
+                              </motion.div>
+                           )}
+                        </AnimatePresence>
+                      </div>
                   </form>
                </div>
                <div className="bg-white rounded-lg p-8 border border-brand-blue/5 flex flex-col h-full">
