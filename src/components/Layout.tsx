@@ -65,6 +65,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     handleLocationChange();
 
     // Prefetch common routes to ensure JS chunks are cached for offline use
+    router.prefetch('/');
     router.prefetch('/dashboard');
     router.prefetch('/my-ticket/offline-preheat');
 

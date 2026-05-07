@@ -1,4 +1,4 @@
-const CACHE_NAME = 'syncqueue-v3';
+const CACHE_NAME = 'syncqueue-v4';
 const OFFLINE_URL = '/offline';
 
 const ASSETS_TO_CACHE = [
@@ -16,11 +16,16 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME).then((cache) => {
       console.log('[SW] Pre-caching core assets');
       return Promise.allSettled(
-        ASSETS_TO_CACHE.map(url => {
-          return fetch(url).then(response => {
-            if (response.ok) return cache.put(url, response);
-            throw new Error(`Failed to fetch ${url}`);
-          });
+        ASSETS_TO_CACHE.map(async (url) => {
+          try {
+            const response = await fetch(url);
+            if (response.ok) {
+              await cache.put(url, response);
+              console.log(`[SW] Cached: ${url}`);
+            }
+          } catch (e) {
+            console.error(`[SW] Failed to cache ${url}:`, e);
+          }
         })
       );
     })
@@ -48,57 +53,44 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // 1. Navigation requests
+  // 1. Navigation requests - serve App Shell fallback
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match(event.request).then((response) => {
-          if (response) return response;
-
-          // Special case for dynamic tickets while offline
-          if (url.pathname.startsWith('/my-ticket/')) {
-            return caches.match('/my-ticket/offline-preheat') || caches.match('/') || caches.match(OFFLINE_URL);
-          }
-
-          // Default fallback
-          return caches.match('/') || caches.match(OFFLINE_URL);
-        });
-      })
-    );
-    return;
-  }
-
-  // 2. Static Assets (Next.js chunks, images, etc.)
-  if (url.pathname.startsWith('/_next/static/') || url.pathname.startsWith('/images/') || url.pathname.endsWith('.png')) {
-    event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
+      fetch(event.request).catch(async () => {
+        const cache = await caches.open(CACHE_NAME);
+        const cachedResponse = await cache.match(event.request);
         if (cachedResponse) return cachedResponse;
-        return fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-          }
-          return networkResponse;
-        });
+
+        // For ANY navigation error (like dynamic tickets), serve the root '/' 
+        // as the App Shell. Next.js will handle the routing client-side.
+        const shellResponse = await cache.match('/');
+        if (shellResponse) return shellResponse;
+
+        // Last resort: offline page
+        return cache.match(OFFLINE_URL);
       })
     );
     return;
   }
 
-  // 3. Everything else
+  // 2. Static Assets & Internal Chunks
+  // Network first, but cache everything we see
   event.respondWith(
-    fetch(event.request)
-      .then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
+    caches.match(event.request).then((cached) => {
+      const networkFetch = fetch(event.request).then((response) => {
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         }
-        return networkResponse;
-      })
-      .catch(() => caches.match(event.request))
+        return response;
+      }).catch(() => null);
+
+      // Return cached immediately if it's a static asset, otherwise wait for network
+      if (url.pathname.startsWith('/_next/static/') && cached) {
+        return cached;
+      }
+
+      return networkFetch || cached;
+    })
   );
 });
