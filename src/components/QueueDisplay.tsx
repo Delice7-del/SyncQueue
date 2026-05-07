@@ -188,19 +188,19 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                       {service.substring(0, 3).toUpperCase()}-{serving.number.toString().padStart(3, '0')}
                    </h4>
 
-                   {/* 2. Service & Serving Tag */}
+                   {/* 2. Service Info */}
                    <div className="flex-1 flex flex-col gap-0.5 min-w-0">
-                      <div className="flex items-center gap-2">
-                         <span className={cn("text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-brand-blue/5 whitespace-nowrap", colors.text)}>Serving</span>
-                      </div>
-                      <p className="text-[9px] font-medium text-brand-blue/60 truncate">{serviceLabels[service]}</p>
+                      <p className="text-[9px] font-medium text-brand-blue/60 truncate italic">{serviceLabels[service]}</p>
                    </div>
 
-                   {/* 3. Active Status & Time */}
-                   <div className="flex flex-col items-end gap-1.5 shrink-0 ml-auto">
-                      <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-blue/5 border border-brand-blue/5 whitespace-nowrap">
-                         <span className="w-1 h-1 rounded-full bg-brand-accent animate-pulse shrink-0" />
-                         <span className="text-[7px] font-bold text-brand-blue/40 uppercase tracking-tighter">Active</span>
+                   {/* 3. Status Badges & Time */}
+                   <div className="flex flex-col items-end gap-2 shrink-0">
+                      <div className="flex items-center gap-2">
+                         <span className={cn("text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-brand-blue/5 whitespace-nowrap", colors.text)}>Serving</span>
+                         <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-blue/5 border border-brand-blue/5 whitespace-nowrap">
+                            <span className="w-1 h-1 rounded-full bg-brand-accent animate-pulse shrink-0" />
+                            <span className="text-[7px] font-bold text-brand-blue/40 uppercase tracking-tighter">Active</span>
+                         </div>
                       </div>
                       <div className="flex items-center gap-1 text-brand-blue/30">
                          <Clock className="w-2.5 h-2.5" />
