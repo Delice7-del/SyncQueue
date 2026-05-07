@@ -150,6 +150,7 @@ export default function Home() {
                />
             </div>
           </motion.div>
+        )}
         {generatedTicket && (
           <motion.div 
             initial={{ opacity: 0 }}
