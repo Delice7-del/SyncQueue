@@ -23,6 +23,9 @@ export default function Dashboard() {
           <h1 className="font-heading text-5xl md:text-7xl font-black tracking-tighter text-brand-blue italic leading-none">
             Queue <span className="text-brand-blue/20 not-italic">monitor.</span>
           </h1>
+          <p className="mt-6 text-sm font-medium text-brand-blue/60 max-w-md leading-relaxed">
+            Real-time visualization of the patient queuing protocol. Monitor active streams, track throughput, and manage serving states across all operational nodes.
+          </p>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-6">
