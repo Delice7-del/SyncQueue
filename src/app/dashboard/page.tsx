@@ -17,8 +17,8 @@ export default function Dashboard() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-3 mb-6"
           >
-            <div className="w-10 h-px bg-brand-accent"></div>
-            <span className="text-[10px] font-black text-brand-accent">Administrative protocol</span>
+            <div className="w-10 h-px bg-brand-accent mt-5"></div>
+            <span className="text-[10px] font-black text-brand-accent mt-5">Administrative protocol</span>
           </motion.div>
           <h1 className="font-heading text-5xl md:text-7xl font-black tracking-tighter text-brand-blue italic leading-none">
             Queue <span className="text-brand-blue/20 not-italic">monitor.</span>
