@@ -98,6 +98,7 @@ SyncQueue is designed as an offline-first application, meaning all core function
 - All user actions are executed locally first  
 - Data is stored in IndexedDB for persistence across refresh and restart  
 - The app does not rely on a backend to function  
+- I have chosen that an advanced good looking ticket will be offered while online but while being offline it will not be advanced but will have only basics needed and essential things so that the user will have the urge to use the online system.
 
 ### Outbox Pattern
 
