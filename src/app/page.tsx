@@ -35,7 +35,7 @@ import BackgroundParticles from '@/components/BackgroundParticles';
 import { startQueueSimulation } from '@/lib/simulation';
 
 export default function Home() {
-  const { createTicket } = useQueueStore();
+  const { createTicket, tickets, getQueueData } = useQueueStore();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [targetService, setTargetService] = useState('');
@@ -64,20 +64,17 @@ export default function Home() {
       await new Promise(resolve => setTimeout(resolve, 2000));
       const ticket = await createTicket(service);
       
-      console.log('[SyncQueue] Ticket created:', ticket.id);
+      console.log('[SyncQueue] Protocol established:', ticket.id);
       
-      // If offline, prioritize the local success overlay
+      setIsProcessing(false);
+
       if (!navigator.onLine) {
+        // Offline: Show success overlay and stay on home for stability
         setGeneratedTicket(ticket);
-        setIsProcessing(false);
+      } else {
+        // Online: Direct navigation
+        router.push(`/my-ticket/${ticket.id}`);
       }
-      
-      // Always try SPA navigation first (v9 SW shell will catch this)
-      router.push(`/my-ticket/${ticket.id}`);
-      
-      // Safety: ensure loader stops even if router.push is slow
-      setTimeout(() => setIsProcessing(false), 1000);
-      
     } catch (error) {
       console.error('[SyncQueue] Protocol Failure:', error);
       setIsProcessing(false);
@@ -164,6 +161,76 @@ export default function Home() {
                  className="h-full bg-brand-accent"
                />
             </div>
+        {generatedTicket && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 z-[400] bg-brand-blue/95 backdrop-blur-3xl flex flex-col items-center justify-center p-6"
+          >
+            {(() => {
+              // Use the reactive tickets from the hook
+              const liveTicket = tickets.find(t => t.id === generatedTicket.id) || generatedTicket;
+              const { position } = getQueueData(liveTicket.id);
+              const isServing = liveTicket.status === 'serving';
+
+              return (
+                <div className="w-full max-w-sm">
+                   <div className="flex justify-between items-center mb-8">
+                      <h2 className="text-white font-heading text-2xl font-black italic uppercase tracking-tighter">Protocol Success</h2>
+                      <button 
+                        onClick={() => setGeneratedTicket(null)}
+                        className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-brand-accent transition-all cursor-pointer group"
+                      >
+                        <ArrowRight className="w-5 h-5 group-hover:rotate-90 transition-transform" />
+                      </button>
+                   </div>
+                   <motion.div 
+                     initial={{ scale: 0.9, y: 20 }}
+                     animate={{ scale: 1, y: 0 }}
+                     className="bg-white rounded-2xl overflow-hidden shadow-2xl"
+                   >
+                      <div className="p-1 bg-brand-accent" />
+                      <div className="p-8">
+                        <div className="flex justify-between items-center mb-6">
+                           <span className="text-[10px] font-black text-brand-blue/40 uppercase tracking-widest">Digital Boarding Pass</span>
+                           <div className="flex items-center gap-2">
+                             {isServing && <Loader2 className="w-3 h-3 text-brand-accent animate-spin" />}
+                             <span className={cn(
+                               "px-3 py-1 rounded-full text-[10px] font-black uppercase",
+                               isServing ? "bg-brand-accent/10 text-brand-accent" : "bg-brand-blue/5 text-brand-blue/60"
+                             )}>
+                               {isServing ? 'Serving' : `Waiting (Pos ${position})`}
+                             </span>
+                           </div>
+                        </div>
+                        <p className="font-heading text-6xl font-black text-brand-blue tracking-tighter mb-2">
+                           {liveTicket.service === 'consultation' ? 'CN' : liveTicket.service === 'lab' ? 'LB' : 'PH'}
+                           <span className="text-brand-accent">-{String(liveTicket.number).padStart(3, '0')}</span>
+                        </p>
+                        <p className="text-xs font-bold text-brand-blue/60 mb-8 uppercase tracking-widest">Stored in local vault</p>
+                        
+                        <div className="flex flex-col gap-3">
+                           <button 
+                             onClick={() => {
+                               setGeneratedTicket(null);
+                               router.push(`/my-ticket/${liveTicket.id}`);
+                             }}
+                             className="w-full py-4 rounded-xl bg-brand-blue text-white font-black text-[11px] uppercase tracking-[0.2em] hover:bg-brand-accent hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-lg shadow-brand-blue/20"
+                           >
+                             Enter Session View
+                           </button>
+                           <button 
+                             onClick={() => setGeneratedTicket(null)}
+                             className="w-full py-3 rounded-xl bg-brand-blue/5 text-brand-blue/40 font-black text-[9px] uppercase tracking-[0.2em] hover:bg-brand-blue/10 hover:text-brand-blue transition-all cursor-pointer"
+                           >
+                             Dismiss Protocol
+                           </button>
+                        </div>
+                      </div>
+                   </motion.div>
+                </div>
+              );
+            })()}
           </motion.div>
         )}
       </AnimatePresence>
