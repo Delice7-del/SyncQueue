@@ -151,14 +151,23 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
             <motion.div 
               key={liveTicket.status}
               initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              animate={{ 
+                scale: 1, 
+                opacity: 1,
+                ...(liveTicket.status === 'serving' ? {
+                  boxShadow: ["0 0 0px rgba(34, 197, 94, 0)", "0 0 15px rgba(34, 197, 94, 0.4)", "0 0 0px rgba(34, 197, 94, 0)"]
+                } : {})
+              }}
+              transition={{
+                boxShadow: { duration: 2, repeat: Infinity }
+              }}
               className={cn(
-                "px-4 py-2 rounded-lg border font-medium text-[9px]",
+                "px-4 py-2 rounded-lg border font-black uppercase tracking-widest text-[9px]",
                 liveTicket.status === 'serving' ? "bg-green-50 border-green-200 text-green-600" :
                 liveTicket.status === 'done' ? "bg-brand-blue text-white" : "bg-amber-50 border-amber-200 text-amber-600"
               )}
             >
-              {liveTicket.status === 'serving' ? 'Serving' : liveTicket.status.charAt(0).toUpperCase() + liveTicket.status.slice(1)}
+              {liveTicket.status === 'serving' ? 'Serving' : liveTicket.status}
             </motion.div>
           </div>
 
@@ -243,18 +252,22 @@ export default function TicketCard({ ticket }: { ticket: Ticket }) {
 
           <div className="flex flex-col gap-4">
              <div className="flex gap-4">
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={handleSave}
-                  className="flex-1 px-4 py-3 rounded-lg bg-brand-blue text-white text-[10px] font-medium hover:bg-brand-blue/90 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer border border-brand-blue/10"
+                  className="flex-1 px-4 py-3 rounded-lg bg-brand-blue text-white text-[10px] font-medium transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer border border-brand-blue/10 shadow-lg shadow-brand-blue/10"
                 >
                    <Download className="w-4 h-4" /> Save pass
-                </button>
-                <button 
+                </motion.button>
+                <motion.button 
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={handleShare}
                   className="w-12 h-12 rounded-lg border-2 border-brand-blue/5 flex items-center justify-center text-brand-blue/40 hover:text-brand-accent hover:border-brand-accent/20 hover:bg-brand-accent/5 transition-all duration-300 cursor-pointer"
                 >
                    <Share2 className="w-5 h-5" />
-                </button>
+                </motion.button>
              </div>
              
              <div className="flex items-center justify-between mt-2">

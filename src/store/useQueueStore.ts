@@ -126,23 +126,30 @@ export const useQueueStore = create<QueueState>((set, get) => ({
 
   createTicket: async (service) => {
     const number = await getNextTicketNumber(service);
-    const duration = getServiceDuration(service);
-
-    const newTicket: Ticket = {
-      id: crypto.randomUUID(),
+    const id = crypto.randomUUID();
+    
+    // Check if we should start serving immediately (if no one else is in queue for this service)
+    const { tickets } = get();
+    const serviceTickets = tickets.filter(t => t.service === service);
+    const hasActive = serviceTickets.some(t => t.status === 'serving' || t.status === 'waiting');
+    
+    const ticket: Ticket = {
+      id,
       service,
       number,
-      status: 'waiting',
+      status: hasActive ? 'waiting' : 'serving',
       createdAt: Date.now(),
-      estimatedDuration: duration,
-      synced: !get().isOffline,
+      servedAt: hasActive ? undefined : Date.now(),
+      estimatedDuration: getServiceDuration(service),
+      synced: false,
     };
 
-    await saveTicket(newTicket);
-    set(state => ({ tickets: [...state.tickets, newTicket] }));
-    syncChannel?.postMessage('SYNC_REQUEST');
+    console.log(`[Store] Created ticket ${id} for ${service}. Status: ${ticket.status}`);
 
-    return newTicket;
+    await saveTicket(ticket);
+    set((state) => ({ tickets: [...state.tickets, ticket] }));
+    syncChannel?.postMessage('TICKET_CREATED');
+    return ticket;
   },
 
   updateStatus: async (id, status) => {
