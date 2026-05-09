@@ -774,15 +774,15 @@ export default function Home() {
                   </div>
    
                   <div className="mt-auto pt-6 relative group">
-                     <div className="relative bg-brand-blue/[0.02] p-5 rounded-lg border border-brand-blue/5 flex items-center justify-between">
-                        <div>
-                           <p className="text-[8px] font-bold text-brand-blue/40 mb-1 uppercase">Emergency service</p>
-                           <p className="text-lg sm:text-xl font-black text-brand-blue tracking-tighter">+250 791 926 765</p>
-                        </div>
-                        <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center border border-red-500/20">
-                           <ShieldCheck className="w-5 h-5 text-red-500" />
-                        </div>
-                     </div>
+                      <div className="relative bg-brand-blue/[0.02] p-3 rounded-lg border border-brand-blue/5 flex items-center gap-3">
+                         <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center border border-red-500/20 shrink-0">
+                            <ShieldCheck className="w-4 h-4 text-red-500" />
+                         </div>
+                         <div className="flex flex-row items-center gap-2 overflow-hidden">
+                            <p className="text-[7px] font-bold text-brand-blue/40 uppercase whitespace-nowrap">Emergency:</p>
+                            <p className="text-sm font-black text-brand-blue tracking-tighter whitespace-nowrap">+250 791 926 765</p>
+                         </div>
+                      </div>
                   </div>
                </div>
             </div>
