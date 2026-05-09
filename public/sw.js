@@ -1,7 +1,8 @@
-const CACHE_NAME = 'syncqueue-v11';
+const CACHE_NAME = 'syncqueue-v12';
 const SHELL_URL = '/';
 const ASSETS = [
   SHELL_URL,
+  '/dashboard',
   '/manifest.json',
   '/logo.png',
   '/icon.png',
@@ -12,7 +13,7 @@ const ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Arming shell persistence v11');
+      console.log('[SW] Arming shell persistence v12');
       return cache.addAll(ASSETS);
     })
   );
@@ -36,28 +37,33 @@ async function handleFetch(request) {
   const cache = await caches.open(CACHE_NAME);
   const url = new URL(request.url);
 
-  // 1. Static Assets - Cache-First
-  const isStatic = 
-    url.pathname.startsWith('/_next/static/') || 
-    url.pathname.endsWith('.png') ||
-    url.pathname.endsWith('.svg') ||
-    url.pathname.endsWith('.ico');
-
-  if (isStatic) {
-    const cached = await cache.match(request);
-    if (cached) return cached;
-  }
-
-  // 2. Navigation - Absolute Shell Fallback
+  // 1. Navigation - Absolute Shell Fallback
   if (request.mode === 'navigate') {
     try {
       const response = await fetch(request);
       if (response.ok) return response;
       throw new Error('Offline');
     } catch (e) {
-      console.log('[SW] Serving Shell for navigation:', url.pathname);
-      return cache.match(SHELL_URL);
+      console.log('[SW v12] Serving Shell for navigate:', url.pathname);
+      const shell = await cache.match(SHELL_URL);
+      if (shell) return shell;
+      // Last resort: check if we have the specific dashboard cached
+      const dashboard = await cache.match('/dashboard');
+      if (dashboard) return dashboard;
     }
+  }
+
+  // 2. Static Assets - Cache-First
+  const isStatic = 
+    url.pathname.startsWith('/_next/static/') || 
+    url.pathname.endsWith('.png') ||
+    url.pathname.endsWith('.svg') ||
+    url.pathname.endsWith('.ico') ||
+    url.pathname === '/manifest.json';
+
+  if (isStatic) {
+    const cached = await cache.match(request);
+    if (cached) return cached;
   }
 
   // 3. Data & Others - Network with Cache/Shell Fallback
@@ -71,7 +77,6 @@ async function handleFetch(request) {
     const cached = await cache.match(request);
     if (cached) return cached;
     
-    // If it's a Next.js data request, serve the shell to allow SPA navigation
     if (url.search.includes('_rsc')) {
        return cache.match(SHELL_URL);
     }

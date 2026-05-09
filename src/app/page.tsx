@@ -215,11 +215,11 @@ export default function Home() {
                            <button 
                              onClick={() => {
                                setGeneratedTicket(null);
-                               router.push(`/my-ticket/${liveTicket.id}`);
+                               router.push('/dashboard');
                              }}
                              className="w-full py-4 rounded-xl bg-brand-blue text-white font-black text-[11px] uppercase tracking-[0.2em] hover:bg-brand-accent hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-lg shadow-brand-blue/20"
                            >
-                             Enter Session View
+                             Enter Global Monitor
                            </button>
                            <button 
                              onClick={() => setGeneratedTicket(null)}
