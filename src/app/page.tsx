@@ -201,7 +201,7 @@ export default function Home() {
                            <div className="flex items-center gap-2">
                              {isServing && <Loader2 className="w-3 h-3 text-brand-accent animate-spin" />}
                              <span className={cn(
-                               "px-3 py-1 rounded-full text-[10px] font-black uppercase",
+                               "px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase whitespace-nowrap shrink-0",
                                isServing ? "bg-brand-accent/10 text-brand-accent" : "bg-brand-blue/5 text-brand-blue/60"
                              )}>
                                {isServing ? 'Serving' : `Waiting (Pos ${position})`}
@@ -218,7 +218,9 @@ export default function Home() {
                            <button 
                              onClick={() => {
                                setGeneratedTicket(null);
-                               router.push('/dashboard');
+                               setTimeout(() => {
+                                 document.getElementById('dashboard')?.scrollIntoView({ behavior: 'smooth' });
+                               }, 100);
                              }}
                              className="w-full py-4 rounded-xl bg-brand-blue text-white font-black text-[11px] uppercase tracking-[0.2em] hover:bg-brand-accent hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-lg shadow-brand-blue/20"
                            >
