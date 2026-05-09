@@ -42,23 +42,23 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-6">
-           <div className="bg-white px-6 py-4 rounded-lg border border-brand-blue/5 flex items-center gap-5">
-              <div className="w-12 h-12 rounded-lg bg-brand-blue/[0.03] flex items-center justify-center">
-                 <BarChart3 className="w-6 h-6 text-brand-blue" />
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-3 sm:gap-6 w-full sm:w-auto">
+           <div className="bg-white px-3 sm:px-6 py-3 sm:py-4 rounded-lg border border-brand-blue/5 flex items-center gap-3 sm:gap-5">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg bg-brand-blue/[0.03] flex items-center justify-center shrink-0">
+                 <BarChart3 className="w-4 h-4 sm:w-6 sm:h-6 text-brand-blue" />
               </div>
               <div>
                  <p className="text-[10px] font-black text-brand-blue/20 mb-0.5">Throughput</p>
-                 <p className="text-2xl font-black text-brand-blue italic tracking-tighter">98.4%</p>
+                 <p className="text-[14px] sm:text-2xl font-black text-brand-blue italic tracking-tighter">98.4%</p>
               </div>
            </div>
-           <div className="bg-white px-6 py-4 rounded-lg border border-brand-blue/5 flex items-center gap-5">
-              <div className="w-12 h-12 rounded-lg bg-brand-accent/5 flex items-center justify-center">
-                 <ShieldCheck className="w-6 h-6 text-brand-accent" />
+           <div className="bg-white px-3 sm:px-6 py-3 sm:py-4 rounded-lg border border-brand-blue/5 flex items-center gap-3 sm:gap-5">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg bg-brand-accent/5 flex items-center justify-center shrink-0">
+                 <ShieldCheck className="w-4 h-4 sm:w-6 sm:h-6 text-brand-accent" />
               </div>
               <div>
                  <p className="text-[10px] font-black text-brand-blue/20 mb-0.5">Security</p>
-                 <p className="text-2xl font-black text-brand-accent italic tracking-tighter">AES-256</p>
+                 <p className="text-[14px] sm:text-2xl font-black text-brand-accent italic tracking-tighter">AES-256</p>
               </div>
            </div>
         </div>
