@@ -186,7 +186,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-bg-light selection:bg-brand-blue/10 selection:text-brand-blue font-body">
       {/* ── TOP STATUS BAR ── */}
       <nav className="fixed top-0 left-0 right-0 z-[120] bg-white/80 backdrop-blur-[20px] border-b border-white/20">
-        <div className="max-w-[1700px] mx-auto px-4 md:px-8 h-20 flex justify-between items-center">
+        <div className="max-w-[1700px] mx-auto px-4 md:px-8 h-16 sm:h-20 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <Link 
               href="/" 
@@ -216,7 +216,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         "fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[400px] px-6 transition-all duration-700 ease-in-out",
         (isNavVisible || isBottomHovered) ? "translate-y-0 opacity-100" : "translate-y-32 opacity-0"
       )}>
-        <div className="relative w-full h-20">
+        <div className="relative w-full h-16 sm:h-20">
           <motion.div 
             className="absolute top-0 w-1/3 h-full flex flex-col items-center justify-center"
             initial={false}
@@ -270,7 +270,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <main className="max-w-[1800px] mx-auto px-6 md:px-12 pt-20 pb-16 relative">
+      <main className="max-w-[1800px] mx-auto px-4 md:px-12 pt-16 sm:pt-20 pb-16 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-gradient-to-b from-brand-accent/[0.04] to-transparent pointer-events-none -z-10" />
         {children}
       </main>
@@ -280,7 +280,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
             {/* Left Card: CTA */}
-            <div className="bg-white/[0.03] border border-white/5 rounded-lg p-10 flex flex-col items-start relative overflow-hidden group">
+            <div className="bg-white/[0.03] border border-white/5 rounded-lg p-6 sm:p-10 flex flex-col items-start relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
                 <Globe className="w-48 h-48 text-white" />
               </div>
@@ -288,7 +288,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <ShieldCheck className="w-4 h-4 text-brand-accent" />
                 <span className="text-[10px] font-black text-brand-accent uppercase tracking-widest">Security Protocol</span>
               </div>
-              <h2 className="font-heading text-4xl font-black text-white tracking-tighter mb-4 leading-tight italic">
+              <h2 className="font-heading text-3xl sm:text-4xl font-black text-white tracking-tighter mb-4 leading-tight italic">
                 Optimize flow:<br />Join protocol
               </h2>
               <p className="text-xs font-medium text-white/50 max-w-sm leading-relaxed mb-8">
@@ -296,14 +296,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </p>
               <button 
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-8 py-4 rounded-lg bg-transparent border border-white/20 text-white font-black text-[10px] hover:bg-white hover:text-brand-blue cursor-pointer"
+                className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-lg bg-transparent border border-white/20 text-white font-black text-[9px] sm:text-[10px] hover:bg-white hover:text-brand-blue cursor-pointer whitespace-nowrap"
               >
                 ACCESS PORTAL
               </button>
             </div>
 
             {/* Right Card: Brand & Connect */}
-            <div className="bg-white/[0.03] border border-white/5 rounded-lg p-10 flex flex-col justify-between">
+            <div className="bg-white/[0.03] border border-white/5 rounded-lg p-6 sm:p-10 flex flex-col justify-between">
               <div className="flex flex-col md:flex-row justify-between items-start mb-10 gap-8">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-transparent border border-white/10 overflow-hidden shadow-premium">

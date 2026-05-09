@@ -113,7 +113,7 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
       whileInView="visible"
       viewport={{ once: true }}
       variants={containerVariants}
-      className="flex flex-col bg-brand-blue/[0.02] backdrop-blur-md rounded-lg p-10 border border-brand-blue/10 hover:bg-brand-blue/[0.04] transition-all duration-500 h-fit"
+      className="flex flex-col bg-brand-blue/[0.02] backdrop-blur-md rounded-lg p-5 sm:p-10 border border-brand-blue/10 hover:bg-brand-blue/[0.04] transition-all duration-500 h-fit"
     >
       {/* Service Header */}
       <div className="flex items-center gap-4 mb-6">
@@ -121,7 +121,7 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
             <Icon className={cn("w-7 h-7", colors.text)} />
          </div>
          <div className="min-w-0">
-            <h3 className="font-heading text-xl font-black text-brand-blue tracking-tighter truncate">{serviceLabels[service]}</h3>
+            <h3 className="font-heading text-lg sm:text-xl font-black text-brand-blue tracking-tighter truncate">{serviceLabels[service]}</h3>
             <div className="flex items-center gap-2">
                <span className="text-[9px] font-medium text-brand-blue/60 italic">Active stack</span>
                <div className="w-1 h-1 rounded-full bg-brand-blue/10"></div>
@@ -133,12 +133,12 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
       {/* Ranking Timeline Flow */}
       <div className="relative flex flex-col gap-6">
          {/* Vertical Connector Line */}
-         <div className="absolute left-[27px] top-6 bottom-6 w-[2px] bg-brand-blue/[0.1] z-0"></div>
+         <div className="absolute left-[23px] sm:left-[27px] top-6 bottom-6 w-[2px] bg-brand-blue/[0.1] z-0"></div>
 
          <AnimatePresence mode="popLayout">
             {/* 1. COMPLETED TICKETS (TOP RANK) */}
             {completed.length > 0 && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pl-[72px] mb-4">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pl-14 sm:pl-[72px] mb-4">
                  <span className="text-[8px] font-medium text-green-600/60 uppercase tracking-widest">Historical Protocol</span>
               </motion.div>
             )}
@@ -148,10 +148,10 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                 variants={itemVariants}
                 className="relative z-10 flex items-center gap-4"
               >
-                <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center border-4 border-white shrink-0">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-green-50 flex items-center justify-center border-4 border-white shrink-0">
                    <CheckCircle2 className="w-5 h-5 text-green-500" />
                 </div>
-                <div className="flex-1 bg-white/60 border border-brand-blue/5 rounded-lg px-6 py-4 flex justify-between items-center opacity-80">
+                <div className="flex-1 bg-white/60 border border-brand-blue/5 rounded-lg px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center opacity-80">
                    <div>
                       <h4 className="font-heading text-sm font-medium text-brand-blue tracking-tighter italic">
                          {service.substring(0, 3).toUpperCase()}-{ticket.number.toString().padStart(3, '0')}
@@ -173,7 +173,7 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                 className="relative z-10 flex items-center gap-4"
               >
                 <div className="relative shrink-0">
-                   <div className={cn("w-14 h-14 rounded-full flex items-center justify-center border-4 border-white relative z-10", colors.bg)}>
+                   <div className={cn("w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center border-4 border-white relative z-10", colors.bg)}>
                       <Loader2 className="w-6 h-6 text-white animate-spin" />
                    </div>
                    <div className={cn("absolute inset-0 rounded-full animate-ping opacity-20", colors.bg)}></div>
@@ -181,7 +181,7 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
 
                 <div className={cn("flex-1 min-w-0 bg-white border-2 rounded-lg px-4 py-3 flex items-center justify-between gap-4 overflow-hidden", colors.border)}>
                    {/* 1. Ticket ID */}
-                   <h4 className="font-heading text-lg font-black text-brand-blue tracking-tighter leading-none shrink-0">
+                   <h4 className="font-heading text-base sm:text-lg font-black text-brand-blue tracking-tighter leading-none shrink-0">
                       {service.substring(0, 3).toUpperCase()}-{serving.number.toString().padStart(3, '0')}
                    </h4>
 
@@ -212,12 +212,12 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
                 variants={itemVariants}
                 className="relative z-10 flex items-center gap-4 group"
               >
-                <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center border-4 border-white shrink-0 group-hover:border-brand-accent/40 transition-all">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white flex items-center justify-center border-4 border-white shrink-0 group-hover:border-brand-accent/40 transition-all">
                    <span className="text-xs font-medium text-brand-blue/60 group-hover:text-brand-accent transition-colors">{serving ? idx + 2 : idx + 1}</span>
                 </div>
-                <div className="flex-1 bg-white border border-brand-blue/10 rounded-lg px-6 py-3 flex items-center justify-between group-hover:border-brand-blue/30 transition-all">
+                <div className="flex-1 bg-white border border-brand-blue/10 rounded-lg px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between group-hover:border-brand-blue/30 transition-all">
                    <div className="flex flex-col gap-0.5">
-                      <h4 className="font-heading text-lg font-black text-brand-blue/60 group-hover:text-brand-blue transition-colors tracking-tighter leading-none">
+                      <h4 className="font-heading text-base sm:text-lg font-black text-brand-blue/60 group-hover:text-brand-blue transition-colors tracking-tighter leading-none">
                          {service.substring(0, 3).toUpperCase()}-{ticket.number.toString().padStart(3, '0')}
                       </h4>
                       <p className="text-[10px] font-medium text-brand-blue/40 group-hover:text-brand-blue/60 transition-colors">{serviceLabels[service]}</p>
@@ -249,7 +249,7 @@ function ServiceColumn({ service, tickets }: { service: Ticket['service'], ticke
             ))}
 
             {waiting.length > 4 && (
-              <motion.div layout className="pl-[72px] mt-2">
+              <motion.div layout className="pl-14 sm:pl-[72px] mt-2">
                  <button 
                    onClick={() => setIsExpanded(!isExpanded)}
                    className="text-[9px] font-black text-brand-accent uppercase tracking-widest hover:text-brand-blue transition-colors flex items-center gap-2 group/btn"

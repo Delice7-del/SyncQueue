@@ -256,7 +256,7 @@ export default function Home() {
               <span className="text-[10px] font-medium text-brand-accent">System 2.0 ready</span>
             </div>
             
-            <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl font-black text-brand-blue tracking-tighter mb-8 leading-[0.85] italic">
+            <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-brand-blue tracking-tighter mb-8 leading-[0.85] italic">
               Smart<br />
               queue<br />
               <span className="relative inline-block">
@@ -279,24 +279,24 @@ export default function Home() {
               <p className="text-xs font-medium text-brand-blue/60">Start your journey by accessing the portal or monitoring the live queue.</p>
             </div>
             
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+            <div className="flex flex-row items-center gap-3 sm:gap-6">
               <Magnetic>
                   <button 
                     onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="group px-6 py-3.5 rounded-lg bg-brand-blue text-white font-medium text-[11px] flex items-center gap-3 cursor-pointer shadow-lg shadow-brand-blue/10 hover:bg-brand-accent transition-all"
+                    className="group px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg bg-brand-blue text-white font-medium text-[10px] sm:text-[11px] flex items-center gap-2 sm:gap-3 cursor-pointer shadow-lg shadow-brand-blue/10 hover:bg-brand-accent transition-all whitespace-nowrap"
                   >
                     Access portal
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   </button>
               </Magnetic>
               
               <Magnetic>
                  <button 
-                   onClick={() => document.getElementById('dashboard')?.scrollIntoView({ behavior: 'smooth' })}
-                   className="group text-xs font-medium text-brand-blue hover:text-brand-accent transition-colors flex items-center gap-2 relative py-1 cursor-pointer"
-                 >
-                   View live dashboard
-                   <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    onClick={() => document.getElementById('dashboard')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="group text-[10px] sm:text-xs font-medium text-brand-blue hover:text-brand-accent transition-colors flex items-center gap-1.5 sm:gap-2 relative py-1 cursor-pointer whitespace-nowrap"
+                  >
+                    View live dashboard
+                    <ChevronRight className="w-3.5 h-3.5 sm:w-4 h-4 group-hover:translate-x-1 transition-transform" />
                    <motion.span 
                       className="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-accent"
                       whileHover={{ width: '100%' }}
@@ -441,14 +441,14 @@ export default function Home() {
              <h2 className="font-heading text-4xl font-black text-brand-blue tracking-tighter mb-4 italic">Live monitor</h2>
              <p className="text-[12px] font-medium text-brand-blue/85 max-w-lg mx-auto">Monitor the active patient flow and department throughput in real-time. View serving status and waiting positions below.</p>
           </motion.div>
-          <motion.div variants={itemVariants} className="bg-white/40 backdrop-blur-sm rounded-2xl border border-brand-blue/5 p-4 lg:p-12 overflow-visible shadow-2xl shadow-brand-blue/5">
+          <motion.div variants={itemVariants} className="bg-white/40 backdrop-blur-sm rounded-2xl border border-brand-blue/5 p-4 sm:p-8 lg:p-12 overflow-visible shadow-2xl shadow-brand-blue/5">
              <QueueDisplay />
           </motion.div>
        </motion.section>
 
        <motion.section 
         id="services" 
-        className="relative scroll-mt-32 pb-20 max-w-full mx-auto px-8"
+        className="relative scroll-mt-32 pb-20 max-w-full mx-auto px-4 sm:px-8"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
@@ -488,14 +488,14 @@ export default function Home() {
 
        <motion.section 
           id="about" 
-          className="relative pb-20 scroll-mt-32 max-w-full mx-auto px-8"
+          className="relative pb-20 scroll-mt-32 max-w-full mx-auto px-4 sm:px-8"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
        >
            <motion.div variants={itemVariants} className="text-center mb-10">
-              <h2 className="font-heading text-5xl font-black text-brand-blue tracking-tighter mb-4 italic leading-none">About systems.</h2>
+              <h2 className="font-heading text-3xl sm:text-5xl font-black text-brand-blue tracking-tighter mb-4 italic leading-none">About systems.</h2>
               <p className="text-[12px] font-medium text-brand-blue/80 max-w-lg mx-auto leading-relaxed">Explore the mission-critical engineering and resilient infrastructure protocols that power our zero-latency smart queue orchestration.</p>
            </motion.div>
           
@@ -532,7 +532,7 @@ export default function Home() {
                  className="relative group py-10"
                >
                 {/* LARGE BACKGROUND NUMBER */}
-                <span className="absolute -top-4 -left-8 text-[140px] font-black text-brand-blue/[0.03] select-none group-hover:text-brand-accent/[0.06] transition-colors duration-700 leading-none">
+                <span className="absolute -top-4 -left-4 sm:-left-8 text-[80px] sm:text-[140px] font-black text-brand-blue/[0.03] select-none group-hover:text-brand-accent/[0.06] transition-colors duration-700 leading-none">
                   {item.num}
                 </span>
                 
@@ -552,8 +552,8 @@ export default function Home() {
        </motion.section>
 
       {/* Offline resiliency details */}
-      <section id="features" className="relative pb-20 scroll-mt-28 max-w-full mx-auto px-8">
-         <div className="bg-brand-blue rounded-lg px-10 py-8 relative overflow-hidden text-white">
+      <section id="features" className="relative pb-20 scroll-mt-28 max-w-full mx-auto px-4 sm:px-8">
+         <div className="bg-brand-blue rounded-lg px-6 sm:px-10 py-8 relative overflow-hidden text-white">
             <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/20 to-transparent opacity-50" />
             <div className="relative z-10 flex flex-col lg:flex-row lg:items-center gap-8">
                {/* Left: heading block */}
@@ -590,8 +590,8 @@ export default function Home() {
       </section>
 
       {/* Contact */}
-      <section id="contact" className="relative pb-20 scroll-mt-32 max-w-full mx-auto px-8">
-         <div className="bg-white/40 backdrop-blur-md rounded-lg border border-brand-blue/5 p-10">
+      <section id="contact" className="relative pb-20 scroll-mt-32 max-w-full mx-auto px-4 sm:px-8">
+         <div className="bg-white/40 backdrop-blur-md rounded-lg border border-brand-blue/5 p-5 sm:p-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
                <div className="bg-white rounded-lg p-8 border border-brand-blue/5 flex flex-col h-full">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-brand-blue/5 border border-brand-blue/10 mb-4">
