@@ -112,8 +112,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         setIsBottomHovered(false);
       }
     };
+
+    const handleTouch = (e: TouchEvent) => {
+      if (e.touches.length > 0 && window.innerHeight - e.touches[0].clientY < 150) {
+        setIsBottomHovered(true);
+      } else {
+        setIsBottomHovered(false);
+      }
+    };
     
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchstart', handleTouch, { passive: true });
+    window.addEventListener('touchmove', handleTouch, { passive: true });
 
     return () => {
       clearInterval(syncInterval);
@@ -121,8 +131,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       window.removeEventListener('popstate', handleLocationChange);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchstart', handleTouch);
+      window.removeEventListener('touchmove', handleTouch);
       stopQueueSimulation();
     };
+
   }, [init, pathname, router]);
 
   const navItems = [
