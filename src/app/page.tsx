@@ -300,18 +300,10 @@ export default function Home() {
                  <motion.button 
                     whileTap={{ scale: 0.95 }}
                     onClick={() => document.getElementById('dashboard')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="group text-[10px] sm:text-xs font-medium text-brand-blue hover:text-brand-accent transition-colors flex items-center gap-1.5 sm:gap-2 relative py-2 cursor-pointer whitespace-nowrap"
+                    className="group px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg bg-brand-blue/5 text-brand-blue font-medium text-[10px] sm:text-[11px] flex items-center gap-2 sm:gap-3 cursor-pointer hover:bg-brand-blue/10 transition-all whitespace-nowrap"
                   >
                     View live dashboard
                     <ChevronRight className="w-3.5 h-3.5 sm:w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                   <motion.span 
-                      className="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-accent"
-                      whileHover={{ width: '100%' }}
-                      transition={{ duration: 0.3 }}
-                   />
-                   <motion.span 
-                      className="absolute bottom-0 left-0 w-full h-[1px] bg-brand-blue/5"
-                   />
                  </motion.button>
                </Magnetic>
             </div>

@@ -314,7 +314,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 Engineering high-precision queue management protocols for modern healthcare infrastructure.
               </p>
               <button 
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => {
+                  const el = document.getElementById('services');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  else window.location.href = '/#services';
+                }}
                 className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-lg bg-transparent border border-white/20 text-white font-black text-[9px] sm:text-[10px] hover:bg-white hover:text-brand-blue cursor-pointer whitespace-nowrap"
               >
                 ACCESS PORTAL
