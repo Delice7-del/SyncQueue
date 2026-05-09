@@ -52,7 +52,7 @@ export default function Home() {
   };
 
   React.useEffect(() => {
-    // Broad prefetch to ensure all possible code chunks are in cache for offline
+    // prefetch chunks for offline cache
     router.prefetch('/dashboard');
     router.prefetch('/my-ticket/preheat');
     router.prefetch('/offline');
@@ -63,7 +63,7 @@ export default function Home() {
     setTargetService(service);
     
     try {
-      // Simulate protocol sequence
+      // fake network delay
       await new Promise(resolve => setTimeout(resolve, 2000));
       const ticket = await createTicket(service);
       
@@ -72,10 +72,10 @@ export default function Home() {
       setIsProcessing(false);
 
       if (!navigator.onLine) {
-        // Offline: Show success overlay and stay on home for stability
+        // keep user on home page if offline
         setGeneratedTicket(ticket);
       } else {
-        // Online: Direct navigation
+        // standard routing
         router.push(`/my-ticket/${ticket.id}`);
       }
     } catch (error) {
@@ -133,10 +133,10 @@ export default function Home() {
 
   return (
     <div className="relative">
-      {/* Smart queue orchestration protocol - version 2.0 */}
+      {/* bg effects */}
       <BackgroundParticles />
 
-      {/* Loading overlay for ticket creation */}
+      {/* processing overlay */}
       <AnimatePresence>
         {isProcessing && (
           <motion.div 
@@ -173,7 +173,7 @@ export default function Home() {
             className="fixed inset-0 z-[400] bg-brand-blue/95 backdrop-blur-3xl flex flex-col items-center justify-center p-6"
           >
             {(() => {
-              // Use the reactive tickets from the hook
+              // grab live ticket state
               const liveTicket = tickets.find(t => t.id === generatedTicket.id) || generatedTicket;
               const { position } = getQueueData(liveTicket.id);
               const isServing = liveTicket.status === 'serving';

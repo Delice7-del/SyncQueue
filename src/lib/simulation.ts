@@ -15,7 +15,7 @@ const serveStartTime: Record<string, number> = {};
 
 export function startQueueSimulation() {
   if (masterInterval !== null) return;
-  // Run an immediate tick to catch up on state after reload
+  // run tick immediately on mount
   tick();
   masterInterval = setInterval(tick, POLL_INTERVAL_MS);
 }
@@ -49,19 +49,19 @@ function tick() {
 
     if (serving) {
       if (!serveStartTime[serving.id]) {
-        // catch up from when they actually started serving in the DB
+        // restore exact start time
         serveStartTime[serving.id] = serving.servedAt || now;
       }
 
       const elapsed = now - serveStartTime[serving.id];
-      // Use ticket's unique duration, or assign one if missing (legacy support)
+      // fallback to defaults if legacy
       const duration = serving.estimatedDuration || FALLBACK_DURATION_MS[service];
 
       if (elapsed >= duration) {
         delete serveStartTime[serving.id];
         updateStatus(serving.id, 'done');
         
-        // IMMEDIATE PROMOTION
+        // promote next
         const afterDoneWaiting = serviceTickets
           .filter(t => t.id !== serving.id && t.status === 'waiting')
           .sort((a, b) => a.createdAt - b.createdAt)[0];
@@ -77,7 +77,7 @@ function tick() {
         .sort((a, b) => a.createdAt - b.createdAt)[0];
 
       if (nextWaiting) {
-        // If it doesn't have a duration, give it one now before serving
+        // set duration if missing
         if (!nextWaiting.estimatedDuration) {
           nextWaiting.estimatedDuration = getServiceDuration(nextWaiting.service);
         }

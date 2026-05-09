@@ -10,7 +10,7 @@ import Link from 'next/link';
 export default function Dashboard() {
   return (
     <div className="flex flex-col gap-16">
-      {/* Back Navigation */}
+      {/* back btn */}
       <div className="pt-2 -mb-8">
         <Link 
           href="/" 
@@ -23,7 +23,7 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      {/* Dashboard Header */}
+      {/* header */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-10 border-b border-brand-blue/5 pb-8">
         <div>
           <motion.div
@@ -64,7 +64,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Full Queue View */}
+      {/* full queue */}
       <section className="relative z-10">
          <div className="flex items-center justify-between mb-12">
             <div className="flex items-center gap-4">
@@ -82,7 +82,7 @@ export default function Dashboard() {
          <QueueDisplay />
       </section>
 
-      {/* Dashboard Stats / Background Elements */}
+      {/* extra stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12">
          <div className="p-8 rounded-lg bg-white border border-brand-blue/5 flex flex-col items-center justify-center text-center group hover:bg-brand-blue/[0.01] transition-all duration-700">
             <div className="w-1 h-12 bg-brand-blue/10 rounded-full mb-8 group-hover:bg-brand-accent transition-colors duration-700"></div>

@@ -44,7 +44,7 @@ const getServiceDuration = (service: Ticket['service']) => {
   return Math.floor(minutes * 60 * 1000); 
 };
 
-// broadcast channel for multi-tab sync
+// multi-tab sync channel
 const syncChannel = typeof window !== 'undefined' ? new BroadcastChannel('syncqueue_orchestrator') : null;
 
 export const useQueueStore = create<QueueState>((set, get) => ({
@@ -84,13 +84,13 @@ export const useQueueStore = create<QueueState>((set, get) => ({
       const conn = (navigator as any).connection;
       if (conn) conn.addEventListener('change', updateNetwork);
 
-      // handle PWA installation
+      // setup pwa prompt
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         set({ deferredPrompt: e, canInstall: true });
       });
 
-      // sync state across tabs
+      // cross-tab updates
       syncChannel?.addEventListener('message', async (event) => {
         if (event.data === 'SYNC_REQUEST' || event.data === 'TICKET_CREATED') {
           const tickets = await getTickets().catch(() => []);
@@ -99,9 +99,9 @@ export const useQueueStore = create<QueueState>((set, get) => ({
       });
     }
 
-    // Load tickets as a background task to avoid UI block
+    // async load to unblock ui
     getTickets().then(tickets => {
-      // ensure only one person is serving per department
+      // cleanup ghost serving tickets
       const services = ['consultation', 'lab', 'pharmacy'] as const;
       let cleaned = [...tickets];
       
@@ -120,7 +120,7 @@ export const useQueueStore = create<QueueState>((set, get) => ({
       });
     }).catch(err => {
       console.error('[Store] Init failed:', err);
-      set({ initialized: true }); // Still allow app to boot
+      set({ initialized: true }); // let app boot anyway
     });
   },
 
@@ -128,7 +128,7 @@ export const useQueueStore = create<QueueState>((set, get) => ({
     const number = await getNextTicketNumber(service);
     const id = crypto.randomUUID();
     
-    // Check if we should start serving immediately (if no one else is in queue for this service)
+    // serve immediately if queue is empty
     const { tickets } = get();
     const serviceTickets = tickets.filter(t => t.service === service);
     const hasActive = serviceTickets.some(t => t.status === 'serving' || t.status === 'waiting');

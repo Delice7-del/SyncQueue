@@ -37,7 +37,7 @@ async function handleFetch(request) {
   const cache = await caches.open(CACHE_NAME);
   const url = new URL(request.url);
 
-  // 1. Navigation - Absolute Shell Fallback
+  // 1. nav fallback to app shell
   if (request.mode === 'navigate') {
     try {
       const response = await fetch(request);
@@ -47,13 +47,13 @@ async function handleFetch(request) {
       console.log('[SW v12] Serving Shell for navigate:', url.pathname);
       const shell = await cache.match(SHELL_URL);
       if (shell) return shell;
-      // Last resort: check if we have the specific dashboard cached
+      // try cached dashboard if shell fails
       const dashboard = await cache.match('/dashboard');
       if (dashboard) return dashboard;
     }
   }
 
-  // 2. Static Assets - Cache-First
+  // 2. static assets cache-first
   const isStatic = 
     url.pathname.startsWith('/_next/static/') || 
     url.pathname.endsWith('.png') ||
@@ -66,7 +66,7 @@ async function handleFetch(request) {
     if (cached) return cached;
   }
 
-  // 3. Data & Others - Network with Cache/Shell Fallback
+  // 3. network first for data, fallback to cache
   try {
     const response = await fetch(request);
     if (response.ok && url.origin === self.location.origin) {

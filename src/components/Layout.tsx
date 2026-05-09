@@ -46,7 +46,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const runInit = async () => {
-      // Non-blocking start for simulation
+      // start background sim
       startQueueSimulation();
       
       try {
@@ -59,13 +59,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     
     runInit();
 
-    // Fallback sync: Proactively check IDB every 2s for cross-tab updates when offline
+    // poll idb for multi-tab sync when offline
     const syncInterval = setInterval(async () => {
        try {
          const tickets = await getTickets().catch(() => []);
          const currentTickets = useQueueStore.getState().tickets;
          
-         // Only update if there's a real difference to avoid render loops
+         // bail out if state matches
          if (JSON.stringify(tickets) !== JSON.stringify(currentTickets)) {
             console.log('[Layout] Heartbeat Sync: Updating tickets from local vault');
             useQueueStore.setState({ tickets: tickets.sort((a,b) => a.createdAt - b.createdAt) });
@@ -89,7 +89,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     window.addEventListener('popstate', handleLocationChange);
     handleLocationChange();
 
-    // Prefetch common routes to ensure JS chunks are cached for offline use
+    // prefetch core routes
     router.prefetch('/');
     router.prefetch('/dashboard');
 
@@ -198,7 +198,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-bg-light selection:bg-brand-blue/10 selection:text-brand-blue font-body">
-      {/* ── TOP STATUS BAR ── */}
+      {/* top nav */}
       <nav className="fixed top-0 left-0 right-0 z-[120] bg-white/80 backdrop-blur-[20px] border-b border-white/20">
         <div className="max-w-[1700px] mx-auto px-4 md:px-8 h-16 sm:h-20 flex justify-between items-center">
           <div className="flex items-center gap-4">
@@ -240,7 +240,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </nav>
 
-      {/* ── MASTER NAV SYSTEM ── */}
+      {/* bottom nav */}
       <div className={cn(
         "fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[400px] px-6 transition-all duration-700 ease-in-out",
         (isNavVisible || isBottomHovered) ? "translate-y-0 opacity-100" : "translate-y-32 opacity-0"
