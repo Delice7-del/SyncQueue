@@ -28,6 +28,7 @@ export default function Magnetic({ children }: { children: React.ReactNode }) {
             onMouseMove={handleMouse}
             onMouseLeave={reset}
             animate={{ x, y }}
+            whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
         >
             {children}

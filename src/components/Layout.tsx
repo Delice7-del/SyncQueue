@@ -254,15 +254,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   onClick={() => setManualTab(item.id)}
                   className="relative flex flex-col items-center justify-center w-1/3 h-full z-[130] cursor-pointer"
                 >
-                  <div className={cn(
-                    "flex flex-col items-center transition-all duration-500",
-                    isActive ? "opacity-100" : "opacity-30 hover:opacity-100"
-                  )}>
+                  <motion.div 
+                    whileTap={{ scale: 0.9 }}
+                    className={cn(
+                      "flex flex-col items-center transition-all duration-500",
+                      isActive ? "opacity-100" : "opacity-30 hover:opacity-100"
+                    )}
+                  >
                     <div className={cn("transition-all duration-300", isActive ? "invisible opacity-0" : "visible opacity-100")}>
                       <item.icon className="w-6 h-6 text-white" />
                     </div>
                     <span className={cn("nav-label", isActive && "nav-label-active")}>{item.label}</span>
-                  </div>
+                  </motion.div>
                 </Link>
               );
             })}

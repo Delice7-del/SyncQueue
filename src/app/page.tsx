@@ -44,6 +44,9 @@ export default function Home() {
 
   const handleTransmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate([10]);
+    }
     setIsTransmitted(true);
     setTimeout(() => setIsTransmitted(null as any), 4000);
   };
@@ -281,17 +284,19 @@ export default function Home() {
             
             <div className="flex flex-row items-center gap-3 sm:gap-6">
               <Magnetic>
-                  <button 
+                  <motion.button 
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
                     className="group px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg bg-brand-blue text-white font-medium text-[10px] sm:text-[11px] flex items-center gap-2 sm:gap-3 cursor-pointer shadow-lg shadow-brand-blue/10 hover:bg-brand-accent transition-all whitespace-nowrap"
                   >
                     Access portal
                     <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                  </button>
+                  </motion.button>
               </Magnetic>
               
               <Magnetic>
-                 <button 
+                 <motion.button 
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => document.getElementById('dashboard')?.scrollIntoView({ behavior: 'smooth' })}
                     className="group text-[10px] sm:text-xs font-medium text-brand-blue hover:text-brand-accent transition-colors flex items-center gap-1.5 sm:gap-2 relative py-2 cursor-pointer whitespace-nowrap"
                   >
@@ -305,7 +310,7 @@ export default function Home() {
                    <motion.span 
                       className="absolute bottom-0 left-0 w-full h-[1px] bg-brand-blue/5"
                    />
-                 </button>
+                 </motion.button>
                </Magnetic>
             </div>
           </motion.div>
