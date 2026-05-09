@@ -1,20 +1,20 @@
-const CACHE_NAME = 'syncqueue-v8';
-const CORE_ASSETS = [
-  '/',
+const CACHE_NAME = 'syncqueue-v9';
+const SHELL_URL = '/';
+const ASSETS = [
+  SHELL_URL,
   '/manifest.json',
   '/logo.png',
   '/icon.png',
+  '/offline',
   '/icon-192x192.png',
   '/icon-512x512.png',
-  '/offline',
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return Promise.allSettled(
-        CORE_ASSETS.map(url => fetch(url, { cache: 'reload' }).then(res => cache.put(url, res)))
-      );
+      console.log('[SW] Arming shell persistence');
+      return cache.addAll(ASSETS).catch(err => console.error('[SW] Pre-cache error:', err));
     })
   );
   self.skipWaiting();
@@ -22,45 +22,65 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.map(key => key !== CACHE_NAME && caches.delete(key))
-    ))
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) return caches.delete(key);
+        })
+      );
+    })
   );
   self.clients.claim();
 });
 
-// Universal responder to ensure we NEVER return undefined/null to respondWith
-async function safeResponse(request) {
+async function handleFetch(request) {
   const cache = await caches.open(CACHE_NAME);
   const url = new URL(request.url);
 
-  // 1. Try Cache Match first (even if online, for speed of system assets)
-  const cached = await cache.match(request);
-  if (cached) return cached;
+  // 1. SYSTEM ASSETS & SHELL - Strict Cache-First
+  const isSystemAsset = 
+    url.pathname.startsWith('/_next/static/') || 
+    url.pathname.startsWith('/icon') || 
+    url.pathname.endsWith('.png') ||
+    url.pathname.endsWith('.svg') ||
+    url.pathname === SHELL_URL;
 
-  // 2. Try Network
+  if (isSystemAsset) {
+    const cached = await cache.match(request);
+    if (cached) return cached;
+    
+    // Fallback to Shell if specific static asset fails and we are in navigation mode
+    if (request.mode === 'navigate') {
+       const shell = await cache.match(SHELL_URL);
+       if (shell) return shell;
+    }
+  }
+
+  // 2. DATA & NAVIGATION - Network with Aggressive Cache Fallback
   try {
     const networkResponse = await fetch(request);
-    if (networkResponse.ok && (url.origin === self.location.origin)) {
+    if (networkResponse && networkResponse.status === 200 && url.origin === self.location.origin) {
       cache.put(request, networkResponse.clone());
     }
     return networkResponse;
-  } catch (err) {
-    // 3. OFFLINE FALLBACKS
+  } catch (error) {
+    console.warn('[SW] Offline fallback triggered for:', url.pathname);
     
-    // A. Next.js Data / Navigation Fallback
-    // If it's a ticket page or a data request for one, serve the root shell
-    if (url.pathname.includes('/my-ticket/') || url.search.includes('_rsc') || request.mode === 'navigate') {
-      const shell = await cache.match('/');
-      if (shell) return shell;
+    // A. If it's a navigation or Next.js RSC data request, serve the shell
+    if (request.mode === 'navigate' || url.search.includes('_rsc') || url.pathname.includes('/my-ticket/')) {
+      const shell = await cache.match(SHELL_URL);
+      if (shell) {
+         console.log('[SW] Serving App Shell for:', url.pathname);
+         return shell;
+      }
     }
 
-    // B. Offline page
-    const offline = await cache.match('/offline');
-    if (offline) return offline;
+    // B. Check specific cache match
+    const cached = await cache.match(request);
+    if (cached) return cached;
 
-    // C. Hardcoded fallback
-    return new Response('SyncQueue Protocol Offline', {
+    // C. Final safety response
+    return new Response('Offline Mode Active', {
       status: 200,
       headers: { 'Content-Type': 'text/html' }
     });
@@ -69,10 +89,8 @@ async function safeResponse(request) {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-  
-  // Ignore external analytics/extensions
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
 
-  event.respondWith(safeResponse(event.request));
+  event.respondWith(handleFetch(event.request));
 });

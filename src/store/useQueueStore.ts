@@ -78,11 +78,7 @@ export const useQueueStore = create<QueueState>((set, get) => ({
       };
 
       updateNetwork();
-
-      window.addEventListener('online', () => {
-        updateNetwork();
-        get().syncOfflineTickets();
-      });
+      window.addEventListener('online', updateNetwork);
       window.addEventListener('offline', updateNetwork);
       
       const conn = (navigator as any).connection;
@@ -96,50 +92,36 @@ export const useQueueStore = create<QueueState>((set, get) => ({
 
       // sync state across tabs
       syncChannel?.addEventListener('message', async (event) => {
-        if (event.data === 'SYNC_REQUEST') {
-          const tickets = await getTickets();
+        if (event.data === 'SYNC_REQUEST' || event.data === 'TICKET_CREATED') {
+          const tickets = await getTickets().catch(() => []);
           set({ tickets });
         }
       });
     }
 
-    let tickets = await getTickets();
-
-    // ensure only one person is serving per department on reload
-    const services = ['consultation', 'lab', 'pharmacy'] as const;
-    for (const service of services) {
-      const servingTickets = tickets
-        .filter(t => t.service === service && t.status === 'serving')
-        .sort((a, b) => (a.createdAt ?? 0) - (b.createdAt ?? 0));
-
-      if (servingTickets.length > 1) {
-        // if somehow multiple people are serving, reset all but the first one
-        const toReset = servingTickets.slice(1);
-        for (const t of toReset) {
-          await updateTicketInDB(t.id, { status: 'waiting', servedAt: undefined });
+    // Load tickets as a background task to avoid UI block
+    getTickets().then(tickets => {
+      // ensure only one person is serving per department
+      const services = ['consultation', 'lab', 'pharmacy'] as const;
+      let cleaned = [...tickets];
+      
+      for (const service of services) {
+        const serving = cleaned.filter(t => t.service === service && t.status === 'serving');
+        if (serving.length > 1) {
+          const toReset = serving.slice(1);
+          toReset.forEach(t => updateTicketInDB(t.id, { status: 'waiting', servedAt: undefined }));
+          cleaned = cleaned.map(t => toReset.find(r => r.id === t.id) ? { ...t, status: 'waiting', servedAt: undefined } : t);
         }
-        tickets = tickets.map(t =>
-          toReset.find(r => r.id === t.id) ? { ...t, status: 'waiting', servedAt: undefined } : t
-        );
       }
-    }
 
-    // Fix any missing durations in old tickets
-    const updatedTickets = tickets.map(t => {
-      if (!t.estimatedDuration) {
-        return { ...t, estimatedDuration: getServiceDuration(t.service) };
-      }
-      return t;
+      set({ 
+        tickets: cleaned.map(t => ({...t, estimatedDuration: t.estimatedDuration || getServiceDuration(t.service)})), 
+        initialized: true 
+      });
+    }).catch(err => {
+      console.error('[Store] Init failed:', err);
+      set({ initialized: true }); // Still allow app to boot
     });
-    
-    // Save fixed tickets back to DB
-    for (const t of updatedTickets) {
-      if (t.estimatedDuration !== tickets.find(old => old.id === t.id)?.estimatedDuration) {
-         await updateTicketInDB(t.id, { estimatedDuration: t.estimatedDuration });
-      }
-    }
-
-    set({ tickets: updatedTickets, initialized: true });
   },
 
   createTicket: async (service) => {

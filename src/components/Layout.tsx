@@ -26,6 +26,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { startQueueSimulation, stopQueueSimulation } from '@/lib/simulation';
+import { getTickets } from '@/lib/db';
 import { NetworkStatus } from './NetworkStatus';
 import { InstallPrompt } from './InstallPrompt';
 import { SyncOverlay } from './SyncOverlay';
@@ -44,12 +45,27 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const runInit = async () => {
-      await init();
-      setMounted(true);
+      // Non-blocking start for simulation
       startQueueSimulation();
+      
+      try {
+        await init();
+      } catch (e) {
+        console.warn('[Layout] Init sequence delayed:', e);
+      }
+      setMounted(true);
     };
     
     runInit();
+
+    // Fallback sync: Proactively check IDB every 5s for cross-tab updates when offline
+    const syncInterval = setInterval(async () => {
+       const { initialized } = useQueueStore.getState();
+       if (initialized) {
+          const tickets = await getTickets().catch(() => []);
+          useQueueStore.setState({ tickets });
+       }
+    }, 5000);
     
     const handleLocationChange = () => {
       setActiveHash(window.location.hash);
@@ -67,11 +83,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     // Prefetch common routes to ensure JS chunks are cached for offline use
     router.prefetch('/');
     router.prefetch('/dashboard');
-    router.prefetch('/my-ticket/offline-preheat');
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      // Hide nav if scrolling down past 100px, show if scrolling up
       if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
         setIsNavVisible(false);
       } else {
@@ -83,7 +97,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Show nav if mouse is in the bottom 100px of the viewport
       if (window.innerHeight - e.clientY < 100) {
         setIsBottomHovered(true);
       } else {
@@ -94,13 +107,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
+      clearInterval(syncInterval);
       window.removeEventListener('hashchange', handleLocationChange);
       window.removeEventListener('popstate', handleLocationChange);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
       stopQueueSimulation();
     };
-  }, [init, pathname]);
+  }, [init, pathname, router]);
 
   const navItems = [
     { id: 'sync', label: 'Sync', icon: RefreshCw, href: '/#features' },
