@@ -593,7 +593,7 @@ export default function Home() {
       <section id="contact" className="relative pb-20 scroll-mt-32 max-w-full mx-auto px-4 sm:px-8">
          <div className="bg-white/40 backdrop-blur-md rounded-lg border border-brand-blue/5 p-5 sm:p-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
-               <div className="bg-white rounded-lg p-8 border border-brand-blue/5 flex flex-col h-full">
+               <div className="bg-white rounded-lg p-5 sm:p-8 border border-brand-blue/5 flex flex-col h-full">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-brand-blue/5 border border-brand-blue/10 mb-4">
                     <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
                     <span className="text-[9px] font-medium tracking-widest text-brand-blue uppercase">Contact Protocol</span>
@@ -603,7 +603,7 @@ export default function Home() {
                      Fill out the form below to initiate an administrative support sequence or request a technical consultation.
                   </p>
                   <form className="space-y-5" onSubmit={handleTransmit}>
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                     <div className="grid grid-cols-2 gap-4 sm:gap-5">
                         <div className="relative group">
                            <input 
                               type="text" 
@@ -652,7 +652,7 @@ export default function Home() {
                         <div className="absolute bottom-0 left-0 h-[1px] bg-brand-blue/5 w-full -z-10" />
                      </div>
    
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                     <div className="grid grid-cols-2 gap-4 sm:gap-5">
                         <div className="relative group">
                            <input 
                               type="email" 
@@ -730,14 +730,14 @@ export default function Home() {
                       </div>
                   </form>
                </div>
-               <div className="bg-white rounded-lg p-8 border border-brand-blue/5 flex flex-col h-full">
+               <div className="bg-white rounded-lg p-5 sm:p-8 border border-brand-blue/5 flex flex-col h-full">
                   <div>
-                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-brand-accent/5 border border-brand-accent/10 mb-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-brand-accent/5 border border-brand-accent/10 mb-4">
                        <span className="text-[10px] font-medium tracking-widest text-brand-accent uppercase">Infrastructure</span>
                      </div>
                      <h3 className="font-heading text-2xl font-black text-brand-blue tracking-tighter italic mb-4 leading-tight">Global Support Systems.</h3>
                      
-                     <div className="grid grid-cols-2 gap-4 mb-5">
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-4 mb-5">
                         <div className="flex items-center gap-3">
                            <div className="w-10 h-10 rounded-lg bg-brand-blue/5 flex items-center justify-center border border-brand-blue/5 shrink-0">
                               <MapPin className="w-4 h-4 text-brand-blue" />
@@ -777,7 +777,7 @@ export default function Home() {
                      <div className="relative bg-brand-blue/[0.02] p-5 rounded-lg border border-brand-blue/5 flex items-center justify-between">
                         <div>
                            <p className="text-[8px] font-bold text-brand-blue/40 mb-1 uppercase">Emergency service</p>
-                           <p className="text-xl font-black text-brand-blue tracking-tighter text-brand-blue">+250 791 926 765</p>
+                           <p className="text-lg sm:text-xl font-black text-brand-blue tracking-tighter">+250 791 926 765</p>
                         </div>
                         <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center border border-red-500/20">
                            <ShieldCheck className="w-5 h-5 text-red-500" />
