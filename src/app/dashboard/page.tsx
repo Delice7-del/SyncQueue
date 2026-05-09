@@ -4,11 +4,25 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import QueueDisplay from '@/components/QueueDisplay';
 import { motion } from 'framer-motion';
-import { Activity, ShieldCheck, BarChart3, Zap } from 'lucide-react';
+import { Activity, ShieldCheck, BarChart3, Zap, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Dashboard() {
   return (
     <div className="flex flex-col gap-16">
+      {/* Back Navigation */}
+      <div className="pt-2 -mb-8">
+        <Link 
+          href="/" 
+          className="group flex items-center gap-3 w-fit px-4 py-2 rounded-lg bg-white border border-brand-blue/5 hover:border-brand-accent/30 transition-all cursor-pointer"
+        >
+          <div className="w-8 h-8 rounded-lg bg-brand-blue/5 flex items-center justify-center group-hover:bg-brand-accent transition-colors">
+            <ArrowLeft className="w-4 h-4 text-brand-blue group-hover:text-white transition-colors" />
+          </div>
+          <span className="text-[10px] font-black text-brand-blue/40 group-hover:text-brand-blue uppercase tracking-widest">Back to protocol</span>
+        </Link>
+      </div>
+
       {/* Dashboard Header */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-10 border-b border-brand-blue/5 pb-8">
         <div>

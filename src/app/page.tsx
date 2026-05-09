@@ -281,13 +281,13 @@ export default function Home() {
             
             <div className="flex items-center gap-6">
               <Magnetic>
-                 <button 
-                   onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-                   className="group px-8 py-5 rounded-lg bg-brand-blue text-white font-medium text-xs flex items-center gap-3 cursor-pointer"
-                 >
-                   Access portal
-                   <ArrowRight className="w-4 h-4" />
-                 </button>
+                  <button 
+                    onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="group px-6 py-3.5 rounded-lg bg-brand-blue text-white font-medium text-[11px] flex items-center gap-3 cursor-pointer shadow-lg shadow-brand-blue/10 hover:bg-brand-accent transition-all"
+                  >
+                    Access portal
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
               </Magnetic>
               
               <Magnetic>
