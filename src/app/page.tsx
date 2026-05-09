@@ -293,7 +293,7 @@ export default function Home() {
               <Magnetic>
                  <button 
                     onClick={() => document.getElementById('dashboard')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="group text-[10px] sm:text-xs font-medium text-brand-blue hover:text-brand-accent transition-colors flex items-center gap-1.5 sm:gap-2 relative py-1 cursor-pointer whitespace-nowrap"
+                    className="group text-[10px] sm:text-xs font-medium text-brand-blue hover:text-brand-accent transition-colors flex items-center gap-1.5 sm:gap-2 relative py-2 cursor-pointer whitespace-nowrap"
                   >
                     View live dashboard
                     <ChevronRight className="w-3.5 h-3.5 sm:w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -778,9 +778,9 @@ export default function Home() {
                          <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center border border-red-500/20 shrink-0">
                             <ShieldCheck className="w-4 h-4 text-red-500" />
                          </div>
-                         <div className="flex flex-row items-center gap-2 overflow-hidden">
-                            <p className="text-[7px] font-bold text-brand-blue/40 uppercase whitespace-nowrap">Emergency:</p>
-                            <p className="text-sm font-black text-brand-blue tracking-tighter whitespace-nowrap">+250 791 926 765</p>
+                         <div className="flex flex-row items-center gap-1.5">
+                            <p className="text-[6px] font-bold text-brand-blue/30 uppercase whitespace-nowrap">EMG:</p>
+                            <p className="text-xs font-black text-brand-blue tracking-tight whitespace-nowrap">+250 791 926 765</p>
                          </div>
                       </div>
                   </div>
