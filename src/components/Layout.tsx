@@ -58,14 +58,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     
     runInit();
 
-    // Fallback sync: Proactively check IDB every 5s for cross-tab updates when offline
+    // Fallback sync: Proactively check IDB every 2s for cross-tab updates when offline
     const syncInterval = setInterval(async () => {
-       const { initialized } = useQueueStore.getState();
-       if (initialized) {
-          const tickets = await getTickets().catch(() => []);
-          useQueueStore.setState({ tickets });
+       try {
+         const tickets = await getTickets().catch(() => []);
+         const currentTickets = useQueueStore.getState().tickets;
+         
+         // Only update if there's a real difference to avoid render loops
+         if (JSON.stringify(tickets) !== JSON.stringify(currentTickets)) {
+            console.log('[Layout] Heartbeat Sync: Updating tickets from local vault');
+            useQueueStore.setState({ tickets: tickets.sort((a,b) => a.createdAt - b.createdAt) });
+         }
+       } catch (e) {
+         console.warn('[Layout] Heartbeat Sync failed:', e);
        }
-    }, 5000);
+    }, 2000);
     
     const handleLocationChange = () => {
       setActiveHash(window.location.hash);
@@ -73,6 +80,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         setActiveHash('#features');
       } else {
         setActiveHash('');
+        
       }
     };
     

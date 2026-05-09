@@ -441,7 +441,7 @@ export default function Home() {
              <h2 className="font-heading text-4xl font-black text-brand-blue tracking-tighter mb-4 italic">Live monitor</h2>
              <p className="text-[12px] font-medium text-brand-blue/85 max-w-lg mx-auto">Monitor the active patient flow and department throughput in real-time. View serving status and waiting positions below.</p>
           </motion.div>
-          <motion.div variants={itemVariants} className="bg-white rounded-lg border border-brand-blue/5 p-12 overflow-hidden">
+          <motion.div variants={itemVariants} className="bg-white/40 backdrop-blur-sm rounded-2xl border border-brand-blue/5 p-4 lg:p-12 overflow-visible shadow-2xl shadow-brand-blue/5">
              <QueueDisplay />
           </motion.div>
        </motion.section>

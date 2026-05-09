@@ -1,4 +1,4 @@
-const CACHE_NAME = 'syncqueue-v10';
+const CACHE_NAME = 'syncqueue-v11';
 const SHELL_URL = '/';
 const ASSETS = [
   SHELL_URL,
@@ -12,8 +12,8 @@ const ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Arming shell persistence v10');
-      return cache.addAll(ASSETS).catch(err => console.error('[SW] Pre-cache error:', err));
+      console.log('[SW] Arming shell persistence v11');
+      return cache.addAll(ASSETS);
     })
   );
   self.skipWaiting();
@@ -36,47 +36,46 @@ async function handleFetch(request) {
   const cache = await caches.open(CACHE_NAME);
   const url = new URL(request.url);
 
-  // 1. SYSTEM ASSETS - Cache-First
-  const isSystemAsset = 
+  // 1. Static Assets - Cache-First
+  const isStatic = 
     url.pathname.startsWith('/_next/static/') || 
-    url.pathname.startsWith('/icon') || 
     url.pathname.endsWith('.png') ||
-    url.pathname.endsWith('.svg');
+    url.pathname.endsWith('.svg') ||
+    url.pathname.endsWith('.ico');
 
-  if (isSystemAsset) {
+  if (isStatic) {
     const cached = await cache.match(request);
     if (cached) return cached;
   }
 
-  // 2. NAVIGATION & SHELL - Ultra-Aggressive Fallback
-  if (request.mode === 'navigate' || url.pathname === SHELL_URL) {
+  // 2. Navigation - Absolute Shell Fallback
+  if (request.mode === 'navigate') {
     try {
-      const networkResponse = await fetch(request);
-      if (networkResponse.ok) return networkResponse;
-      throw new Error('Network fail');
+      const response = await fetch(request);
+      if (response.ok) return response;
+      throw new Error('Offline');
     } catch (e) {
-      const shell = await cache.match(SHELL_URL);
-      console.log('[SW] Shell fallback for:', url.pathname);
-      return shell;
+      console.log('[SW] Serving Shell for navigation:', url.pathname);
+      return cache.match(SHELL_URL);
     }
   }
 
-  // 3. DATA & ASSETS - Network with Cache Fallback
+  // 3. Data & Others - Network with Cache/Shell Fallback
   try {
-    const networkResponse = await fetch(request);
-    if (networkResponse && networkResponse.status === 200 && url.origin === self.location.origin) {
-      cache.put(request, networkResponse.clone());
+    const response = await fetch(request);
+    if (response.ok && url.origin === self.location.origin) {
+      cache.put(request, response.clone());
     }
-    return networkResponse;
-  } catch (error) {
+    return response;
+  } catch (e) {
     const cached = await cache.match(request);
     if (cached) return cached;
     
-    // Fallback to Shell for RSC data requests to prevent white-screens
+    // If it's a Next.js data request, serve the shell to allow SPA navigation
     if (url.search.includes('_rsc')) {
        return cache.match(SHELL_URL);
     }
-
+    
     return new Response('Offline Protocol Active', { status: 200 });
   }
 }
