@@ -161,6 +161,8 @@ export default function Home() {
                  className="h-full bg-brand-accent"
                />
             </div>
+           </motion.div>
+         )}
         {generatedTicket && (
           <motion.div 
             initial={{ opacity: 0 }}
