@@ -72,7 +72,7 @@ export default function QueueDisplay() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16 min-w-[900px] lg:min-w-0">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-16 w-full overflow-x-hidden">
       {(['consultation', 'lab', 'pharmacy'] as const).map(service => (
         <ServiceColumn key={service} service={service} tickets={tickets} />
       ))}

@@ -190,9 +190,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-4">
             <Link 
               href="/" 
-              className="flex items-center gap-3 px-4 py-2 rounded-lg bg-white/40 backdrop-blur-xl border border-white/20 group transition-all hover:bg-white/60"
+              className="flex items-center gap-2 md:gap-3 px-2 md:px-4 py-1.5 md:py-2 rounded-lg bg-white/40 backdrop-blur-xl border border-white/20 group transition-all hover:bg-white/60"
             >
-              <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-white group-hover:scale-110 transition-transform border border-brand-blue/5 overflow-hidden">
+              <div className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-lg bg-white group-hover:scale-110 transition-transform border border-brand-blue/5 overflow-hidden">
                 <Image 
                   src="/logo.png" 
                   alt="SyncQueue Logo" 
@@ -201,7 +201,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="font-heading text-2xl font-black tracking-tighter text-brand-blue">SyncQueue</span>
+              <span className="font-heading text-lg md:text-2xl font-black tracking-tighter text-brand-blue">SyncQueue</span>
             </Link>
           </div>
 

@@ -242,7 +242,7 @@ export default function Home() {
         <HeroVisual />
         
         <div className="max-w-full relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
             <motion.div
             initial={{ opacity: 0, x: -60 }}
             animate={{ opacity: 1, x: 0 }}
@@ -256,7 +256,7 @@ export default function Home() {
               <span className="text-[10px] font-medium text-brand-accent">System 2.0 ready</span>
             </div>
             
-            <h1 className="font-heading text-7xl lg:text-8xl font-black text-brand-blue tracking-tighter mb-8 leading-[0.85] italic">
+            <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl font-black text-brand-blue tracking-tighter mb-8 leading-[0.85] italic">
               Smart<br />
               queue<br />
               <span className="relative inline-block">
@@ -279,7 +279,7 @@ export default function Home() {
               <p className="text-xs font-medium text-brand-blue/60">Start your journey by accessing the portal or monitoring the live queue.</p>
             </div>
             
-            <div className="flex items-center gap-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
               <Magnetic>
                   <button 
                     onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
