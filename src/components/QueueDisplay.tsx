@@ -83,27 +83,24 @@ export default function QueueDisplay() {
 function ServiceColumn({ service, tickets }: { service: Ticket['service'], tickets: Ticket[] }) {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
-  const getServiceData = () => {
+  const { serving, waiting, completed } = React.useMemo(() => {
     const serviceTickets = tickets.filter(t => t.service === service);
     
-    // Done tickets (at the top)
     const completed = serviceTickets
       .filter(t => t.status === 'done')
       .sort((a, b) => b.createdAt - a.createdAt)
       .slice(0, 5);
 
-    // Serving ticket
     const serving = serviceTickets.find(t => t.status === 'serving');
     
-    // Waiting tickets
     const waiting = serviceTickets
       .filter(t => t.status === 'waiting')
       .sort((a, b) => a.createdAt - b.createdAt);
     
+    console.log(`[QueueDisplay] ${service}: ${waiting.length} waiting, ${serving ? '1 serving' : 'none serving'}`);
+    
     return { serving, waiting, completed };
-  };
-
-  const { serving, waiting, completed } = getServiceData();
+  }, [tickets, service]);
   const Icon = serviceIcons[service];
   const colors = serviceColors[service];
 

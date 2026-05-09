@@ -168,11 +168,17 @@ export const useQueueStore = create<QueueState>((set, get) => ({
   syncOfflineTickets: async () => {
     if (get().isOffline) return;
     set({ isSyncing: true });
-    // fake a network delay for the sync animation
     await new Promise(resolve => setTimeout(resolve, 1500));
-    const updatedTickets = get().tickets.map(t => ({ ...t, synced: true }));
+    
+    const { tickets } = get();
+    const updatedTickets = tickets.map(t => ({ ...t, synced: true }));
+    
     for (const t of updatedTickets) await saveTicket(t);
-    set({ tickets: updatedTickets, isSyncing: false });
+    
+    set({ 
+      tickets: updatedTickets.sort((a, b) => a.createdAt - b.createdAt),
+      isSyncing: false 
+    });
     syncChannel?.postMessage('SYNC_REQUEST');
   },
 
