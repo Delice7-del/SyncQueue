@@ -20,7 +20,8 @@ import {
   WifiOff,
   ArrowRight,
   ChevronRight,
-  X
+  X,
+  Download
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -32,7 +33,7 @@ import { InstallPrompt } from './InstallPrompt';
 import { SyncOverlay } from './SyncOverlay';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const { tickets, isOffline, init } = useQueueStore();
+  const { tickets, isOffline, init, canInstall, installApp } = useQueueStore();
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -205,7 +206,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3 md:gap-6">
+            <AnimatePresence>
+              {canInstall && (
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={installApp}
+                  className="flex items-center gap-1.5 md:gap-2 px-3 py-1.5 rounded-lg bg-brand-blue text-white shadow-lg hover:bg-brand-accent transition-all cursor-pointer group"
+                >
+                  <Download className="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:-translate-y-0.5 transition-transform" />
+                  <span className="text-[10px] md:text-xs font-black uppercase tracking-widest whitespace-nowrap">Install App</span>
+                </motion.button>
+              )}
+            </AnimatePresence>
             <NetworkStatus />
           </div>
         </div>
